@@ -1,3 +1,15 @@
+var Point = (function () {
+    //  var newX=x*(this.settings.width/this.settings.xlength),newY=-y*(this.settings.height/this.settings.ylength);
+    function Point(x, y, graph) {
+        var originX = -graph.xMin * graph.width / graph.xLength;
+        var originY = graph.height + graph.yMin * graph.height / graph.yLength;
+
+        this.x = originX + x * (graph.width / graph.xLength);
+        this.y = originY - y * (graph.height / graph.yLength);
+    }
+    return Point;
+})();
+/// <reference path="Point.ts" />
 var Graph = (function () {
     function Graph(canvas, xMin, xMax, yMin, yMax, lineWidth, pointWidth, axes, gridlines, tabs) {
         if (typeof xMin === "undefined") { xMin = -10; }
@@ -112,9 +124,37 @@ var Graph = (function () {
         get: function () {
             return this._minorXScale;
         },
+        set: function (value) {
+            this._minorXScale = value;
+        },
         enumerable: true,
         configurable: true
     });
+
+
+    Object.defineProperty(Graph.prototype, "majorYScale", {
+        get: function () {
+            return this._majorYScale;
+        },
+        set: function (value) {
+            this._majorYScale = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+
+    Object.defineProperty(Graph.prototype, "minorYScale", {
+        get: function () {
+            return this._minorYScale;
+        },
+        set: function (value) {
+            this._minorXScale = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
 
     Object.defineProperty(Graph.prototype, "width", {
         get: function () {
@@ -132,26 +172,35 @@ var Graph = (function () {
         configurable: true
     });
 
-    Graph.prototype.update = function () {
+    Graph.prototype.update = function (recalculate) {
+        if (typeof recalculate === "undefined") { recalculate = true; }
         this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
-        this._xLength = this._xMax - this._xMin;
-        this._yLength = this._yMax - this._yMin;
 
-        if (this._xLength <= 0) {
-            throw "xMax must be greater than or equal to xMin";
-        }
+        if (recalculate) {
+            this._xLength = this._xMax - this._xMin;
+            this._yLength = this._yMax - this._yMin;
 
-        if (this._yLength <= 0) {
-            throw "yMax must be greater than or equal to yMin";
+            if (this._xLength <= 0) {
+                throw "xMax must be greater than or equal to xMin";
+            }
+
+            if (this._yLength <= 0) {
+                throw "yMax must be greater than or equal to yMin";
+            }
+
+            var xScales = this.scale(this._xLength);
+            var yScales = this.scale(this._yLength);
+
+            this._minorXScale = xScales[0];
+            this._majorXScale = xScales[1];
+
+            this._minorYScale = yScales[0];
+            this._majorYScale = yScales[1];
         }
 
         if (this._gridLines) {
-            var xScales = this.scale(this._xLength);
-            var yScales = this.scale(this._yLength);
             this.drawGridlines(xScales[0], yScales[0]);
             this.drawGridlines(xScales[1], yScales[1], "grey");
-
-            console.log(xScales, yScales);
         }
 
         if (this._axes) {
@@ -159,10 +208,7 @@ var Graph = (function () {
         }
 
         if (this._tabs) {
-            var xScales = this.scale(this._xLength);
-            var yScales = this.scale(this._yLength);
-            this.drawGridlines(xScales[0], yScales[0]);
-            this.drawGridlines(xScales[1], yScales[1], "grey");
+            this.drawTabs();
         }
     };
 
@@ -216,36 +262,49 @@ var Graph = (function () {
         }
     };
 
-    Graph.prototype.drawTabs = function (xScale, yScale, isMajor, color) {
-        if (typeof isMajor === "undefined") { isMajor = true; }
+    Graph.prototype.drawTabs = function (color) {
         if (typeof color === "undefined") { color = "black"; }
         this.context.strokeStyle = color;
 
         var tabWidth;
         var tabHeight;
 
-        if (isMajor) {
-            tabWidth = 1 / 4 * xScale;
-            tabHeight = 1 / 4 * yScale;
-        } else {
-            tabWidth = 1 / 8 * xScale;
-            tabHeight = 1 / 8 * yScale;
+        var majorTabWidth = 1 / 16 * this._majorXScale;
+        var majorTabHeight = 1 / 16 * this._majorYScale;
+
+        var minorTabWidth = 1 / 8 * this._minorXScale;
+        var minorTabHeight = 1 / 8 * this._minorYScale;
+
+        for (var i = 0; i < this._xMax; i += this._minorXScale) {
+            this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
         }
 
-        for (var i = 0; i < this._xMax; i += xScale) {
-            this.drawLine(this.point(i, -tabHeight), this.point(i, tabHeight));
+        for (var i = 0; i > this._xMin; i -= this._minorXScale) {
+            this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
         }
 
-        for (var i = 0; i > this._xMin; i -= xScale) {
-            this.drawLine(this.point(i, -tabWidth), this.point(i, tabWidth));
+        for (var i = 0; i < this._yMax; i += this._minorYScale) {
+            this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
         }
 
-        for (var i = 0; i < this._yMax; i += yScale) {
-            this.drawLine(this.point(this._xMin, i), this.point(this._xMax, i));
+        for (var i = 0; i > this._yMin; i -= this.minorYScale) {
+            this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
         }
 
-        for (var i = 0; i > this._yMin; i -= yScale) {
-            this.drawLine(this.point(this._xMin, i), this.point(this._xMax, i));
+        for (var i = 0; i < this._xMax; i += this._majorXScale) {
+            this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
+        }
+
+        for (var i = 0; i > this._xMin; i -= this._majorXScale) {
+            this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
+        }
+
+        for (var i = 0; i < this._yMax; i += this._majorYScale) {
+            this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
+        }
+
+        for (var i = 0; i > this._yMin; i -= this.majorYScale) {
+            this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
         }
     };
 
@@ -296,25 +355,13 @@ var Graph = (function () {
     return Graph;
 })();
 
-var Point = (function () {
-    //  var newX=x*(this.settings.width/this.settings.xlength),newY=-y*(this.settings.height/this.settings.ylength);
-    function Point(x, y, graph) {
-        var originX = -graph.xMin * graph.width / graph.xLength;
-        var originY = graph.height + graph.yMin * graph.height / graph.yLength;
-
-        this.x = originX + x * (graph.width / graph.xLength);
-        this.y = originY - y * (graph.height / graph.yLength);
-    }
-    return Point;
-})();
-
 var canvas = document.getElementById("graph");
 canvas.width = 600;
 canvas.height = 600;
 var graph = new Graph(canvas, -10, 10, -10, 10);
 
 function f(x) {
-    return x * Math.sin(Math.PI * x);
+    return x * x;
 }
 graph.context.strokeStyle = "black";
 for (var i = -10; i < 100; i += graph.xLength / 600) {

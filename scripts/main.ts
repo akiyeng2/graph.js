@@ -1,3 +1,4 @@
+/// <reference path="Point.ts" />
 
 class Graph {    
 
@@ -86,6 +87,7 @@ class Graph {
         this._yMax = value;
         this.update();
     }
+
     
 
     get xLength(): number {
@@ -95,6 +97,8 @@ class Graph {
     get yLength(): number {
         return this._yLength;
     }
+
+
 
     get majorXScale(): number {
         return this._majorXScale;
@@ -108,6 +112,27 @@ class Graph {
         return this._minorXScale;
     } 
 
+    set minorXScale(value: number) {
+        this._minorXScale = value;
+    }
+
+    get majorYScale(): number {
+        return this._majorYScale;
+    }
+
+    set majorYScale(value: number) {
+        this._majorYScale = value; 
+    }
+
+    get minorYScale(): number {
+        return this._minorYScale;
+    } 
+
+    set minorYScale(value: number) {
+        this._minorXScale = value;
+    }
+
+
 
     get width(): number {
         return this._width;
@@ -117,26 +142,39 @@ class Graph {
         return this._height;
     }   
 
-    update() {
-        this.context.clearRect(0,0, this.context.canvas.width, this.context.canvas.height);
-        this._xLength = this._xMax - this._xMin;
-        this._yLength = this._yMax - this._yMin;
-    
-        if(this._xLength <= 0) {
-            throw "xMax must be greater than or equal to xMin";
-        }
 
-        if(this._yLength <= 0) {
-            throw "yMax must be greater than or equal to yMin";
-        }
+    update(recalculate: boolean = true) {
+        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
 
-        if(this._gridLines) {
+        if(recalculate) {
+            this._xLength = this._xMax - this._xMin;
+            this._yLength = this._yMax - this._yMin;
+
+            if(this._xLength <= 0) {
+                throw "xMax must be greater than or equal to xMin";
+            }
+
+            if(this._yLength <= 0) {
+                throw "yMax must be greater than or equal to yMin";
+            }
+
             var xScales: Array<number> = this.scale(this._xLength);
             var yScales: Array<number> = this.scale(this._yLength);
+
+            this._minorXScale = xScales[0];
+            this._majorXScale = xScales[1];
+
+            this._minorYScale = yScales[0];
+            this._majorYScale = yScales[1];
+        }
+
+      
+
+
+
+        if(this._gridLines) {
             this.drawGridlines(xScales[0], yScales[0]);
             this.drawGridlines(xScales[1], yScales[1], "grey");
-
-            console.log(xScales, yScales);
         }
 
         if(this._axes) {
@@ -144,10 +182,7 @@ class Graph {
         }
 
         if(this._tabs) {
-            var xScales: Array<number> = this.scale(this._xLength);
-            var yScales: Array<number> = this.scale(this._yLength);
-            this.drawGridlines(xScales[0], yScales[0]);
-            this.drawGridlines(xScales[1], yScales[1], "grey");
+           this.drawTabs();
         }
 
 
@@ -209,36 +244,52 @@ class Graph {
         }
     }
 
-    private drawTabs(xScale: number, yScale: number, isMajor: boolean = true, color:string = "black") {
+    private drawTabs(color: string = "black") {
         this.context.strokeStyle = color;
 
         var tabWidth: number;
         var tabHeight: number;
 
-        if(isMajor) {
-            tabWidth = 1/4 * xScale;
-            tabHeight = 1/4 * yScale;
-        } else {
-            tabWidth = 1/8 * xScale;
-            tabHeight = 1/8 * yScale;
+
+        var majorTabWidth: number = 1/16 * this._majorXScale;
+        var majorTabHeight: number = 1/16 * this._majorYScale
+
+        var minorTabWidth: number = 1/8 * this._minorXScale;
+        var minorTabHeight: number = 1/8 * this._minorYScale;
+        
+        //Minor tabs
+        for(var i = 0; i < this._xMax; i += this._minorXScale) {
+            this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
         }
 
-        for(var i = 0; i < this._xMax; i += xScale) {
-            this.drawLine(this.point(i, -tabHeight), this.point(i, tabHeight));
+        for(var i = 0; i > this._xMin; i -= this._minorXScale) {
+            this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
         }
 
-        for(var i = 0; i > this._xMin; i -= xScale) {
-            this.drawLine(this.point(i, -tabWidth), this.point(i, tabWidth));
+        for(var i = 0; i < this._yMax; i += this._minorYScale) {
+            this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
         }
 
-
-
-        for(var i = 0; i < this._yMax; i += yScale) {
-            this.drawLine(this.point(this._xMin, i), this.point(this._xMax, i));
+        for(var i = 0; i > this._yMin; i -= this.minorYScale) {
+            this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
         }
 
-        for(var i = 0; i > this._yMin; i -= yScale) {
-            this.drawLine(this.point(this._xMin, i), this.point(this._xMax, i));
+        //Major tabs
+        
+        for(var i = 0; i < this._xMax; i += this._majorXScale) {
+            this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
+        }
+
+        for(var i = 0; i > this._xMin; i -= this._majorXScale) {
+            this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
+        }
+
+        for(var i = 0; i < this._yMax; i += this._majorYScale) {
+            this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
+        }
+
+        for(var i = 0; i > this._yMin; i -= this.majorYScale) {
+            this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
         }
     }
     
@@ -292,28 +343,7 @@ class Graph {
         
 }
 
-class Point {
-    x: number;
-    y: number;
-        
-    private gridX: number;
-    private gridY: number;
-    //  var newX=x*(this.settings.width/this.settings.xlength),newY=-y*(this.settings.height/this.settings.ylength);
 
-    constructor(x: number, y: number, graph: Graph) {
-        var originX = -graph.xMin * graph.width / graph.xLength;
-        var originY = graph.height + graph.yMin * graph.height / graph.yLength;
-
-
-
-        this.x = originX + x * (graph.width / graph.xLength);
-        this.y = originY - y * (graph.height / graph.yLength);
-
-           
-    }
-    
-    
-}
 
 var canvas: any = document.getElementById("graph");
 canvas.width = 600;
@@ -321,7 +351,7 @@ canvas.height = 600;
 var graph = new Graph(canvas, -10, 10, -10, 10);
 
 function f(x: number): number {
-    return x*Math.sin(Math.PI*x);
+    return x*x;
 }
 graph.context.strokeStyle = "black";
 for(var i = -10; i < 100; i+= graph.xLength / 600) {  
