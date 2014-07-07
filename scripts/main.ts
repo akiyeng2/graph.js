@@ -55,6 +55,7 @@ class Graph {
     }
     set xMin(value: number) {
         this._xMin = value;
+        this.update();
     }
 
     get xMax(): number {
@@ -62,6 +63,7 @@ class Graph {
     }
     set xMax(value: number) {
         this._xMax = value;
+        update();
     }
 
 
@@ -70,6 +72,7 @@ class Graph {
     }
     set yMin(value: number) {
         this._yMin = value;
+        update();
     }
 
     get yMax(): number {
@@ -77,6 +80,7 @@ class Graph {
     }
     set yMax(value: number) {
         this._yMax = value;
+        update();
     }
     
 
@@ -219,13 +223,13 @@ class Graph {
         }
 
 
-
+        var bigExponent: number;
 
         var niceExponent = niceFraction * Math.pow(10, exponent);
         if(niceFraction < 5) {
-            var bigExponent = niceExponent * 4;
+            bigExponent = niceExponent * 4;
         } else {
-            var bigExponent = niceExponent * 5;
+            bigExponent = niceExponent * 5;
         }
 
         return [niceExponent, bigExponent];
