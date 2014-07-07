@@ -38,6 +38,7 @@ var Graph = (function () {
         },
         set: function (value) {
             this._xMin = value;
+            this.update();
         },
         enumerable: true,
         configurable: true
@@ -49,6 +50,7 @@ var Graph = (function () {
         },
         set: function (value) {
             this._xMax = value;
+            this.update();
         },
         enumerable: true,
         configurable: true
@@ -60,6 +62,7 @@ var Graph = (function () {
         },
         set: function (value) {
             this._yMin = value;
+            this.update();
         },
         enumerable: true,
         configurable: true
@@ -71,6 +74,7 @@ var Graph = (function () {
         },
         set: function (value) {
             this._yMax = value;
+            this.update();
         },
         enumerable: true,
         configurable: true
@@ -87,6 +91,26 @@ var Graph = (function () {
     Object.defineProperty(Graph.prototype, "yLength", {
         get: function () {
             return this._yLength;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(Graph.prototype, "majorXScale", {
+        get: function () {
+            return this._majorXScale;
+        },
+        set: function (value) {
+            this._majorXScale = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+
+    Object.defineProperty(Graph.prototype, "minorXScale", {
+        get: function () {
+            return this._minorXScale;
         },
         enumerable: true,
         configurable: true
@@ -132,6 +156,13 @@ var Graph = (function () {
 
         if (this._axes) {
             this.drawAxes();
+        }
+
+        if (this._tabs) {
+            var xScales = this.scale(this._xLength);
+            var yScales = this.scale(this._yLength);
+            this.drawGridlines(xScales[0], yScales[0]);
+            this.drawGridlines(xScales[1], yScales[1], "grey");
         }
     };
 
@@ -185,6 +216,39 @@ var Graph = (function () {
         }
     };
 
+    Graph.prototype.drawTabs = function (xScale, yScale, isMajor, color) {
+        if (typeof isMajor === "undefined") { isMajor = true; }
+        if (typeof color === "undefined") { color = "black"; }
+        this.context.strokeStyle = color;
+
+        var tabWidth;
+        var tabHeight;
+
+        if (isMajor) {
+            tabWidth = 1 / 4 * xScale;
+            tabHeight = 1 / 4 * yScale;
+        } else {
+            tabWidth = 1 / 8 * xScale;
+            tabHeight = 1 / 8 * yScale;
+        }
+
+        for (var i = 0; i < this._xMax; i += xScale) {
+            this.drawLine(this.point(i, -tabHeight), this.point(i, tabHeight));
+        }
+
+        for (var i = 0; i > this._xMin; i -= xScale) {
+            this.drawLine(this.point(i, -tabWidth), this.point(i, tabWidth));
+        }
+
+        for (var i = 0; i < this._yMax; i += yScale) {
+            this.drawLine(this.point(this._xMin, i), this.point(this._xMax, i));
+        }
+
+        for (var i = 0; i > this._yMin; i -= yScale) {
+            this.drawLine(this.point(this._xMin, i), this.point(this._xMax, i));
+        }
+    };
+
     Graph.prototype.scale = function (length) {
         var niceRange = this.makeNice(length, false)[0];
         var scale = this.makeNice(niceRange / (this._maxTicks - 1), true);
@@ -218,11 +282,13 @@ var Graph = (function () {
             }
         }
 
+        var bigExponent;
+
         var niceExponent = niceFraction * Math.pow(10, exponent);
         if (niceFraction < 5) {
-            var bigExponent = niceExponent * 4;
+            bigExponent = niceExponent * 4;
         } else {
-            var bigExponent = niceExponent * 5;
+            bigExponent = niceExponent * 5;
         }
 
         return [niceExponent, bigExponent];
@@ -245,14 +311,14 @@ var Point = (function () {
 var canvas = document.getElementById("graph");
 canvas.width = 600;
 canvas.height = 600;
-var graph = new Graph(canvas, 0, 100, 0, 10);
+var graph = new Graph(canvas, -10, 10, -10, 10);
 
 function f(x) {
-    return Math.sqrt(x);
+    return x * Math.sin(Math.PI * x);
 }
 graph.context.strokeStyle = "black";
-for (var i = -10; i < 100; i += 100 / 600) {
-    var lastX = i - (100 / 600);
+for (var i = -10; i < 100; i += graph.xLength / 600) {
+    var lastX = i - (graph.xLength / 600);
     var lastY = f(lastX);
 
     graph.drawLine(graph.point(lastX, lastY), graph.point(i, f(i)));

@@ -8,6 +8,10 @@ class Graph {
     private _yMax: number;
     private _xLength: number;
     private _yLength: number;
+    private _majorXScale: number;
+    private _minorXScale: number;
+    private _majorYScale: number;
+    private _minorYScale: number;
     
     private _width: number;
     private _height: number;
@@ -63,7 +67,7 @@ class Graph {
     }
     set xMax(value: number) {
         this._xMax = value;
-        update();
+        this.update();
     }
 
 
@@ -72,7 +76,7 @@ class Graph {
     }
     set yMin(value: number) {
         this._yMin = value;
-        update();
+        this.update();
     }
 
     get yMax(): number {
@@ -80,7 +84,7 @@ class Graph {
     }
     set yMax(value: number) {
         this._yMax = value;
-        update();
+        this.update();
     }
     
 
@@ -92,10 +96,23 @@ class Graph {
         return this._yLength;
     }
 
+    get majorXScale(): number {
+        return this._majorXScale;
+    }
+
+    set majorXScale(value: number) {
+        this._majorXScale = value; 
+    }
+
+    get minorXScale(): number {
+        return this._minorXScale;
+    } 
+
+
     get width(): number {
         return this._width;
     }
-        
+            
     get height(): number {
         return this._height;
     }   
@@ -126,7 +143,12 @@ class Graph {
             this.drawAxes();
         }
 
-        
+        if(this._tabs) {
+            var xScales: Array<number> = this.scale(this._xLength);
+            var yScales: Array<number> = this.scale(this._yLength);
+            this.drawGridlines(xScales[0], yScales[0]);
+            this.drawGridlines(xScales[1], yScales[1], "grey");
+        }
 
 
     }
@@ -187,7 +209,39 @@ class Graph {
         }
     }
 
-     
+    private drawTabs(xScale: number, yScale: number, isMajor: boolean = true, color:string = "black") {
+        this.context.strokeStyle = color;
+
+        var tabWidth: number;
+        var tabHeight: number;
+
+        if(isMajor) {
+            tabWidth = 1/4 * xScale;
+            tabHeight = 1/4 * yScale;
+        } else {
+            tabWidth = 1/8 * xScale;
+            tabHeight = 1/8 * yScale;
+        }
+
+        for(var i = 0; i < this._xMax; i += xScale) {
+            this.drawLine(this.point(i, -tabHeight), this.point(i, tabHeight));
+        }
+
+        for(var i = 0; i > this._xMin; i -= xScale) {
+            this.drawLine(this.point(i, -tabWidth), this.point(i, tabWidth));
+        }
+
+
+
+        for(var i = 0; i < this._yMax; i += yScale) {
+            this.drawLine(this.point(this._xMin, i), this.point(this._xMax, i));
+        }
+
+        for(var i = 0; i > this._yMin; i -= yScale) {
+            this.drawLine(this.point(this._xMin, i), this.point(this._xMax, i));
+        }
+    }
+    
     private scale(length: number): Array<number> {
         var niceRange: number = this.makeNice(length, false)[0];
         var scale: Array<number> = this.makeNice(niceRange / (this._maxTicks - 1), true);
@@ -264,14 +318,14 @@ class Point {
 var canvas: any = document.getElementById("graph");
 canvas.width = 600;
 canvas.height = 600;
-var graph = new Graph(canvas, 0, 100, 0, 10);
+var graph = new Graph(canvas, -10, 10, -10, 10);
 
 function f(x: number): number {
-    return Math.sqrt(x);
+    return x*Math.sin(Math.PI*x);
 }
 graph.context.strokeStyle = "black";
-for(var i = -10; i < 100; i+= 100 / 600) {  
-    var lastX = i - (100  / 600);
+for(var i = -10; i < 100; i+= graph.xLength / 600) {  
+    var lastX = i - (graph.xLength / 600);
     var lastY = f(lastX);
 
     graph.drawLine(graph.point(lastX, lastY), graph.point(i, f(i)));
