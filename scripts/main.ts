@@ -1,18 +1,18 @@
 /// <reference path="Point.ts" />
+/// <reference path="Styles.ts" />
+/// <reference path="Scale.ts" />
+
 
 class Graph {    
+    style: Styles;
+    context: any;
 
-    context: CanvasRenderingContext2D;
     private _xMin: number;
     private _xMax: number;
     private _yMin: number;
     private _yMax: number;
     private _xLength: number;
     private _yLength: number;
-    private _majorXScale: number;
-    private _minorXScale: number;
-    private _majorYScale: number;
-    private _minorYScale: number;
     
     private _width: number;
     private _height: number;
@@ -27,12 +27,17 @@ class Graph {
     private _strokeStyle: string = "#000000";
     private _fillStyle: string = "#000000";
 
-    private _maxTicks: number = 20;
+    private _scale: Scale;
+    private _maxTicks: number = 10;
+
     constructor(canvas: HTMLCanvasElement, xMin : number = -10, xMax : number = 10, yMin: number = -10, yMax: number = 10, 
-        lineWidth: number = 1, pointWidth: number = 1, axes: boolean = true, gridlines: boolean = true, tabs: boolean = true) {
+        axes: boolean = true, gridlines: boolean = true, tabs: boolean = true, style: Styles = new Styles()) {
         
 
         this.context = canvas.getContext("2d");
+        this.context.imageSmoothingEnabled = true;
+        this.style = style;
+
         this._height = canvas.height;
         this._width = canvas.width;
         
@@ -40,21 +45,268 @@ class Graph {
         this._xMax = xMax;
         this._yMin = yMin;
         this._yMax = yMax;
-       
-
-        this._lineWidth = lineWidth;
-        this._pointWidth = pointWidth;
-
-        this.context.lineWidth = lineWidth;
-
+    
         this._axes = axes;
         this._gridLines = gridlines;
         this._tabs = tabs;
+
+        this._scale = new Scale(this);
 
         this.update();
     
     }
      
+    
+    update(recalculate: boolean = true) {
+        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+
+        if(recalculate) {
+            this._xLength = this._xMax - this._xMin;
+            this._yLength = this._yMax - this._yMin;
+
+            if(this._xLength <= 0) {
+                throw "xMax must be greater than or equal to xMin";
+            }
+
+            if(this._yLength <= 0) {
+                throw "yMax must be greater than or equal to yMin";
+            }
+
+            this._scale.scale();
+        }
+
+        if(this._gridLines) {
+            this.drawGridlines();
+        }
+
+        if(this._axes) {
+            this.drawAxes();
+        }
+
+        if(this._tabs) {
+           this.drawTabs();
+        }
+
+
+    }
+
+       
+    private drawCircle(center: Point, radius: number) {
+        this.context.beginPath();
+        this.context.arc(center.x, center.y, radius, 0, Math.PI * 2, true);
+        this.context.fill();
+    }
+
+    point(x: number, y: number): Point {
+        return new Point(x, y, this);
+    }
+
+    drawPoint(point: Point): void {
+        this.context.fillStyle = this.style.point;
+        this.drawCircle(point, this.style.pointWidth);
+    }
+
+    drawLine(point1: Point, point2: Point, round: boolean = false): void {
+
+
+        this.context.strokeStyle = this.style.line;
+        this.context.lineWidth = this.style.lineWidth;
+
+        var x1: number = (round) ? Math.round(point1.x) : point1.x;
+        var x2: number = (round) ? Math.round(point2.x) : point2.x;
+
+        var y1: number = (round) ? Math.round(point1.y) : point1.y;
+        var y2: number = (round) ? Math.round(point2.y) : point2.y;
+
+        //Special cases of vertical or horizontal lines to prevent antialiasing
+        if(x1 == x2) {
+            var height: number = y2 - y1;
+            var oldFill: string = this.style.fill;
+            this.context.fillStyle = this.style.line;
+
+            x1 -= Math.floor(this.style.lineWidth / 2);
+
+            this.context.fillRect(x1, y1, this.style.lineWidth, height);
+
+            this.style.fill = oldFill;
+        } else if(y1 == y2) {
+            var width: number = x2 - x1;
+            var oldFill: string = this.style.fill;
+            this.context.fillStyle = this.style.line;
+
+            y1 -= Math.floor(this.style.lineWidth / 2);
+
+            this.context.fillRect(x1, y1, width, this.style.lineWidth);
+
+        } else { 
+            this.context.beginPath();
+            this.context.moveTo(x1, y1);
+            this.context.lineTo(x2, y2);
+            this.context.stroke();
+        }
+        this.context.lineWidth = this.style.lineWidth;
+
+    }
+
+    drawHorizontal(y: number, round: boolean = true): void {
+        var point: Point = this.point(0, y);
+        y = (round)? Math.round(point.y): point.y;
+
+        var oldFill: string = this.style.fill;
+        this.context.fillStyle = this.style.line;
+
+        if(this.style.lineWidth % 2 == 0) {
+            y -= this.style.lineWidth / 2;
+        } else {
+            y -= Math.floor(this.style.lineWidth / 2);
+        }
+
+        this.context.fillRect(0, y, this._width, this.style.lineWidth);
+
+        this.context.fillStyle = oldFill;
+
+        
+    }
+
+    drawVertical(x: number, round: boolean = true) {
+        var point: Point = this.point(x, 0);
+        x = (round)? Math.round(point.x): point.x;
+
+        var oldFill: string = this.style.fill;
+        this.context.fillStyle = this.style.line;
+
+        if(this.style.lineWidth % 2 == 0) {
+            x -= this.style.lineWidth / 2;
+        } else {
+            x -= Math.floor(this.style.lineWidth / 2);
+        }
+
+        this.context.fillRect(x, 0, this.style.lineWidth, this._height);
+
+        this.style.fill = oldFill;
+    }
+
+    private drawAxes(): void {
+
+        var oldLine: string = this.style.line;
+        var oldWidth: number = this.style.lineWidth;
+
+        this.style.line = this.style.axes;
+        this.style.lineWidth = this.style.axisWidth;
+
+        this.drawHorizontal(0);
+        this.drawVertical(0);
+
+        this.style.line = oldLine;
+        this.style.lineWidth = oldWidth;
+
+    }
+
+    private drawGridlines(): void {
+       
+        var oldLine: string = this.style.line;
+
+        var xScale: number = this._scale.minorXScale;
+        var yScale: number = this._scale.minorYScale;
+
+        this.style.line = this.style.minorGridLines;
+
+        for(var i = xScale; i < this._xMax; i += xScale) {
+            this.drawVertical(i);
+        }
+
+        for(var i = -xScale; i > this._xMin; i -= xScale) {
+            this.drawVertical(i);
+        }
+
+        for(var i = yScale; i < this._yMax; i += yScale) {
+            this.drawHorizontal(i);
+        }
+
+        for(var i = -yScale; i > this._yMin; i -= yScale) {
+            this.drawHorizontal(i);
+        }
+
+
+        xScale = this._scale.majorXScale;
+        yScale = this._scale.majorYScale;
+
+        this.style.line = this.style.majorGridLines;
+
+        for(var i = xScale; i < this._xMax; i += xScale) {
+            this.drawVertical(i);
+        }
+
+        for(var i = -xScale; i > this._xMin; i -= xScale) {
+            this.drawVertical(i);
+        }
+
+        for(var i = yScale; i < this._yMax; i += yScale) {
+            this.drawHorizontal(i);
+        }
+
+        for(var i = -yScale; i > this._yMin; i -= yScale) {
+            this.drawHorizontal(i);
+        }
+
+        this.style.line = oldLine;
+    }
+
+    drawTabs(color: string = "black") {
+        this.context.strokeStyle = color;
+
+        var tabWidth: number;
+        var tabHeight: number;
+
+
+        var majorTabWidth: number = 1/8 * this._scale.majorXScale;
+        var majorTabHeight: number = 1/8 * this._scale.majorYScale
+
+        var minorTabWidth: number = 1/16 * this._scale.majorXScale;
+        var minorTabHeight: number = 1/16 * this._scale.majorYScale;
+            
+        this.style.lineWidth = 1;
+
+            
+        //Minor tabs
+        for(var i = 0; i < this._xMax; i += this._scale.minorXScale) {
+            this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
+        }
+
+        for(var i = 0; i > this._xMin; i -= this._scale.minorXScale) {
+            this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
+        }
+
+        for(var i = 0; i < this._yMax; i += this._scale.minorYScale) {
+            this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
+        }
+
+        for(var i = 0; i > this._yMin; i -= this._scale.minorYScale) {
+            this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
+        }
+
+        //Major tabs
+        
+        for(var i = 0; i < this._xMax; i += this._scale.majorXScale) {
+            this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
+        }
+
+        for(var i = 0; i > this._xMin; i -= this._scale.majorXScale) {
+            this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
+        }
+
+        for(var i = 0; i < this._yMax; i += this._scale.majorYScale) {
+            this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
+        }
+
+        for(var i = 0; i > this._yMin; i -= this._scale.majorYScale) {
+            this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
+        }
+
+        this.context.globalAlpha = 1;
+    }
+    
+        
     get xMin(): number {
         return this._xMin;
     }
@@ -101,38 +353,44 @@ class Graph {
 
 
     get majorXScale(): number {
-        return this._majorXScale;
+        return this._scale.majorXScale;
     }
 
     set majorXScale(value: number) {
-        this._majorXScale = value; 
+        this._scale.majorXScale = value; 
     }
 
     get minorXScale(): number {
-        return this._minorXScale;
+        return this._scale.minorXScale;
     } 
 
     set minorXScale(value: number) {
-        this._minorXScale = value;
+        this._scale.minorXScale = value;
     }
 
     get majorYScale(): number {
-        return this._majorYScale;
+        return this._scale.majorYScale;
     }
 
     set majorYScale(value: number) {
-        this._majorYScale = value; 
+        this._scale.majorYScale = value; 
     }
 
     get minorYScale(): number {
-        return this._minorYScale;
+        return this._scale.minorYScale;
     } 
 
     set minorYScale(value: number) {
-        this._minorXScale = value;
+        this._scale.minorXScale = value;
     }
 
+    get maxTicks() : number {
+        return this._maxTicks;
+    }
 
+    set maxTicks(v : number) {
+        this._maxTicks = v;
+    }
 
     get width(): number {
         return this._width;
@@ -140,207 +398,7 @@ class Graph {
             
     get height(): number {
         return this._height;
-    }   
-
-
-    update(recalculate: boolean = true) {
-        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
-
-        if(recalculate) {
-            this._xLength = this._xMax - this._xMin;
-            this._yLength = this._yMax - this._yMin;
-
-            if(this._xLength <= 0) {
-                throw "xMax must be greater than or equal to xMin";
-            }
-
-            if(this._yLength <= 0) {
-                throw "yMax must be greater than or equal to yMin";
-            }
-
-            var xScales: Array<number> = this.scale(this._xLength);
-            var yScales: Array<number> = this.scale(this._yLength);
-
-            this._minorXScale = xScales[0];
-            this._majorXScale = xScales[1];
-
-            this._minorYScale = yScales[0];
-            this._majorYScale = yScales[1];
-        }
-
-      
-
-
-
-        if(this._gridLines) {
-            this.drawGridlines(xScales[0], yScales[0]);
-            this.drawGridlines(xScales[1], yScales[1], "grey");
-        }
-
-        if(this._axes) {
-            this.drawAxes();
-        }
-
-        if(this._tabs) {
-           this.drawTabs();
-        }
-
-
-    }
-
-       
-    drawCircle(center: Point, radius: number) {
-        this.context.beginPath();
-        this.context.arc(center.x, center.y, radius, 0, Math.PI * 2, true);
-        this.context.fill();
-    }
-
-    point(x: number, y: number): Point {
-        return new Point(x, y, this);
-    }
-
-    drawPoint(point: Point): void {
-        this.drawCircle(point, this._pointWidth);
-    }
-
-    drawLine(point1: Point, point2: Point): void {
-        this.context.beginPath();
-        this.context.moveTo(point1.x, point1.y);
-        this.context.lineTo(point2.x, point2.y);
-        this.context.stroke();
-
-    }
-
-    private drawAxes(): void {
-
-        this.context.strokeStyle = "black";
-        this.context.lineWidth = 2;
-        this.drawLine(this.point(this._xMin, 0), this.point(this._xMax, 0));
-        this.drawLine(this.point(0, this._yMin), this.point(0, this._yMax));
-        this.context.lineWidth = this._lineWidth;   
-
-    }
-
-    private drawGridlines(xScale: number, yScale: number, color: string = "lightgrey"): void {
-
-        this.context.strokeStyle = color;
-
-        for(var i = 0; i < this._xMax; i += xScale) {
-            this.drawLine(this.point(i, this._yMin), this.point(i, this._yMax));
-        }
-
-        for(var i = 0; i > this._xMin; i -= xScale) {
-            this.drawLine(this.point(i, this._yMin), this.point(i, this._yMax));
-        }
-
-
-
-        for(var i = 0; i < this._yMax; i += yScale) {
-            this.drawLine(this.point(this._xMin, i), this.point(this._xMax, i));
-        }
-
-        for(var i = 0; i > this._yMin; i -= yScale) {
-            this.drawLine(this.point(this._xMin, i), this.point(this._xMax, i));
-        }
-    }
-
-    private drawTabs(color: string = "black") {
-        this.context.strokeStyle = color;
-
-        var tabWidth: number;
-        var tabHeight: number;
-
-
-        var majorTabWidth: number = 1/16 * this._majorXScale;
-        var majorTabHeight: number = 1/16 * this._majorYScale
-
-        var minorTabWidth: number = 1/8 * this._minorXScale;
-        var minorTabHeight: number = 1/8 * this._minorYScale;
-        
-        //Minor tabs
-        for(var i = 0; i < this._xMax; i += this._minorXScale) {
-            this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
-        }
-
-        for(var i = 0; i > this._xMin; i -= this._minorXScale) {
-            this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
-        }
-
-        for(var i = 0; i < this._yMax; i += this._minorYScale) {
-            this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
-        }
-
-        for(var i = 0; i > this._yMin; i -= this.minorYScale) {
-            this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
-        }
-
-        //Major tabs
-        
-        for(var i = 0; i < this._xMax; i += this._majorXScale) {
-            this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
-        }
-
-        for(var i = 0; i > this._xMin; i -= this._majorXScale) {
-            this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
-        }
-
-        for(var i = 0; i < this._yMax; i += this._majorYScale) {
-            this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
-        }
-
-        for(var i = 0; i > this._yMin; i -= this.majorYScale) {
-            this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
-        }
-    }
-    
-    private scale(length: number): Array<number> {
-        var niceRange: number = this.makeNice(length, false)[0];
-        var scale: Array<number> = this.makeNice(niceRange / (this._maxTicks - 1), true);
-        return scale;
-
-    }
-
-    private makeNice(num: number, round: boolean): Array<number> {
-        var exponent: number = Math.floor(Math.log(num) / Math.log(10));
-        var fraction: number = num / Math.pow(10, exponent);
-        var niceFraction: number;
-
-        if(round) {
-            if(fraction < 1.5) {
-                niceFraction = 1;
-            } else if(fraction < 3) {
-                niceFraction = 2;
-            } else if(fraction < 7) {
-                niceFraction = 5;
-            } else {
-                niceFraction = 10;
-            }
-        } else {
-            if(fraction <= 1) {
-                niceFraction = 1;
-            } else if(fraction <= 2) {
-                niceFraction = 2;
-            } else if(fraction <= 5) {
-                niceFraction = 5;
-            } else {
-                niceFraction = 10;
-            }
-        }
-
-
-        var bigExponent: number;
-
-        var niceExponent = niceFraction * Math.pow(10, exponent);
-        if(niceFraction < 5) {
-            bigExponent = niceExponent * 4;
-        } else {
-            bigExponent = niceExponent * 5;
-        }
-
-        return [niceExponent, bigExponent];
-
-    }
-        
+    }  
 }
 
 
@@ -348,7 +406,7 @@ class Graph {
 var canvas: any = document.getElementById("graph");
 canvas.width = 600;
 canvas.height = 600;
-var graph = new Graph(canvas, -10, 10, -10, 10);
+var graph = new Graph(canvas, -15, 15, -15, 15);
 
 function f(x: number): number {
     return x*x;
