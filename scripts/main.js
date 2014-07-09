@@ -530,39 +530,21 @@ var Graph = (function () {
 
         this.style.lineWidth = 1;
 
-        for (var i = 0; i < this._xMax; i += this._scale.minorXScale) {
+        for (var i = this._scale.minorXMin; i < this._scale.minorXMax; i += this._scale.minorXScale) {
             this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
         }
 
-        for (var i = 0; i > this._xMin; i -= this._scale.minorXScale) {
-            this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
-        }
-
-        for (var i = 0; i < this._yMax; i += this._scale.minorYScale) {
+        for (var i = this._scale.minorYMin; i < this._scale.minorYMax; i += this._scale.minorYScale) {
             this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
         }
 
-        for (var i = 0; i > this._yMin; i -= this._scale.minorYScale) {
-            this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
-        }
-
-        for (var i = 0; i < this._xMax; i += this._scale.majorXScale) {
+        for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += this._scale.majorXScale) {
             this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
         }
 
-        for (var i = 0; i > this._xMin; i -= this._scale.majorXScale) {
-            this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
-        }
-
-        for (var i = 0; i < this._yMax; i += this._scale.majorYScale) {
+        for (var i = this._scale.majorYMin; i < this._scale.majorYMax; i += this._scale.majorYScale) {
             this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
         }
-
-        for (var i = 0; i > this._yMin; i -= this._scale.majorYScale) {
-            this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
-        }
-
-        this._context.globalAlpha = 1;
     };
 
     Graph.prototype.drawText = function (point, text) {
