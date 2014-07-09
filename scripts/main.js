@@ -15,7 +15,7 @@ var Styles = (function () {
         if (typeof fill === "undefined") { fill = "black"; }
         if (typeof point === "undefined") { point = "black"; }
         if (typeof line === "undefined") { line = "black"; }
-        if (typeof equation === "undefined") { equation = "black"; }
+        if (typeof equation === "undefined") { equation = "darkblue"; }
         if (typeof axes === "undefined") { axes = "#2363636"; }
         if (typeof minorGridLines === "undefined") { minorGridLines = "#E6E6E6"; }
         if (typeof majorGridLines === "undefined") { majorGridLines = "lightgrey"; }
@@ -50,8 +50,8 @@ var Scale = (function () {
         var xScale = this.makeNice(xLength / (graph.maxTicks - 1), true);
         var yScale = this.makeNice(yLength / (graph.maxTicks - 1), true);
 
-        this._majorXScale = xScale[0] * Math.pow(10, xScale[1]);
-        this._majorYScale = yScale[0] * Math.pow(10, yScale[1]);
+        this._majorXScale = Number((xScale[0] * Math.pow(10, xScale[1])).toPrecision(1));
+        this._majorYScale = Number((yScale[0] * Math.pow(10, yScale[1])).toPrecision(1));
 
         if (xScale[0] < 5) {
             this._minorXScale = 1 / 4 * this._majorXScale;
@@ -239,6 +239,8 @@ var Graph = (function () {
         this._fillStyle = "#000000";
         this._maxTicks = 10;
         this.mouseDown = false;
+        this.xZoom = true;
+        this.yZoom = true;
         this._context = canvas.getContext("2d");
 
         this.style = style;
@@ -354,18 +356,18 @@ var Graph = (function () {
             var y = e.pageY - parentOffset.top;
 
             var delta = e.deltaY;
-            var factor = 1 + delta / 500;
+            var factor = 1 + delta / 1000;
 
             var origin = graph.point(0, 0);
 
             var xOffset = (x - origin.x) * graph.xResolution;
             var yOffset = (y - origin.y) * graph.yResolution;
 
-            var xMin = Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(10));
-            var xMax = Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(10));
+            var xMin = (graph.xZoom) ? Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(20)) : graph.xMin;
+            var xMax = (graph.xZoom) ? Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(20)) : graph.xMax;
 
-            var yMin = Number(((graph.yMin + yOffset) * factor - yOffset));
-            var yMax = Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(10));
+            var yMin = (graph.yZoom) ? Number(((graph.yMin + yOffset) * factor - yOffset).toPrecision(20)) : graph.yMin;
+            var yMax = (graph.yZoom) ? Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(20)) : graph.yMax;
 
             graph.setWindow(xMin, xMax, yMin, yMax);
         });
@@ -558,7 +560,7 @@ var Graph = (function () {
             if (Math.abs(i) > xScale / 2) {
                 var point = this.point(i, -this.yResolution * 20);
 
-                var message = Number(i.toPrecision(5)).toString();
+                var message = Number(i.toPrecision(15)).toString();
                 if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
                     message = i.toExponential();
                 }
@@ -755,12 +757,18 @@ var Graph = (function () {
             return x * x;
         };
 
+        var oldLine = this.style.line;
+
+        this.style.line = this.style.equation;
+
         for (var i = this.xMin; i < this.xMax; i += this.xLength / this.width) {
             var lastX = i - (this.xLength / this.width);
             var lastY = f(lastX);
 
             this.drawLine(this.point(lastX, lastY), this.point(i, f(i)));
         }
+
+        this.style.line = oldLine;
     };
     return Graph;
 })();

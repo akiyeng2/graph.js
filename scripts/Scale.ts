@@ -40,8 +40,8 @@ class Scale {
         var xScale: Array<number> = this.makeNice(xLength / (graph.maxTicks - 1), true);
         var yScale: Array<number> = this.makeNice(yLength / (graph.maxTicks - 1), true);
 
-        this._majorXScale = xScale[0] * Math.pow(10, xScale[1]);
-        this._majorYScale = yScale[0] * Math.pow(10, yScale[1]);
+        this._majorXScale = Number((xScale[0] * Math.pow(10, xScale[1])).toPrecision(1));
+        this._majorYScale = Number((yScale[0] * Math.pow(10, yScale[1])).toPrecision(1));
 
         if(xScale[0] < 5) {
             this._minorXScale = 1/4 * this._majorXScale

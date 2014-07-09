@@ -33,6 +33,9 @@ class Graph {
 
     private mouseDown: boolean = false;
 
+    public xZoom: boolean = true;
+    public yZoom: boolean = true;
+
     constructor(canvas: HTMLCanvasElement, xMin : number = -10, xMax : number = 10, yMin: number = -10, yMax: number = 10, 
         axes: boolean = true, gridlines: boolean = true, tabs: boolean = true, style: Styles = new Styles()) {
         
@@ -179,11 +182,11 @@ class Graph {
 
 
 
-            var xMin: number = Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(10));
-            var xMax: number = Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(10));
+            var xMin: number = (graph.xZoom)? Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(20)) : graph.xMin;
+            var xMax: number = (graph.xZoom)? Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(20)) : graph.xMax;
 
-            var yMin: number = Number(((graph.yMin + yOffset) * factor - yOffset));
-            var yMax: number = Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(10));
+            var yMin: number = (graph.yZoom)? Number(((graph.yMin + yOffset) * factor - yOffset).toPrecision(20)) : graph.yMin;
+            var yMax: number = (graph.yZoom)? Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(20)) : graph.yMax;
 
 
 
@@ -411,7 +414,7 @@ class Graph {
             if(Math.abs(i) > xScale / 2) {
                 var point: Point = this.point(i, -this.yResolution * 20);
 
-                var message: string = Number(i.toPrecision(5)).toString();
+                var message: string = Number(i.toPrecision(15)).toString();
                 if(Math.log(Math.abs(i))/Math.log(10) > 5) {
                     message = i.toExponential();
                 }
@@ -547,12 +550,18 @@ class Graph {
             return x*x;
         }
 
+        var oldLine: string = this.style.line;
+
+        this.style.line = this.style.equation;
+
         for(var i = this.xMin; i < this.xMax; i+= this.xLength / this.width) {  
             var lastX = i - (this.xLength / this.width);
             var lastY = f(lastX);
 
             this.drawLine(this.point(lastX, lastY), this.point(i, f(i)));
         }
+
+        this.style.line = oldLine;
     }
         
     
