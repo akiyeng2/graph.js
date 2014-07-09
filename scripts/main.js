@@ -156,6 +156,38 @@ var Scale = (function () {
     });
 
 
+    Object.defineProperty(Scale.prototype, "minorXMax", {
+        get: function () {
+            return this._majorXMax;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(Scale.prototype, "minorXMin", {
+        get: function () {
+            return this._majorXMin;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(Scale.prototype, "minorYMax", {
+        get: function () {
+            return this._majorYMax;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(Scale.prototype, "minorYMin", {
+        get: function () {
+            return this._majorYMin;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
     Object.defineProperty(Scale.prototype, "majorXMax", {
         get: function () {
             return this._majorXMax;
@@ -292,8 +324,8 @@ var Graph = (function () {
                 var newX = e.pageX - offset.left;
                 var newY = e.pageY - offset.top;
 
-                var xChange = Number(((newX - oldX) * graph.xResolution).toPrecision(3));
-                var yChange = Number(((newY - oldY) * graph.yResolution).toPrecision(3));
+                var xChange = Number(((newX - oldX) * graph.xResolution).toPrecision(5));
+                var yChange = Number(((newY - oldY) * graph.yResolution).toPrecision(5));
 
                 var xMin = graph.xMin - xChange;
                 var xMax = graph.xMax - xChange;
@@ -329,11 +361,11 @@ var Graph = (function () {
             var xOffset = (x - origin.x) * graph.xResolution;
             var yOffset = (y - origin.y) * graph.yResolution;
 
-            var xMin = Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(8));
-            var xMax = Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(8));
+            var xMin = Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(10));
+            var xMax = Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(10));
 
             var yMin = Number(((graph.yMin + yOffset) * factor - yOffset));
-            var yMax = Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(8));
+            var yMax = Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(10));
 
             graph.setWindow(xMin, xMax, yMin, yMax);
         });
@@ -453,43 +485,33 @@ var Graph = (function () {
 
         this.style.line = this.style.minorGridLines;
 
-        for (var i = xScale; i < this._xMax; i += xScale) {
+        for (var i = this._scale.minorXMin; i < this._scale.minorXMax; i += xScale) {
             this.drawVertical(i);
         }
 
-        for (var i = -xScale; i > this._xMin; i -= xScale) {
-            this.drawVertical(i);
-        }
-
-        for (var i = yScale; i < this._yMax; i += yScale) {
+        for (var i = this._scale.minorYMin; i < this._scale.minorYMax; i += yScale) {
             this.drawHorizontal(i);
         }
 
-        for (var i = -yScale; i > this._yMin; i -= yScale) {
-            this.drawHorizontal(i);
-        }
-
+        // for(var i = -yScale; i > this._yMin; i -= yScale) {
+        //     this.drawHorizontal(i);
+        // }
         xScale = this._scale.majorXScale;
         yScale = this._scale.majorYScale;
 
         this.style.line = this.style.majorGridLines;
 
-        for (var i = xScale; i < this._xMax; i += xScale) {
+        for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
             this.drawVertical(i);
         }
 
-        for (var i = -xScale; i > this._xMin; i -= xScale) {
-            this.drawVertical(i);
-        }
-
-        for (var i = yScale; i < this._yMax; i += yScale) {
+        for (var i = this._scale.majorYMin; i < this._scale.majorYMax; i += yScale) {
             this.drawHorizontal(i);
         }
 
-        for (var i = -yScale; i > this._yMin; i -= yScale) {
-            this.drawHorizontal(i);
-        }
-
+        // for(var i = -yScale; i > this._yMin; i -= yScale) {
+        //     this.drawHorizontal(i);
+        // }
         this.style.line = oldLine;
     };
 

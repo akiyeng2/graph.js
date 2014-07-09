@@ -132,8 +132,8 @@ class Graph {
                 var newY: number = e.pageY - offset.top;
 
 
-                var xChange = Number(((newX - oldX) * graph.xResolution).toPrecision(3));
-                var yChange = Number(((newY - oldY) * graph.yResolution).toPrecision(3));
+                var xChange = Number(((newX - oldX) * graph.xResolution).toPrecision(5));
+                var yChange = Number(((newY - oldY) * graph.yResolution).toPrecision(5));
 
                 var xMin = graph.xMin - xChange;
                 var xMax = graph.xMax - xChange;
@@ -179,11 +179,11 @@ class Graph {
 
 
 
-            var xMin: number = Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(8));
-            var xMax: number = Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(8));
+            var xMin: number = Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(10));
+            var xMax: number = Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(10));
 
             var yMin: number = Number(((graph.yMin + yOffset) * factor - yOffset));
-            var yMax: number = Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(8));
+            var yMax: number = Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(10));
 
 
 
@@ -318,21 +318,21 @@ class Graph {
 
         this.style.line = this.style.minorGridLines;
 
-        for(var i = xScale; i < this._xMax; i += xScale) {
+        for(var i = this._scale.minorXMin; i < this._scale.minorXMax; i += xScale) {
             this.drawVertical(i);
         }
 
-        for(var i = -xScale; i > this._xMin; i -= xScale) {
-            this.drawVertical(i);
-        }
+        // for(var i = -xScale; i > this._xMin; i -= xScale) {
+        //     this.drawVertical(i);
+        // }
 
-        for(var i = yScale; i < this._yMax; i += yScale) {
+        for(var i = this._scale.minorYMin; i < this._scale.minorYMax; i += yScale) {
             this.drawHorizontal(i);
         }
 
-        for(var i = -yScale; i > this._yMin; i -= yScale) {
-            this.drawHorizontal(i);
-        }
+        // for(var i = -yScale; i > this._yMin; i -= yScale) {
+        //     this.drawHorizontal(i);
+        // }
 
 
         xScale = this._scale.majorXScale;
@@ -340,21 +340,21 @@ class Graph {
 
         this.style.line = this.style.majorGridLines;
 
-        for(var i = xScale; i < this._xMax; i += xScale) {
+        for(var i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
             this.drawVertical(i);
         }
 
-        for(var i = -xScale; i > this._xMin; i -= xScale) {
-            this.drawVertical(i);
-        }
+        // for(var i = -xScale; i > this._xMin; i -= xScale) {
+        //     this.drawVertical(i);
+        // }
 
-        for(var i = yScale; i < this._yMax; i += yScale) {
+        for(var i = this._scale.majorYMin; i < this._scale.majorYMax; i += yScale) {
             this.drawHorizontal(i);
         }
 
-        for(var i = -yScale; i > this._yMin; i -= yScale) {
-            this.drawHorizontal(i);
-        }
+        // for(var i = -yScale; i > this._yMin; i -= yScale) {
+        //     this.drawHorizontal(i);
+        // }
 
         this.style.line = oldLine;
     }
@@ -557,7 +557,7 @@ class Graph {
     }
 
     drawFunction() {
-        var f = function(x) {
+        var f = function(x): number {
             return x*x;
         }
 
