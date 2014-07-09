@@ -327,8 +327,11 @@ var Graph = (function () {
                 var newX = e.pageX - offset.left;
                 var newY = e.pageY - offset.top;
 
-                var xChange = Number(((newX - oldX) * graph.xResolution).toPrecision(5));
-                var yChange = Number(((newY - oldY) * graph.yResolution).toPrecision(5));
+                var oldXLength = graph.xLength;
+                var oldYLength = graph.yLength;
+
+                var xChange = Number(((newX - oldX) * graph.xResolution).toPrecision(1));
+                var yChange = Number(((newY - oldY) * graph.yResolution).toPrecision(1));
 
                 var xMin = graph.xMin - xChange;
                 var xMax = graph.xMax - xChange;
@@ -346,8 +349,6 @@ var Graph = (function () {
 
     Graph.prototype.zoom = function () {
         var graph = this;
-
-        console.log($)
 
         $(canvas).mousewheel(function (e) {
             e.preventDefault();
@@ -559,9 +560,22 @@ var Graph = (function () {
 
     Graph.prototype.drawLabels = function () {
         var xScale = this._scale.majorXScale;
+
+        var point;
+
+        var pixels = 15;
+
         for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
             if (Math.abs(i) > xScale / 2) {
-                var point = this.point(i, -this.yResolution * 20);
+                if (this.yMin > 0) {
+                    point = this.point(i, this.yMin + pixels * this.yResolution);
+                } else if (this.yMax < 0) {
+                    point = this.point(i, this.yMax - pixels * this.yResolution);
+                } else if (xScale < -this.yMin) {
+                    point = this.point(i, -this.yResolution * pixels);
+                } else {
+                    point = this.point(i, this.yResolution * pixels);
+                }
 
                 var message = Number(i.toPrecision(15)).toString();
                 if (Math.log(Math.abs(i)) / Math.log(10) > 5) {

@@ -133,9 +133,11 @@ class Graph {
                 var newX: number = e.pageX - offset.left;
                 var newY: number = e.pageY - offset.top;
 
+                var oldXLength: number = graph.xLength;
+                var oldYLength: number = graph.yLength;
 
-                var xChange = Number(((newX - oldX) * graph.xResolution).toPrecision(5));
-                var yChange = Number(((newY - oldY) * graph.yResolution).toPrecision(5));
+                var xChange = Number(((newX - oldX) * graph.xResolution).toPrecision(1));
+                var yChange = Number(((newY - oldY) * graph.yResolution).toPrecision(1));
 
                 var xMin = graph.xMin - xChange;
                 var xMax = graph.xMax - xChange;
@@ -190,8 +192,6 @@ class Graph {
 
 
             graph.setWindow(xMin, xMax, yMin, yMax);
-
-
 
 
         });
@@ -400,16 +400,34 @@ class Graph {
     drawLabels(): void {
 
         var xScale = this._scale.majorXScale;
+
+        var point: Point;
+
+        var pixels: number = 15;
+
         for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
             if (Math.abs(i) > xScale / 2) {
-                var point: Point = this.point(i, -this.yResolution * 20);
 
-                var message: string = Number(i.toPrecision(15)).toString();
+                if (this.yMin > 0) {
+                    point = this.point(i, this.yMin + pixels * this.yResolution);
+                } else if (this.yMax < 0) {
+                    point = this.point(i, this.yMax - pixels * this.yResolution);
+                } else if (xScale < -this.yMin) {
+                    point = this.point(i, -this.yResolution * pixels);
+                } else {
+                    point = this.point(i, this.yResolution * pixels);
+
+                }
+           
+
+                var message: string = Number(i.toPrecision(8)).toString();
                 if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
                     message = i.toExponential();
                 }
 
                 this.drawText(point, message);
+
+
             }
         }
     }
