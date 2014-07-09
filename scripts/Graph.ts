@@ -68,30 +68,30 @@ class Graph {
     update(recalculate: boolean = true) {
         this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
 
-        if(recalculate) {
+        if (recalculate) {
             this._xLength = this._xMax - this._xMin;
             this._yLength = this._yMax - this._yMin;
 
-            if(this._xLength <= 0) {
+            if (this._xLength <= 0) {
                 throw "xMax must be greater than or equal to xMin";
             }
 
-            if(this._yLength <= 0) {
+            if (this._yLength <= 0) {
                 throw "yMax must be greater than or equal to yMin";
             }
 
             this._scale.scale();
         }
 
-        if(this._gridLines) {
+        if (this._gridLines) {
             this.drawGridlines();
         }
 
-        if(this._axes) {
+        if (this._axes) {
             this.drawAxes();
         }
 
-        if(this._tabs) {
+        if (this._tabs) {
            this.drawTabs();
         }
 
@@ -109,7 +109,7 @@ class Graph {
         var newX: number;
         var newY: number;
         var oldX: number;
-        var oldY: number;    
+        var oldY: number;
 
         $(canvas).mousedown(function(e) {
             graph.mouseDown = true;
@@ -129,7 +129,7 @@ class Graph {
 
         $(canvas).mousemove(function(e) {
 
-            if(graph.mouseDown) {
+            if (graph.mouseDown) {
                 var newX: number = e.pageX - offset.left;
                 var newY: number = e.pageY - offset.top;
 
@@ -139,7 +139,7 @@ class Graph {
 
                 var xMin = graph.xMin - xChange;
                 var xMax = graph.xMax - xChange;
-                
+
                 var yMin = graph.yMin + yChange;
                 var yMax = graph.yMax + yChange;
 
@@ -170,7 +170,7 @@ class Graph {
 
             var x: number = e.pageX - parentOffset.left;
             var y: number = e.pageY - parentOffset.top;
-            
+
             var delta: number = e.deltaY;
             var factor: number = 1 + delta / 1000;
 
@@ -181,11 +181,11 @@ class Graph {
 
 
 
-            var xMin: number = (graph.xZoom)? Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(20)) : graph.xMin;
-            var xMax: number = (graph.xZoom)? Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(20)) : graph.xMax;
+            var xMin: number = (graph.xZoom) ? Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(20)) : graph.xMin;
+            var xMax: number = (graph.xZoom) ? Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(20)) : graph.xMax;
 
-            var yMin: number = (graph.yZoom)? Number(((graph.yMin + yOffset) * factor - yOffset).toPrecision(20)) : graph.yMin;
-            var yMax: number = (graph.yZoom)? Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(20)) : graph.yMax;
+            var yMin: number = (graph.yZoom) ? Number(((graph.yMin + yOffset) * factor - yOffset).toPrecision(20)) : graph.yMin;
+            var yMax: number = (graph.yZoom) ? Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(20)) : graph.yMax;
 
 
 
@@ -199,7 +199,7 @@ class Graph {
 
     }
 
-       
+
     private drawCircle(center: Point, radius: number) {
         this._context.beginPath();
         this._context.arc(center.x, center.y, radius, 0, Math.PI * 2, true);
@@ -229,7 +229,7 @@ class Graph {
 
         var oldFill: string = this.style.fill;
         //Special cases of vertical or horizontal lines to prevent antialiasing
-        if(x1 == x2) {
+        if (x1 === x2) {
             var height: number = y2 - y1;
             oldFill = this.style.fill;
             this._context.fillStyle = this.style.line;
@@ -239,7 +239,7 @@ class Graph {
             this._context.fillRect(x1, y1, this.style.lineWidth, height);
 
             this.style.fill = oldFill;
-        } else if(y1 == y2) {
+        } else if (y1 === y2) {
             var width: number = x2 - x1;
             oldFill = this.style.fill;
             this._context.fillStyle = this.style.line;
@@ -248,7 +248,7 @@ class Graph {
 
             this._context.fillRect(x1, y1, width, this.style.lineWidth);
 
-        } else { 
+        } else {
             this._context.beginPath();
             this._context.moveTo(x1, y1);
             this._context.lineTo(x2, y2);
@@ -260,12 +260,12 @@ class Graph {
 
     drawHorizontal(y: number, round: boolean = true): void {
         var point: Point = this.point(0, y);
-        y = (round)? Math.round(point.y): point.y;
+        y = (round) ? Math.round(point.y) : point.y;
 
         var oldFill: string = this.style.fill;
         this._context.fillStyle = this.style.line;
 
-        if(this.style.lineWidth % 2 === 0) {
+        if (this.style.lineWidth % 2 === 0) {
             y -= this.style.lineWidth / 2;
         } else {
             y -= Math.floor(this.style.lineWidth / 2);
@@ -275,17 +275,17 @@ class Graph {
 
         this._context.fillStyle = oldFill;
 
-        
+
     }
 
     drawVertical(x: number, round: boolean = true) {
         var point: Point = this.point(x, 0);
-        x = (round)? Math.round(point.x): point.x;
+        x = (round) ? Math.round(point.x) : point.x;
 
         var oldFill: string = this.style.fill;
         this._context.fillStyle = this.style.line;
 
-        if(this.style.lineWidth % 2 === 0) {
+        if (this.style.lineWidth % 2 === 0) {
             x -= this.style.lineWidth / 2;
         } else {
             x -= Math.floor(this.style.lineWidth / 2);
@@ -313,7 +313,7 @@ class Graph {
     }
 
     private drawGridlines(): void {
-       
+
         var oldLine: string = this.style.line;
 
         var xScale: number = this._scale.minorXScale;
@@ -323,12 +323,12 @@ class Graph {
 
         this.style.line = this.style.minorGridLines;
 
-        for(i = this._scale.minorXMin; i < this._scale.minorXMax; i += xScale) {
+        for (i = this._scale.minorXMin; i < this._scale.minorXMax; i += xScale) {
             this.drawVertical(i);
         }
 
-       
-        for(i = this._scale.minorYMin; i < this._scale.minorYMax; i += yScale) {
+
+        for (i = this._scale.minorYMin; i < this._scale.minorYMax; i += yScale) {
             this.drawHorizontal(i);
         }
 
@@ -337,16 +337,16 @@ class Graph {
 
         this.style.line = this.style.majorGridLines;
 
-        for(i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
+        for (i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
             this.drawVertical(i);
         }
 
 
-        for(i = this._scale.majorYMin; i < this._scale.majorYMax; i += yScale) {
+        for (i = this._scale.majorYMin; i < this._scale.majorYMax; i += yScale) {
             this.drawHorizontal(i);
         }
 
-      
+
         this.style.line = oldLine;
     }
 
@@ -362,36 +362,36 @@ class Graph {
 
         var minorTabWidth: number = 4 * this.xResolution;
         var minorTabHeight: number = 4 * this.yResolution;
-            
+
         this.style.lineWidth = 1;
 
         var i: number;
 
-            
+
         //Minor tabs
-        for(i = this._scale.minorXMin; i < this._scale.minorXMax; i += this._scale.minorXScale) {
+        for (i = this._scale.minorXMin; i < this._scale.minorXMax; i += this._scale.minorXScale) {
             this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
         }
 
 
-        for(i = this._scale.minorYMin; i < this._scale.minorYMax; i += this._scale.minorYScale) {
+        for (i = this._scale.minorYMin; i < this._scale.minorYMax; i += this._scale.minorYScale) {
             this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
         }
 
 
 
         //Major tabs
-        
-        for(i = this._scale.majorXMin; i < this._scale.majorXMax; i += this._scale.majorXScale) {
+
+        for (i = this._scale.majorXMin; i < this._scale.majorXMax; i += this._scale.majorXScale) {
             this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
         }
 
-        for(i = this._scale.majorYMin; i < this._scale.majorYMax; i += this._scale.majorYScale) {
+        for (i = this._scale.majorYMin; i < this._scale.majorYMax; i += this._scale.majorYScale) {
             this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
         }
 
     }
-    
+
     drawText(point: Point, text: string): void {
         var textWidth: number = this._context.measureText(text).width;
         this._context.fillText(text, point.x - textWidth / 2, point.y);
@@ -400,12 +400,12 @@ class Graph {
     drawLabels(): void {
 
         var xScale = this._scale.majorXScale;
-        for(var i = this._scale.majorXMin; i < this._scale.majorXMax; i+= xScale) {
-            if(Math.abs(i) > xScale / 2) {
+        for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
+            if (Math.abs(i) > xScale / 2) {
                 var point: Point = this.point(i, -this.yResolution * 20);
 
                 var message: string = Number(i.toPrecision(15)).toString();
-                if(Math.log(Math.abs(i))/Math.log(10) > 5) {
+                if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
                     message = i.toExponential();
                 }
 
@@ -449,7 +449,7 @@ class Graph {
         this.update();
     }
 
-    
+
 
     get xLength(): number {
         return this._xLength;
@@ -466,13 +466,13 @@ class Graph {
     }
 
     set majorXScale(value: number) {
-        this._scale.majorXScale = value; 
+        this._scale.majorXScale = value;
         this.update(false);
     }
 
     get minorXScale(): number {
         return this._scale.minorXScale;
-    } 
+    }
 
     set minorXScale(value: number) {
         this._scale.minorXScale = value;
@@ -484,13 +484,13 @@ class Graph {
     }
 
     set majorYScale(value: number) {
-        this._scale.majorYScale = value; 
+        this._scale.majorYScale = value;
         this.update(false);
     }
 
     get minorYScale(): number {
         return this._scale.minorYScale;
-    } 
+    }
 
     set minorYScale(value: number) {
         this._scale.minorXScale = value;
@@ -509,10 +509,10 @@ class Graph {
     get width(): number {
         return this._width;
     }
-            
+
     get height(): number {
         return this._height;
-    }  
+    }
 
     get xResolution(): number {
         return this._xLength / this._width;
@@ -537,14 +537,14 @@ class Graph {
 
     drawFunction() {
         var f = function(x): number {
-            return x*x;
-        }
+            return x * x;
+        };
 
         var oldLine: string = this.style.line;
 
         this.style.line = this.style.equation;
 
-        for(var i = this.xMin; i < this.xMax; i+= this.xLength / this.width) {  
+        for (var i = this.xMin; i < this.xMax; i += this.xLength / this.width) {
             var lastX = i - (this.xLength / this.width);
             var lastY = f(lastX);
 
@@ -553,6 +553,6 @@ class Graph {
 
         this.style.line = oldLine;
     }
-        
-    
+
+
 }

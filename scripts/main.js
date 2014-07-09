@@ -347,6 +347,8 @@ var Graph = (function () {
     Graph.prototype.zoom = function () {
         var graph = this;
 
+        console.log($)
+
         $(canvas).mousewheel(function (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -403,7 +405,7 @@ var Graph = (function () {
         var oldFill = this.style.fill;
 
         //Special cases of vertical or horizontal lines to prevent antialiasing
-        if (x1 == x2) {
+        if (x1 === x2) {
             var height = y2 - y1;
             oldFill = this.style.fill;
             this._context.fillStyle = this.style.line;
@@ -413,7 +415,7 @@ var Graph = (function () {
             this._context.fillRect(x1, y1, this.style.lineWidth, height);
 
             this.style.fill = oldFill;
-        } else if (y1 == y2) {
+        } else if (y1 === y2) {
             var width = x2 - x1;
             oldFill = this.style.fill;
             this._context.fillStyle = this.style.line;
@@ -488,35 +490,31 @@ var Graph = (function () {
         var xScale = this._scale.minorXScale;
         var yScale = this._scale.minorYScale;
 
+        var i;
+
         this.style.line = this.style.minorGridLines;
 
-        for (var i = this._scale.minorXMin; i < this._scale.minorXMax; i += xScale) {
+        for (i = this._scale.minorXMin; i < this._scale.minorXMax; i += xScale) {
             this.drawVertical(i);
         }
 
-        for (var i = this._scale.minorYMin; i < this._scale.minorYMax; i += yScale) {
+        for (i = this._scale.minorYMin; i < this._scale.minorYMax; i += yScale) {
             this.drawHorizontal(i);
         }
 
-        // for(var i = -yScale; i > this._yMin; i -= yScale) {
-        //     this.drawHorizontal(i);
-        // }
         xScale = this._scale.majorXScale;
         yScale = this._scale.majorYScale;
 
         this.style.line = this.style.majorGridLines;
 
-        for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
+        for (i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
             this.drawVertical(i);
         }
 
-        for (var i = this._scale.majorYMin; i < this._scale.majorYMax; i += yScale) {
+        for (i = this._scale.majorYMin; i < this._scale.majorYMax; i += yScale) {
             this.drawHorizontal(i);
         }
 
-        // for(var i = -yScale; i > this._yMin; i -= yScale) {
-        //     this.drawHorizontal(i);
-        // }
         this.style.line = oldLine;
     };
 
@@ -535,19 +533,21 @@ var Graph = (function () {
 
         this.style.lineWidth = 1;
 
-        for (var i = this._scale.minorXMin; i < this._scale.minorXMax; i += this._scale.minorXScale) {
+        var i;
+
+        for (i = this._scale.minorXMin; i < this._scale.minorXMax; i += this._scale.minorXScale) {
             this.drawLine(this.point(i, -minorTabHeight), this.point(i, minorTabHeight));
         }
 
-        for (var i = this._scale.minorYMin; i < this._scale.minorYMax; i += this._scale.minorYScale) {
+        for (i = this._scale.minorYMin; i < this._scale.minorYMax; i += this._scale.minorYScale) {
             this.drawLine(this.point(-minorTabWidth, i), this.point(minorTabWidth, i));
         }
 
-        for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += this._scale.majorXScale) {
+        for (i = this._scale.majorXMin; i < this._scale.majorXMax; i += this._scale.majorXScale) {
             this.drawLine(this.point(i, -majorTabHeight), this.point(i, majorTabHeight));
         }
 
-        for (var i = this._scale.majorYMin; i < this._scale.majorYMax; i += this._scale.majorYScale) {
+        for (i = this._scale.majorYMin; i < this._scale.majorYMax; i += this._scale.majorYScale) {
             this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
         }
     };

@@ -16,7 +16,7 @@ window.Graph=function (ctx,params){
 	this.ctx.setTransform(1,0,0,1,0,0);
 
 	this.ctx.save();
-	
+
 	this.settings.xscale=((params.xscale===undefined)?((this.settings.xmax-this.settings.xmin)/20):params.xscale);
 	this.settings.yscale=((params.yscale===undefined)?((this.settings.ymax-this.settings.ymin)/20):params.yscale);
 	this.settings.xlength=this.settings.xmax-this.settings.xmin;
@@ -27,9 +27,9 @@ window.Graph=function (ctx,params){
 	}else{
 		this.tabs();
 	}
-	
+
 	this.axes();
-	
+
 };
 Graph.prototype.reset=function(){
 	"use strict";
@@ -38,7 +38,7 @@ Graph.prototype.reset=function(){
 };
 Graph.prototype.update=function (params){
 	"use strict";
-	
+
 	this.settings.xmin=((params.xmin===undefined)?this.settings.xmin:params.xmin);
 	this.settings.xmax=((params.xmax===undefined)?this.settings.xmax:params.xmax);
 	this.settings.ymin=((params.ymin===undefined)?this.settings.ymin:params.ymin);
@@ -67,7 +67,7 @@ Graph.prototype.zero=function (){
 	"use strict";
 	var newX,newY;
 	this.ctx.setTransform(1,0,0,1,0,0);
-	this.ctx.restore();	
+	this.ctx.restore();
 	this.ctx.translate((-this.settings.xmin*(this.settings.width/this.settings.xlength)),this.settings.height+(this.settings.ymin*(this.settings.height/this.settings.ylength)));
 	newX=(this.settings.width/this.settings.xlength);
 	newY=-(this.settings.height/this.settings.ylength);
@@ -99,7 +99,7 @@ Graph.prototype.convert=function (x,y){
 	return {x:newX,y:newY};
 };
 Graph.prototype.tabs=function (){
-	
+
 	"use strict";
 	var i;
 	for(i=this.settings.xmin;i<=this.settings.xmax;i+=this.settings.xscale){

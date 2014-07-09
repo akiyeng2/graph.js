@@ -1,7 +1,7 @@
 class Scale {
 
 	private graph: Graph;
-	
+
 	private _minorXMin: number;
 	private _minorXMax: number;
 
@@ -43,16 +43,16 @@ class Scale {
         this._majorXScale = Number((xScale[0] * Math.pow(10, xScale[1])).toPrecision(1));
         this._majorYScale = Number((yScale[0] * Math.pow(10, yScale[1])).toPrecision(1));
 
-        if(xScale[0] < 5) {
-            this._minorXScale = 1/4 * this._majorXScale
+        if (xScale[0] < 5) {
+            this._minorXScale = 1 / 4 * this._majorXScale;
         } else {
-            this._minorXScale = 1/5 * this._majorXScale
+            this._minorXScale = 1 / 5 * this._majorXScale;
         }
 
-        if(yScale[0] < 5) {
-            this._minorYScale = 1/4 * this._majorYScale;
-        } else{
-            this._minorYScale = 1/5 * this._majorYScale;
+        if (yScale[0] < 5) {
+            this._minorYScale = 1 / 4 * this._majorYScale;
+        } else {
+            this._minorYScale = 1 / 5 * this._majorYScale;
         }
 
         this._minorXMin = Math.floor(graph.xMin / this._minorXScale) * this._minorXScale;
@@ -75,22 +75,22 @@ class Scale {
         var fraction: number = num / Math.pow(10, exponent);
         var niceFraction: number;
 
-        if(round) {
-            if(fraction < 1.5) {
+        if (round) {
+            if (fraction < 1.5) {
                 niceFraction = 1;
-            } else if(fraction < 3) {
+            } else if (fraction < 3) {
                 niceFraction = 2;
-            } else if(fraction < 7) {
+            } else if (fraction < 7) {
                 niceFraction = 5;
             } else {
                 niceFraction = 10;
             }
         } else {
-            if(fraction <= 1) {
+            if (fraction <= 1) {
                 niceFraction = 1;
-            } else if(fraction <= 2) {
+            } else if (fraction <= 2) {
                 niceFraction = 2;
-            } else if(fraction <= 5) {
+            } else if (fraction <= 5) {
                 niceFraction = 5;
             } else {
                 niceFraction = 10;
@@ -98,7 +98,6 @@ class Scale {
         }
 
         return [niceFraction, exponent];
-        
 
     }
 
