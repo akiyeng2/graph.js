@@ -16,7 +16,7 @@ var Styles = (function () {
         if (typeof point === "undefined") { point = "black"; }
         if (typeof line === "undefined") { line = "black"; }
         if (typeof equation === "undefined") { equation = "black"; }
-        if (typeof axes === "undefined") { axes = "#363636"; }
+        if (typeof axes === "undefined") { axes = "#2363636"; }
         if (typeof minorGridLines === "undefined") { minorGridLines = "#E6E6E6"; }
         if (typeof majorGridLines === "undefined") { majorGridLines = "lightgrey"; }
         if (typeof pointWidth === "undefined") { pointWidth = 3; }
@@ -155,11 +155,44 @@ var Scale = (function () {
         configurable: true
     });
 
+
+    Object.defineProperty(Scale.prototype, "majorXMax", {
+        get: function () {
+            return this._majorXMax;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(Scale.prototype, "majorXMin", {
+        get: function () {
+            return this._majorXMin;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(Scale.prototype, "majorYMax", {
+        get: function () {
+            return this._majorYMax;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(Scale.prototype, "majorYMin", {
+        get: function () {
+            return this._majorYMin;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return Scale;
 })();
 /// <reference path="Point.ts" />
 /// <reference path="Styles.ts" />
 /// <reference path="Scale.ts" />
+
 var Graph = (function () {
     function Graph(canvas, xMin, xMax, yMin, yMax, axes, gridlines, tabs, style) {
         if (typeof xMin === "undefined") { xMin = -10; }
@@ -173,8 +206,9 @@ var Graph = (function () {
         this._strokeStyle = "#000000";
         this._fillStyle = "#000000";
         this._maxTicks = 10;
-        this.context = canvas.getContext("2d");
-        this.context.imageSmoothingEnabled = true;
+        this.mouseDown = false;
+        this._context = canvas.getContext("2d");
+
         this.style = style;
 
         this._height = canvas.height;
@@ -191,11 +225,14 @@ var Graph = (function () {
 
         this._scale = new Scale(this);
 
+        this.drag();
+        this.zoom();
+
         this.update();
     }
     Graph.prototype.update = function (recalculate) {
         if (typeof recalculate === "undefined") { recalculate = true; }
-        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+        this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
 
         if (recalculate) {
             this._xLength = this._xMax - this._xMin;
@@ -223,12 +260,89 @@ var Graph = (function () {
         if (this._tabs) {
             this.drawTabs();
         }
+
+        this.drawLabels();
+
+        this.drawFunction();
+    };
+
+    Graph.prototype.drag = function () {
+        var context = this._context;
+        var graph = this;
+        var canvas = context.canvas;
+        var offset = $(canvas).offset();
+        var newX;
+        var newY;
+        var oldX;
+        var oldY;
+
+        $(canvas).mousedown(function (e) {
+            graph.mouseDown = true;
+
+            oldX = e.pageX - offset.left;
+            oldY = e.pageY - offset.top;
+        });
+
+        $(document).mouseup(function () {
+            graph.mouseDown = false;
+        });
+
+        $(canvas).mousemove(function (e) {
+            if (graph.mouseDown) {
+                var newX = e.pageX - offset.left;
+                var newY = e.pageY - offset.top;
+
+                var xChange = Number(((newX - oldX) * graph.xResolution).toPrecision(3));
+                var yChange = Number(((newY - oldY) * graph.yResolution).toPrecision(3));
+
+                var xMin = graph.xMin - xChange;
+                var xMax = graph.xMax - xChange;
+
+                var yMin = graph.yMin + yChange;
+                var yMax = graph.yMax + yChange;
+
+                graph.setWindow(xMin, xMax, yMin, yMax);
+
+                oldX = newX;
+                oldY = newY;
+            }
+        });
+    };
+
+    Graph.prototype.zoom = function () {
+        var graph = this;
+
+        $(canvas).mousewheel(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var parentOffset = $(this).parent().offset();
+
+            var x = e.pageX - parentOffset.left;
+            var y = e.pageY - parentOffset.top;
+
+            var delta = e.deltaY;
+            var factor = 1 + delta / 500;
+
+            var origin = graph.point(0, 0);
+
+            var xOffset = (x - origin.x) * graph.xResolution;
+            var yOffset = (y - origin.y) * graph.yResolution;
+
+            var xMin = Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(8));
+            var xMax = Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(8));
+
+            var yMin = Number(((graph.yMin + yOffset) * factor - yOffset));
+            var yMax = Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(8));
+
+            graph.setWindow(xMin, xMax, yMin, yMax);
+        });
     };
 
     Graph.prototype.drawCircle = function (center, radius) {
-        this.context.beginPath();
-        this.context.arc(center.x, center.y, radius, 0, Math.PI * 2, true);
-        this.context.fill();
+        this._context.beginPath();
+        this._context.arc(center.x, center.y, radius, 0, Math.PI * 2, true);
+        this._context.fill();
     };
 
     Graph.prototype.point = function (x, y) {
@@ -236,14 +350,14 @@ var Graph = (function () {
     };
 
     Graph.prototype.drawPoint = function (point) {
-        this.context.fillStyle = this.style.point;
+        this._context.fillStyle = this.style.point;
         this.drawCircle(point, this.style.pointWidth);
     };
 
     Graph.prototype.drawLine = function (point1, point2, round) {
         if (typeof round === "undefined") { round = false; }
-        this.context.strokeStyle = this.style.line;
-        this.context.lineWidth = this.style.lineWidth;
+        this._context.strokeStyle = this.style.line;
+        this._context.lineWidth = this.style.lineWidth;
 
         var x1 = (round) ? Math.round(point1.x) : point1.x;
         var x2 = (round) ? Math.round(point2.x) : point2.x;
@@ -255,28 +369,28 @@ var Graph = (function () {
         if (x1 == x2) {
             var height = y2 - y1;
             var oldFill = this.style.fill;
-            this.context.fillStyle = this.style.line;
+            this._context.fillStyle = this.style.line;
 
             x1 -= Math.floor(this.style.lineWidth / 2);
 
-            this.context.fillRect(x1, y1, this.style.lineWidth, height);
+            this._context.fillRect(x1, y1, this.style.lineWidth, height);
 
             this.style.fill = oldFill;
         } else if (y1 == y2) {
             var width = x2 - x1;
             var oldFill = this.style.fill;
-            this.context.fillStyle = this.style.line;
+            this._context.fillStyle = this.style.line;
 
             y1 -= Math.floor(this.style.lineWidth / 2);
 
-            this.context.fillRect(x1, y1, width, this.style.lineWidth);
+            this._context.fillRect(x1, y1, width, this.style.lineWidth);
         } else {
-            this.context.beginPath();
-            this.context.moveTo(x1, y1);
-            this.context.lineTo(x2, y2);
-            this.context.stroke();
+            this._context.beginPath();
+            this._context.moveTo(x1, y1);
+            this._context.lineTo(x2, y2);
+            this._context.stroke();
         }
-        this.context.lineWidth = this.style.lineWidth;
+        this._context.lineWidth = this.style.lineWidth;
     };
 
     Graph.prototype.drawHorizontal = function (y, round) {
@@ -285,7 +399,7 @@ var Graph = (function () {
         y = (round) ? Math.round(point.y) : point.y;
 
         var oldFill = this.style.fill;
-        this.context.fillStyle = this.style.line;
+        this._context.fillStyle = this.style.line;
 
         if (this.style.lineWidth % 2 == 0) {
             y -= this.style.lineWidth / 2;
@@ -293,9 +407,9 @@ var Graph = (function () {
             y -= Math.floor(this.style.lineWidth / 2);
         }
 
-        this.context.fillRect(0, y, this._width, this.style.lineWidth);
+        this._context.fillRect(0, y, this._width, this.style.lineWidth);
 
-        this.context.fillStyle = oldFill;
+        this._context.fillStyle = oldFill;
     };
 
     Graph.prototype.drawVertical = function (x, round) {
@@ -304,7 +418,7 @@ var Graph = (function () {
         x = (round) ? Math.round(point.x) : point.x;
 
         var oldFill = this.style.fill;
-        this.context.fillStyle = this.style.line;
+        this._context.fillStyle = this.style.line;
 
         if (this.style.lineWidth % 2 == 0) {
             x -= this.style.lineWidth / 2;
@@ -312,7 +426,7 @@ var Graph = (function () {
             x -= Math.floor(this.style.lineWidth / 2);
         }
 
-        this.context.fillRect(x, 0, this.style.lineWidth, this._height);
+        this._context.fillRect(x, 0, this.style.lineWidth, this._height);
 
         this.style.fill = oldFill;
     };
@@ -381,16 +495,16 @@ var Graph = (function () {
 
     Graph.prototype.drawTabs = function (color) {
         if (typeof color === "undefined") { color = "black"; }
-        this.context.strokeStyle = color;
+        this._context.strokeStyle = color;
 
         var tabWidth;
         var tabHeight;
 
-        var majorTabWidth = 1 / 8 * this._scale.majorXScale;
-        var majorTabHeight = 1 / 8 * this._scale.majorYScale;
+        var majorTabWidth = 8 * this.xResolution;
+        var majorTabHeight = 8 * this.yResolution;
 
-        var minorTabWidth = 1 / 16 * this._scale.majorXScale;
-        var minorTabHeight = 1 / 16 * this._scale.majorYScale;
+        var minorTabWidth = 4 * this.xResolution;
+        var minorTabHeight = 4 * this.yResolution;
 
         this.style.lineWidth = 1;
 
@@ -426,7 +540,28 @@ var Graph = (function () {
             this.drawLine(this.point(-majorTabWidth, i), this.point(majorTabWidth, i));
         }
 
-        this.context.globalAlpha = 1;
+        this._context.globalAlpha = 1;
+    };
+
+    Graph.prototype.drawText = function (point, text) {
+        var textWidth = this._context.measureText(text).width;
+        this._context.fillText(text, point.x - textWidth / 2, point.y);
+    };
+
+    Graph.prototype.drawLabels = function () {
+        var xScale = this._scale.majorXScale;
+        for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
+            if (Math.abs(i) > xScale / 2) {
+                var point = this.point(i, -this.yResolution * 20);
+
+                var message = Number(i.toPrecision(5)).toString();
+                if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
+                    message = i.toExponential();
+                }
+
+                this.drawText(point, message);
+            }
+        }
     };
 
     Object.defineProperty(Graph.prototype, "xMin", {
@@ -499,6 +634,7 @@ var Graph = (function () {
         },
         set: function (value) {
             this._scale.majorXScale = value;
+            this.update(false);
         },
         enumerable: true,
         configurable: true
@@ -511,6 +647,7 @@ var Graph = (function () {
         },
         set: function (value) {
             this._scale.minorXScale = value;
+            this.update(false);
         },
         enumerable: true,
         configurable: true
@@ -523,6 +660,7 @@ var Graph = (function () {
         },
         set: function (value) {
             this._scale.majorYScale = value;
+            this.update(false);
         },
         enumerable: true,
         configurable: true
@@ -535,6 +673,7 @@ var Graph = (function () {
         },
         set: function (value) {
             this._scale.minorXScale = value;
+            this.update(false);
         },
         enumerable: true,
         configurable: true
@@ -547,6 +686,7 @@ var Graph = (function () {
         },
         set: function (v) {
             this._maxTicks = v;
+            this.update();
         },
         enumerable: true,
         configurable: true
@@ -568,21 +708,60 @@ var Graph = (function () {
         enumerable: true,
         configurable: true
     });
+
+    Object.defineProperty(Graph.prototype, "xResolution", {
+        get: function () {
+            return this._xLength / this._width;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(Graph.prototype, "yResolution", {
+        get: function () {
+            return this._yLength / this.height;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(Graph.prototype, "context", {
+        get: function () {
+            return this._context;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Graph.prototype.setWindow = function (xMin, xMax, yMin, yMax) {
+        if (typeof xMin === "undefined") { xMin = -10; }
+        if (typeof xMax === "undefined") { xMax = 10; }
+        if (typeof yMin === "undefined") { yMin = -10; }
+        if (typeof yMax === "undefined") { yMax = 10; }
+        this._xMin = xMin;
+        this._xMax = xMax;
+        this._yMin = yMin;
+        this._yMax = yMax;
+
+        this.update();
+    };
+
+    Graph.prototype.drawFunction = function () {
+        var f = function (x) {
+            return x * x;
+        };
+
+        for (var i = this.xMin; i < this.xMax; i += this.xLength / this.width) {
+            var lastX = i - (this.xLength / this.width);
+            var lastY = f(lastX);
+
+            this.drawLine(this.point(lastX, lastY), this.point(i, f(i)));
+        }
+    };
     return Graph;
 })();
-
+/// <reference path="Graph.ts" />
 var canvas = document.getElementById("graph");
 canvas.width = 600;
 canvas.height = 600;
-var graph = new Graph(canvas, -15, 15, -15, 15);
-
-function f(x) {
-    return x * x;
-}
-graph.context.strokeStyle = "black";
-for (var i = -10; i < 100; i += graph.xLength / 600) {
-    var lastX = i - (graph.xLength / 600);
-    var lastY = f(lastX);
-
-    graph.drawLine(graph.point(lastX, lastY), graph.point(i, f(i)));
-}
+var graph = new Graph(canvas, -10, 10, -10, 10);

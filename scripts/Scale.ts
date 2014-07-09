@@ -134,5 +134,22 @@ class Scale {
     public set majorYScale(v : number) {
         this._majorYScale = v;
     }
+
+    public get majorXMax() : number {
+        return this._majorXMax;
+    }
+
+    public get majorXMin() : number {
+        return this._majorXMin;
+    }
+
+    public get majorYMax() : number {
+        return this._majorYMax;
+    }
+
+    public get majorYMin() : number {
+        return this._majorYMin;
+    }
+
 }
 
