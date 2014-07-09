@@ -399,10 +399,11 @@ var Graph = (function () {
         var y1 = (round) ? Math.round(point1.y) : point1.y;
         var y2 = (round) ? Math.round(point2.y) : point2.y;
 
+        var oldFill: string = this.style.fill;;
+
         //Special cases of vertical or horizontal lines to prevent antialiasing
         if (x1 == x2) {
             var height = y2 - y1;
-            var oldFill = this.style.fill;
             this._context.fillStyle = this.style.line;
 
             x1 -= Math.floor(this.style.lineWidth / 2);
@@ -412,7 +413,6 @@ var Graph = (function () {
             this.style.fill = oldFill;
         } else if (y1 == y2) {
             var width = x2 - x1;
-            var oldFill = this.style.fill;
             this._context.fillStyle = this.style.line;
 
             y1 -= Math.floor(this.style.lineWidth / 2);
