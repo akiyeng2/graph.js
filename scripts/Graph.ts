@@ -170,7 +170,7 @@ class Graph {
             var y: number = e.pageY - parentOffset.top;
             
             var delta: number = e.deltaY;
-            var factor: number = 1 + delta / 500;
+            var factor: number = 1 + delta / 1000;
 
             var origin: Point = graph.point(0, 0);
 
