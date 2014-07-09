@@ -1,3 +1,4 @@
+/*global $:false */
 class Point {
     x: number;
     y: number;

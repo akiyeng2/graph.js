@@ -1,4 +1,5 @@
 /// <reference path="Graph.ts" />
+/*global $:false */
 
 
 var canvas: any = document.getElementById("graph");

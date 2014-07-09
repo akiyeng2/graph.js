@@ -1,3 +1,4 @@
+/*global $:false */
 var Point = (function () {
     //  var newX=x*(this.settings.width/this.settings.xlength),newY=-y*(this.settings.height/this.settings.ylength);
     function Point(x, y, graph) {
@@ -399,11 +400,12 @@ var Graph = (function () {
         var y1 = (round) ? Math.round(point1.y) : point1.y;
         var y2 = (round) ? Math.round(point2.y) : point2.y;
 
-        var oldFill: string = this.style.fill;;
+        var oldFill = this.style.fill;
 
         //Special cases of vertical or horizontal lines to prevent antialiasing
         if (x1 == x2) {
             var height = y2 - y1;
+            oldFill = this.style.fill;
             this._context.fillStyle = this.style.line;
 
             x1 -= Math.floor(this.style.lineWidth / 2);
@@ -413,6 +415,7 @@ var Graph = (function () {
             this.style.fill = oldFill;
         } else if (y1 == y2) {
             var width = x2 - x1;
+            oldFill = this.style.fill;
             this._context.fillStyle = this.style.line;
 
             y1 -= Math.floor(this.style.lineWidth / 2);
@@ -435,7 +438,7 @@ var Graph = (function () {
         var oldFill = this.style.fill;
         this._context.fillStyle = this.style.line;
 
-        if (this.style.lineWidth % 2 == 0) {
+        if (this.style.lineWidth % 2 === 0) {
             y -= this.style.lineWidth / 2;
         } else {
             y -= Math.floor(this.style.lineWidth / 2);
@@ -454,7 +457,7 @@ var Graph = (function () {
         var oldFill = this.style.fill;
         this._context.fillStyle = this.style.line;
 
-        if (this.style.lineWidth % 2 == 0) {
+        if (this.style.lineWidth % 2 === 0) {
             x -= this.style.lineWidth / 2;
         } else {
             x -= Math.floor(this.style.lineWidth / 2);
@@ -773,6 +776,7 @@ var Graph = (function () {
     return Graph;
 })();
 /// <reference path="Graph.ts" />
+/*global $:false */
 var canvas = document.getElementById("graph");
 canvas.width = 600;
 canvas.height = 600;
