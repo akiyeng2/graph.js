@@ -392,9 +392,10 @@ class Graph {
 
     }
 
-    drawText(point: Point, text: string): void {
+    drawText(point: Point, text: string, align: string = "left", centerText: boolean = false): void {
+        this.context.textAlign = align;
         var textWidth: number = this._context.measureText(text).width;
-        this._context.fillText(text, point.x - textWidth / 2, point.y);
+        this._context.fillText(text, (centerText) ? point.x - textWidth / 2 : point.x, point.y);
     }
 
     drawLabels(): void {
@@ -405,7 +406,10 @@ class Graph {
 
         var pixels: number = 15;
 
+
         for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
+
+            //prevent it from plotting zero
             if (Math.abs(i) > xScale / 2) {
 
                 if (this.yMin > 0) {
@@ -420,12 +424,44 @@ class Graph {
                 }
            
 
-                var message: string = Number(i.toPrecision(8)).toString();
+                var message: string = parseFloat(i.toFixed(8)).toString();
                 if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
                     message = i.toExponential();
                 }
 
-                this.drawText(point, message);
+                this.drawText(point, message, "left", true);
+
+
+            }
+        }
+
+        var yScale: number = this._scale.majorYScale;
+
+        this.context.textAlign = "end";
+
+        for (var i = this._scale.majorYMin; i < this._scale.majorYMax; i += yScale) { 
+            var align: string = "right";
+            if (Math.abs(i) > yScale / 2) {
+
+                if (this.xMin > 0) {
+                    point = this.point(this.xMin + pixels * this.xResolution, i - 5 * this.yResolution);
+                    align = "left";
+                } else if (this.xMax < 0) {
+                    point = this.point(this.xMax - pixels * this.xResolution, i - 5 * this.yResolution);
+                } else if (yScale < -this.xMin) {
+                    point = this.point(-this.yResolution * pixels, i - 5 * this.yResolution);
+                } else {
+                    point = this.point(this.yResolution * pixels, i - 5 * this.yResolution);
+                    align = "left";
+                }
+           
+
+                var message: string = parseFloat(i.toFixed(8)).toString();
+                if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
+                    message = i.toExponential();
+                }
+
+                this.drawText(point, message, align);
 
 
             }
@@ -555,7 +591,7 @@ class Graph {
 
     drawFunction() {
         var f = function(x): number {
-            return x * x;
+            return Math.sin(x) / x;
         };
 
         var oldLine: string = this.style.line;

@@ -1,227 +1,3 @@
-/*global $:false */
-var Point = (function () {
-    //  var newX=x*(this.settings.width/this.settings.xlength),newY=-y*(this.settings.height/this.settings.ylength);
-    function Point(x, y, graph) {
-        var originX = -graph.xMin * graph.width / graph.xLength;
-        var originY = graph.height + graph.yMin * graph.height / graph.yLength;
-
-        this.x = originX + x * (graph.width / graph.xLength);
-        this.y = originY - y * (graph.height / graph.yLength);
-    }
-    return Point;
-})();
-var Styles = (function () {
-    function Styles(stroke, fill, point, line, equation, axes, minorGridLines, majorGridLines, pointWidth, lineWidth, axisWidth) {
-        if (typeof stroke === "undefined") { stroke = "black"; }
-        if (typeof fill === "undefined") { fill = "black"; }
-        if (typeof point === "undefined") { point = "black"; }
-        if (typeof line === "undefined") { line = "black"; }
-        if (typeof equation === "undefined") { equation = "darkblue"; }
-        if (typeof axes === "undefined") { axes = "#2363636"; }
-        if (typeof minorGridLines === "undefined") { minorGridLines = "#E6E6E6"; }
-        if (typeof majorGridLines === "undefined") { majorGridLines = "lightgrey"; }
-        if (typeof pointWidth === "undefined") { pointWidth = 3; }
-        if (typeof lineWidth === "undefined") { lineWidth = 1; }
-        if (typeof axisWidth === "undefined") { axisWidth = 2; }
-        this.stroke = stroke;
-        this.fill = fill;
-        this.point = point;
-        this.line = line;
-        this.equation = equation;
-        this.axes = axes;
-        this.minorGridLines = minorGridLines;
-        this.majorGridLines = majorGridLines;
-        this.pointWidth = pointWidth;
-        this.lineWidth = lineWidth;
-        this.axisWidth = axisWidth;
-    }
-    return Styles;
-})();
-var Scale = (function () {
-    function Scale(graph) {
-        this.graph = graph;
-        this.scale();
-    }
-    Scale.prototype.scale = function () {
-        var graph = this.graph;
-
-        var xLength = this.makeNice(graph.xLength, false)[0] * Math.pow(10, this.makeNice(graph.xLength, false)[1]);
-        var yLength = this.makeNice(graph.yLength, false)[0] * Math.pow(10, this.makeNice(graph.yLength, false)[1]);
-
-        var xScale = this.makeNice(xLength / (graph.maxTicks - 1), true);
-        var yScale = this.makeNice(yLength / (graph.maxTicks - 1), true);
-
-        this._majorXScale = Number((xScale[0] * Math.pow(10, xScale[1])).toPrecision(1));
-        this._majorYScale = Number((yScale[0] * Math.pow(10, yScale[1])).toPrecision(1));
-
-        if (xScale[0] < 5) {
-            this._minorXScale = 1 / 4 * this._majorXScale;
-        } else {
-            this._minorXScale = 1 / 5 * this._majorXScale;
-        }
-
-        if (yScale[0] < 5) {
-            this._minorYScale = 1 / 4 * this._majorYScale;
-        } else {
-            this._minorYScale = 1 / 5 * this._majorYScale;
-        }
-
-        this._minorXMin = Math.floor(graph.xMin / this._minorXScale) * this._minorXScale;
-        this._minorXMax = Math.ceil(graph.xMax / this._minorXScale) * this._minorXScale;
-
-        this._majorXMin = Math.floor(graph.xMin / this._majorXScale) * this._majorXScale;
-        this._majorXMax = Math.ceil(graph.xMax / this._majorXScale) * this._majorXScale;
-
-        this._minorYMin = Math.floor(graph.yMin / this._minorYScale) * this._minorYScale;
-        this._minorYMax = Math.ceil(graph.yMax / this._minorYScale) * this._minorYScale;
-
-        this._majorYMin = Math.floor(graph.yMin / this._majorYScale) * this._majorYScale;
-        this._majorYMax = Math.ceil(graph.yMax / this._majorYScale) * this._majorYScale;
-    };
-
-    Scale.prototype.makeNice = function (num, round) {
-        var exponent = Math.floor(Math.log(num) / Math.log(10));
-        var fraction = num / Math.pow(10, exponent);
-        var niceFraction;
-
-        if (round) {
-            if (fraction < 1.5) {
-                niceFraction = 1;
-            } else if (fraction < 3) {
-                niceFraction = 2;
-            } else if (fraction < 7) {
-                niceFraction = 5;
-            } else {
-                niceFraction = 10;
-            }
-        } else {
-            if (fraction <= 1) {
-                niceFraction = 1;
-            } else if (fraction <= 2) {
-                niceFraction = 2;
-            } else if (fraction <= 5) {
-                niceFraction = 5;
-            } else {
-                niceFraction = 10;
-            }
-        }
-
-        return [niceFraction, exponent];
-    };
-
-    Object.defineProperty(Scale.prototype, "minorXScale", {
-        get: function () {
-            return this._minorXScale;
-        },
-        set: function (v) {
-            this._minorXScale = v;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-
-    Object.defineProperty(Scale.prototype, "majorXScale", {
-        get: function () {
-            return this._majorXScale;
-        },
-        set: function (v) {
-            this._majorXScale = v;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-
-    Object.defineProperty(Scale.prototype, "minorYScale", {
-        get: function () {
-            return this._minorYScale;
-        },
-        set: function (v) {
-            this._minorYScale = v;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-
-    Object.defineProperty(Scale.prototype, "majorYScale", {
-        get: function () {
-            return this._majorYScale;
-        },
-        set: function (v) {
-            this._majorYScale = v;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-
-    Object.defineProperty(Scale.prototype, "minorXMax", {
-        get: function () {
-            return this._majorXMax;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    Object.defineProperty(Scale.prototype, "minorXMin", {
-        get: function () {
-            return this._majorXMin;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    Object.defineProperty(Scale.prototype, "minorYMax", {
-        get: function () {
-            return this._majorYMax;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    Object.defineProperty(Scale.prototype, "minorYMin", {
-        get: function () {
-            return this._majorYMin;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    Object.defineProperty(Scale.prototype, "majorXMax", {
-        get: function () {
-            return this._majorXMax;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    Object.defineProperty(Scale.prototype, "majorXMin", {
-        get: function () {
-            return this._majorXMin;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    Object.defineProperty(Scale.prototype, "majorYMax", {
-        get: function () {
-            return this._majorYMax;
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    Object.defineProperty(Scale.prototype, "majorYMin", {
-        get: function () {
-            return this._majorYMin;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return Scale;
-})();
 /// <reference path="Point.ts" />
 /// <reference path="Styles.ts" />
 /// <reference path="Scale.ts" />
@@ -553,12 +329,9 @@ var Graph = (function () {
         }
     };
 
-    Graph.prototype.drawText = function (point, text, align, centerText) {
-        if (typeof align === "undefined") { align = "left"; }
-        if (typeof centerText === "undefined") { centerText = false; }
-        this.context.textAlign = align;
+    Graph.prototype.drawText = function (point, text) {
         var textWidth = this._context.measureText(text).width;
-        this._context.fillText(text, (centerText) ? point.x - textWidth / 2 : point.x, point.y);
+        this._context.fillText(text, point.x - textWidth / 2, point.y);
     };
 
     Graph.prototype.drawLabels = function () {
@@ -569,7 +342,6 @@ var Graph = (function () {
         var pixels = 15;
 
         for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
-            //prevent it from plotting zero
             if (Math.abs(i) > xScale / 2) {
                 if (this.yMin > 0) {
                     point = this.point(i, this.yMin + pixels * this.yResolution);
@@ -586,35 +358,7 @@ var Graph = (function () {
                     message = i.toExponential();
                 }
 
-                this.drawText(point, message, "left", true);
-            }
-        }
-
-        var yScale = this._scale.majorYScale;
-
-        this.context.textAlign = "end";
-
-        for (var i = this._scale.majorYMin; i < this._scale.majorYMax; i += yScale) {
-            var align = "right";
-            if (Math.abs(i) > yScale / 2) {
-                if (this.xMin > 0) {
-                    point = this.point(this.xMin + pixels * this.xResolution, i - 5 * this.yResolution);
-                    align = "left";
-                } else if (this.xMax < 0) {
-                    point = this.point(this.xMax - pixels * this.xResolution, i - 5 * this.yResolution);
-                } else if (yScale < -this.xMin) {
-                    point = this.point(-this.yResolution * pixels, i - 5 * this.yResolution);
-                } else {
-                    point = this.point(this.yResolution * pixels, i - 5 * this.yResolution);
-                    align = "left";
-                }
-
-                var message = parseFloat(i.toFixed(8)).toString();
-                if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
-                    message = i.toExponential();
-                }
-
-                this.drawText(point, message, align);
+                this.drawText(point, message);
             }
         }
     };
@@ -803,7 +547,7 @@ var Graph = (function () {
 
     Graph.prototype.drawFunction = function () {
         var f = function (x) {
-            return Math.sin(x) / x;
+            return x * x;
         };
 
         var oldLine = this.style.line;
@@ -821,9 +565,3 @@ var Graph = (function () {
     };
     return Graph;
 })();
-/// <reference path="Graph.ts" />
-/*global $:false */
-var canvas = document.getElementById("graph");
-canvas.width = 800;
-canvas.height = 800;
-var graph = new Graph(canvas, -10, 10, -10, 10);
