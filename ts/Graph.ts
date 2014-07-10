@@ -1,6 +1,8 @@
 /// <reference path="Point.ts" />
 /// <reference path="Styles.ts" />
 /// <reference path="Scale.ts" />
+/// <reference path="Drawable.ts" />
+
 
 declare var $;
 
@@ -591,7 +593,7 @@ class Graph {
 
     drawFunction() {
         var f = function(x): number {
-            return Math.sin(x) / x;
+            return Math.pow(Math.abs(x), 2 / 3);
         };
 
         var oldLine: string = this.style.line;

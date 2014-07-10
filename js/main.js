@@ -225,6 +225,7 @@ var Scale = (function () {
 /// <reference path="Point.ts" />
 /// <reference path="Styles.ts" />
 /// <reference path="Scale.ts" />
+/// <reference path="Drawable.ts" />
 
 var Graph = (function () {
     function Graph(canvas, xMin, xMax, yMin, yMax, axes, gridlines, tabs, style) {
@@ -803,7 +804,7 @@ var Graph = (function () {
 
     Graph.prototype.drawFunction = function () {
         var f = function (x) {
-            return Math.sin(x) / x;
+            return Math.pow(Math.abs(x), 2 / 3);
         };
 
         var oldLine = this.style.line;
