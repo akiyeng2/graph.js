@@ -26,6 +26,12 @@
 	"dependencies": {
 		"jquery": "1.11.1",
 		"jquery-mousewheel": "3.1.11"
+	},
+
+	"devDependencies" {
+		"grunt": "~0.1.13",
+		"jshint": "2.5.2",
+		"uglifyjs": "2.4.15"
 	}
 
 	
