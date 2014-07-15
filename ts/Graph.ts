@@ -36,7 +36,7 @@ class Graph {
     public xZoom: boolean = true;
     public yZoom: boolean = true;
 
-    private _trace: Equation;
+    private _trace: Expression;
     private _shapes: Array<Drawable>;
 
 
@@ -65,7 +65,7 @@ class Graph {
         this.drag();
         this.zoom();
 
-        this.add(new Equation('Math.sin(x)'))
+        this.add(new Expression('ln (x)'))
 
         this.interpolate();
 
@@ -86,7 +86,7 @@ class Graph {
 
             x = (x - origin.x) * graph.xResolution;
 
-            var fn: Equation = graph._trace;
+            var fn: Expression = graph._trace;
 
 
 
@@ -111,8 +111,8 @@ class Graph {
     public add(shape: Drawable) {
         this._shapes.push(shape);
         shape.add(this);
-        if(shape instanceof Equation) {
-            this.trace = <Equation>shape;
+        if(shape instanceof Expression) {
+            this.trace = <Expression>shape;
         }
         this.update();
     }
@@ -575,11 +575,11 @@ class Graph {
         return this._context;
     }
 
-    public get trace() : Equation {
-        return <Equation>this._trace;
+    public get trace() : Expression {
+        return <Expression>this._trace;
     }
 
-    public set trace(v : Equation) {
+    public set trace(v : Expression) {
         this._trace = v;
     }
 

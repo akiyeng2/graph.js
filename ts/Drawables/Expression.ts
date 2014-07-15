@@ -1,8 +1,11 @@
-class Equation implements Drawable {
+declare var Equation;
+
+class Expression implements Drawable {
 	public f: Function;
 	private _eqn : string;
+	private _equation: any;
 	private _color: string;
-
+ 
 
 
 
@@ -10,7 +13,13 @@ class Equation implements Drawable {
 
 	constructor(eqn: string, color: string = "red") {
 		this._eqn = eqn;
-		this.f = new Function("x", "return " + this._eqn);
+		this._equation = new Equation(eqn);
+		this.f = function(x) {
+			return this._equation.evaluate('x', x);
+		} 
+
+
+
 		this._color = color;
 
 		this._graphs = [];
@@ -33,7 +42,7 @@ class Equation implements Drawable {
 		}
 	}
 
-	equals(other: Equation): boolean {
+	equals(other: Expression): boolean {
 		return this.eqn === other.eqn && this.color === other.color;
 	}
 

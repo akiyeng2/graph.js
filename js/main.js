@@ -570,16 +570,20 @@ var Label = (function () {
 
     return Label;
 })();
-var Equation = (function () {
-    function Equation(eqn, color) {
+var Expression = (function () {
+    function Expression(eqn, color) {
         if (typeof color === "undefined") { color = "red"; }
         this._eqn = eqn;
-        this.f = new Function("x", "return " + this._eqn);
+        this._equation = new Equation(eqn);
+        this.f = function (x) {
+            return this._equation.evaluate('x', x);
+        };
+
         this._color = color;
 
         this._graphs = [];
     }
-    Equation.prototype.draw = function (graph) {
+    Expression.prototype.draw = function (graph) {
         for (var x = graph.xMin; x < graph.xMax; x += graph.xResolution) {
             var lastX = x - (graph.xResolution);
             var lastY = this.f(lastX);
@@ -589,25 +593,25 @@ var Equation = (function () {
         }
     };
 
-    Equation.prototype.updateGraphs = function () {
+    Expression.prototype.updateGraphs = function () {
         for (var i = 0; i < this._graphs.length; i++) {
             this._graphs[i].update();
         }
     };
 
-    Equation.prototype.equals = function (other) {
+    Expression.prototype.equals = function (other) {
         return this.eqn === other.eqn && this.color === other.color;
     };
 
-    Equation.prototype.toString = function () {
+    Expression.prototype.toString = function () {
         return this._eqn;
     };
 
-    Equation.prototype.add = function (graph) {
+    Expression.prototype.add = function (graph) {
         this._graphs.push(graph);
     };
 
-    Equation.prototype.remove = function (graph) {
+    Expression.prototype.remove = function (graph) {
         for (var i = this._graphs.length - 1; i >= 0; i--) {
             if (this._graphs[i] === graph) {
                 this._graphs.splice(i, 1);
@@ -615,7 +619,7 @@ var Equation = (function () {
         }
     };
 
-    Object.defineProperty(Equation.prototype, "eqn", {
+    Object.defineProperty(Expression.prototype, "eqn", {
         get: function () {
             return this._eqn;
         },
@@ -627,7 +631,7 @@ var Equation = (function () {
         configurable: true
     });
 
-    Object.defineProperty(Equation.prototype, "color", {
+    Object.defineProperty(Expression.prototype, "color", {
         get: function () {
             return this._color;
         },
@@ -639,12 +643,12 @@ var Equation = (function () {
         configurable: true
     });
 
-    return Equation;
+    return Expression;
 })();
 /// <reference path="Drawables/Point.ts" />
 /// <reference path="Drawables/Line.ts" />
 /// <reference path="Drawables/Label.ts" />
-/// <reference path="Drawables/Equation.ts" />
+/// <reference path="Drawables/Expression.ts" />
 /// <reference path="Styles.ts" />
 /// <reference path="Scale.ts" />
 /// <reference path="Drawable.ts" />
@@ -687,7 +691,7 @@ var Graph = (function () {
         this.drag();
         this.zoom();
 
-        this.add(new Equation('Math.sin(x)'));
+        this.add(new Expression('ln (x)'));
 
         this.interpolate();
 
@@ -721,7 +725,7 @@ var Graph = (function () {
     Graph.prototype.add = function (shape) {
         this._shapes.push(shape);
         shape.add(this);
-        if (shape instanceof Equation) {
+        if (shape instanceof Expression) {
             this.trace = shape;
         }
         this.update();
