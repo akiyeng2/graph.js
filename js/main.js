@@ -691,8 +691,6 @@ var Graph = (function () {
         this.drag();
         this.zoom();
 
-        this.add(new Expression('ln (x)'));
-
         this.interpolate();
 
         this.update();
