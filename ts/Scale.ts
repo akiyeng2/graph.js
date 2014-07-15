@@ -55,18 +55,21 @@ class Scale {
             this._minorYScale = 1 / 5 * this._majorYScale;
         }
 
-        this._minorXMin = Math.floor(graph.xMin / this._minorXScale) * this._minorXScale;
-        this._minorXMax = Math.ceil(graph.xMax / this._minorXScale) * this._minorXScale;
+        this._minorXScale = parseFloat(this._minorXScale.toPrecision(2));
+        this._minorYScale = parseFloat(this._minorYScale.toPrecision(2));
 
-        this._majorXMin = Math.floor(graph.xMin / this._majorXScale) * this._majorXScale;
-        this._majorXMax = Math.ceil(graph.xMax / this._majorXScale) * this._majorXScale;
+        this._minorXMin = parseFloat((Math.floor(graph.xMin / this._minorXScale) * this._minorXScale).toPrecision(21));
+        this._minorXMax = parseFloat((Math.ceil(graph.xMax / this._minorXScale) * this._minorXScale).toPrecision(21));
+
+        this._majorXMin = parseFloat((Math.floor(graph.xMin / this._majorXScale) * this._majorXScale).toPrecision(21));
+        this._majorXMax = parseFloat((Math.ceil(graph.xMax / this._majorXScale) * this._majorXScale).toPrecision(21));
 
 
-        this._minorYMin = Math.floor(graph.yMin / this._minorYScale) * this._minorYScale;
-        this._minorYMax = Math.ceil(graph.yMax / this._minorYScale) * this._minorYScale;
+        this._minorYMin = parseFloat((Math.floor(graph.yMin / this._minorYScale) * this._minorYScale).toPrecision(21));
+        this._minorYMax = parseFloat((Math.ceil(graph.yMax / this._minorYScale) * this._minorYScale).toPrecision(21));
 
-        this._majorYMin = Math.floor(graph.yMin / this._majorYScale) * this._majorYScale;
-        this._majorYMax = Math.ceil(graph.yMax / this._majorYScale) * this._majorYScale;
+        this._majorYMin = parseFloat((Math.floor(graph.yMin / this._majorYScale) * this._majorYScale).toPrecision(21));
+        this._majorYMax = parseFloat((Math.ceil(graph.yMax / this._majorYScale) * this._majorYScale).toPrecision(21));
 
     }
 
