@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>Testing</title>
+	</head>
+	<body>
+		<canvas id = "graph"></canvas>
+		<script src = "../bower_components/jquery/dist/jquery.min.js"></script>
+		<script src = "../bower_components/jquery-mousewheel/jquery.mousewheel.min.js"></script>
+		<script src = "../js/CAS.js"></script>
+		<script src = "../js/graph.js"></script>
+
+		<script>	
+			var canvas = document.getElementById("graph");
+			canvas.height = 600;
+			canvas.width = 600;
+			var Graph = GraphPaper.Graph;
+			var Point = GraphPaper.Shapes.Point;
+			var Line = GraphPaper.Shapes.Line;
+			var Expression = GraphPaper.Shapes.Expression;
+			var graph = new Graph(canvas);
+
+		</script>
+	</body>
+</html>
+
