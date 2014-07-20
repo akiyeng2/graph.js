@@ -38,11 +38,8 @@ module GraphPaper.Shapes {
 			this._eqn = eqn;
 			this._equation = new Equation(eqn);
 			this.f = function(x) {
-				return this._equation.evaluate('x', x);
-			}
-
-
-
+				return this._equation.evaluate("x", x);
+			};
 
 			this._color = color;
 
@@ -79,8 +76,8 @@ module GraphPaper.Shapes {
 		}
 
 		public remove(graph: Graph) {
-			for(var i = this._graphs.length - 1; i >= 0; i--) {
-	    		if(this._graphs[i] === graph) {
+			for ( var i = this._graphs.length - 1; i >= 0; i--) {
+	    		if (this._graphs[i] === graph) {
 	    		   this._graphs.splice(i, 1);
 	    		}
 			}
@@ -91,7 +88,7 @@ module GraphPaper.Shapes {
 			return this._eqn;
 		}
 		public set eqn(v : string) {
-			this.f = new Function("x", "return " + v);
+			this.f = new Equation(v).compile();
 			this.updateGraphs();
 		}
 

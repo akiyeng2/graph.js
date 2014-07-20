@@ -16,7 +16,7 @@ var GraphPaper;
                 this._eqn = eqn;
                 this._equation = new Equation(eqn);
                 this.f = function (x) {
-                    return this._equation.evaluate('x', x);
+                    return this._equation.evaluate("x", x);
                 };
 
                 this._color = color;
@@ -64,7 +64,7 @@ var GraphPaper;
                     return this._eqn;
                 },
                 set: function (v) {
-                    this.f = new Function("x", "return " + v);
+                    this.f = new Equation(v).compile();
                     this.updateGraphs();
                 },
                 enumerable: true,

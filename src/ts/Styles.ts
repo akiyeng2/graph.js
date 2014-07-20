@@ -24,10 +24,10 @@ module GraphPaper {
          * @param {number} [lineWidth = 1] The default width of a line
          * @param {string} [axisWidth = 2] The default width of the axes
          */
-        constructor(public stroke:string = "black", public fill:string = "black", public point:string = "black",
-                    public line:string = "black", public equation:string = "red", public axes:string = "black",
-                    public minorGridLines:string = "#E6E6E6", public majorGridLines:string = "lightgrey",
-                    public pointWidth:number = 3, public lineWidth:number = 1, public axisWidth:number = 2) {
+        constructor(public stroke: string = "black", public fill: string = "black", public point: string = "black",
+                    public line: string = "black", public equation: string = "red", public axes: string = "black",
+                    public minorGridLines: string = "#E6E6E6", public majorGridLines: string = "lightgrey",
+                    public pointWidth: number = 3, public lineWidth: number = 1, public axisWidth: number = 2) {
 
 
         }

@@ -57,6 +57,10 @@ module.exports = function(grunt) {
                src: ['src/ts/**/*.ts']
 
            }
+       },
+
+       jshint: {
+           files: ['src/js/**/*.js']
        }
 
     });
@@ -64,6 +68,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-tslint');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
     grunt.registerTask('build', ['ts:build', 'uglify']);
-    grunt.registerTask('dev', ['tslint']);
+    grunt.registerTask('lint', ['tslint', 'ts:dev', 'jshint']);
 }

@@ -42,10 +42,10 @@ module GraphPaper.Shapes {
 		}
 
 		public draw(graph: Graph) {
-			var pt: {x: number; y: number;} = this._point.toCanvas(graph);
+			var pt: {x: number; y: number; } = this._point.toCanvas(graph);
 
 
-			if(this._centered) {
+			if (this._centered) {
 				pt.x -= Math.floor(graph.context.measureText(this._text).width / 2);
 				pt.y -= Math.floor(graph.context.measureText("o").width / 2);
 			}
@@ -69,8 +69,8 @@ module GraphPaper.Shapes {
 		}
 
 		public remove(graph: Graph) {
-			for(var i = this._graphs.length - 1; i >= 0; i--) {
-	    		if(this._graphs[i] === graph) {
+			for ( var i = this._graphs.length - 1; i >= 0; i--) {
+	    		if (this._graphs[i] === graph) {
 	    		   this._graphs.splice(i, 1);
 	    		}
 			}

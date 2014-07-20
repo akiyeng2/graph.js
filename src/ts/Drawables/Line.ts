@@ -41,16 +41,16 @@ module GraphPaper.Shapes {
 			graph.context.strokeStyle = this.color;
 			graph.context.lineWidth = this.width;
 
-			var pt1: {x: number; y: number;} = this.point1.toCanvas(graph);
-			var pt2: {x: number; y: number;} = this.point2.toCanvas(graph);
+			var pt1: {x: number; y: number; } = this.point1.toCanvas(graph);
+			var pt2: {x: number; y: number; } = this.point2.toCanvas(graph);
 
-			if(pt1.x === pt2.x) {
+			if (pt1.x === pt2.x) {
 				graph.context.fillStyle = this.color;
 				var x: number = pt1.x;
 				x -= Math.floor(this.width / 2);
 				graph.context.fillRect(x, pt1.y, this.width, pt2.y - pt1.y);
 
-			} else if(pt1.y === pt2.y) {
+			} else if (pt1.y === pt2.y) {
 				graph.context.fillStyle = this.color;
 				var y: number = pt2.y;
 				y -= Math.floor(this.width / 2);
@@ -75,8 +75,8 @@ module GraphPaper.Shapes {
 		}
 
 		public remove(graph: Graph) {
-			for(var i = this._graphs.length - 1; i >= 0; i--) {
-	    		if(this._graphs[i] === graph) {
+			for (var i = this._graphs.length - 1; i >= 0; i--) {
+	    		if (this._graphs[i] === graph) {
 	    		   this._graphs.splice(i, 1);
 	    		}
 			}

@@ -67,7 +67,7 @@ module GraphPaper.Shapes {
          */
 
         draw(graph: Graph): void {
-            var coordinates: {x: number; y: number;} = this.toCanvas(graph);
+            var coordinates: {x: number; y: number; } = this.toCanvas(graph);
 
             graph.context.fillStyle = this._color;
 
@@ -90,8 +90,8 @@ module GraphPaper.Shapes {
         }
 
         public remove(graph: Graph) {
-            for(var i = this._graphs.length - 1; i >= 0; i--) {
-                if(this._graphs[i] === graph) {
+            for ( var i = this._graphs.length - 1; i >= 0; i--) {
+                if (this._graphs[i] === graph) {
                    this._graphs.splice(i, 1);
                 }
             }
@@ -117,7 +117,7 @@ module GraphPaper.Shapes {
          * @returns {number} point.y: The y coordinate
          */
 
-        toCanvas(graph: Graph): {x: number; y: number;} {
+        toCanvas(graph: Graph): {x: number; y: number; } {
             var originX: number = -graph.xMin * graph.width / graph.xLength;
             var originY: number = graph.height + graph.yMin * graph.height / graph.yLength;
 

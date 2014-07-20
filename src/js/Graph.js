@@ -7,7 +7,7 @@
 */
 var GraphPaper;
 (function (GraphPaper) {
-
+    
 
     var Scale = GraphPaper.Scale;
 
@@ -351,8 +351,8 @@ var GraphPaper;
             }
 
             //Major tabs
-            var xScale = this._scale.majorXScale;
-            var yScale = this._scale.majorYScale;
+            xScale = this._scale.majorXScale;
+            yScale = this._scale.majorYScale;
 
             for (x = this._scale.majorXMin; x < this._scale.majorXMax; x += xScale) {
                 line = new Line(new Point(x, -majorTabHeight), new Point(x, majorTabHeight), this.style.axes);
@@ -371,12 +371,12 @@ var GraphPaper;
         */
         Graph.prototype.drawLabels = function () {
             var xScale = this._scale.majorXScale;
-
             var point;
-
             var pixels = 20;
+            var i;
+            var message;
 
-            for (var i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
+            for (i = this._scale.majorXMin; i < this._scale.majorXMax; i += xScale) {
                 //prevent it from plotting zero
                 if (Math.abs(i) > xScale / 2) {
                     if (this.yMin > 0) {
@@ -389,7 +389,7 @@ var GraphPaper;
                         point = new Point(i, this.yResolution * pixels);
                     }
 
-                    var message = parseFloat(i.toPrecision(8)).toString();
+                    message = parseFloat(i.toPrecision(8)).toString();
                     if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
                         message = i.toExponential();
                     }
@@ -404,7 +404,7 @@ var GraphPaper;
 
             pixels = 15;
 
-            for (var i = this._scale.majorYMin; i < this._scale.majorYMax; i += yScale) {
+            for (i = this._scale.majorYMin; i < this._scale.majorYMax; i += yScale) {
                 var align = "right";
                 if (Math.abs(i) > yScale / 2) {
                     if (this.xMin > 0) {
@@ -419,7 +419,7 @@ var GraphPaper;
                         align = "left";
                     }
 
-                    var message = parseFloat(i.toPrecision(8)).toString();
+                    message = parseFloat(i.toPrecision(8)).toString();
                     if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
                         message = i.toExponential();
                     }
