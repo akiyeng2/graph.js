@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<title>Testing</title>
+	</head>
+	<body>
+		<canvas id = "graph"></canvas>
+		<script src = "../bower_components/jquery/dist/jquery.min.js"></script>
+		<script src = "../bower_components/jquery-mousewheel/jquery.mousewheel.min.js"></script>
+		<script src = "../bower_components/fraction.js/fraction.js"></script>
+        <script src = "../bower_components/Javascript-CAS/src/CAS.min.js"></script>
+		<script src = "../dist/Graph.min.js"></script>
+
+		<script>
+			var canvas = document.getElementById("graph");
+			canvas.height = 600;
+			canvas.width = 600;
+			var Graph = GraphPaper.Graph;
+			var Point = GraphPaper.Shapes.Point;
+			var Line = GraphPaper.Shapes.Line;
+			var Expression = GraphPaper.Shapes.Expression;
+			var graph = new Graph(canvas);
+            var expr = new Expression("sin(x)");
+            graph.add(expr);
+
+		</script>
+	</body>
+</html>
+

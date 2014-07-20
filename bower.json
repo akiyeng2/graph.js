@@ -1,0 +1,35 @@
+{
+  "name": "Graph.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/scrblnrd3/graph.js",
+  "authors": [
+    "scrblnrd3 <amalan.iyengar@gmail.com>"
+  ],
+  "description": "A graphing library built in Typescript and Javascript",
+  "main": "js/graph.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "Graph",
+    "Function",
+    "Draw",
+    "Canvas"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "jquery-mousewheel": "~3.1.12",
+    "Javascript-CAS": "scrblnrd3/Javascript-CAS"
+  }
+
+
+}

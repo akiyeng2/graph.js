@@ -1,0 +1,2766 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+	<title>Graph.js Class: Graph</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
+
+	<style>
+		.sideMenu
+		{
+			margin-left: 320px!important;
+
+		}
+		#main
+		{
+			margin-top: 46px;
+		}
+		#mainMenu
+		{
+			position: fixed;
+			left: 0px;
+			top: 0px;
+
+		}
+
+		#searchBox
+		{
+			vertical-align: none !important;
+			padding-right: 0px;
+			width:238px;
+
+		}
+		.sideMargin
+		{
+			margin-left: 15px;
+		}
+		.sunlight-code-container
+		{
+			border:none!important;
+		}
+		.navTitle
+		{
+			font-size:15px;
+			padding:0px;
+
+		}
+		.nav-list
+		{
+			width: 100%;
+		}
+		.nav-list
+		{
+			padding-left:20px;
+		}
+		.nav-list li
+		{
+			line-height: 16px;
+		}
+		.handCursor
+		{
+			cursor: pointer;
+		}
+		.nav-pills > li > a {
+			padding-top: 0px;
+			padding-bottom: 0px;
+		}
+
+		#projectTitle
+		{
+			position: fixed;
+			padding-left: 10px;
+			padding-top: 5px;
+			font-size: 26px;
+			font-weight: lighter;
+			letter-spacing: -1px;
+			background-color: #FFF;
+			width: 100%;
+			height: 35px;
+			line-height: 18px;
+			color: #000;
+			border-bottom: 1px solid rgba(0,0,0,.2);
+			z-index: 10;
+		}
+		h1, h2, h3, h4, h5, h6 {
+			font-family: 'Helvetica Neue';
+			font-weight: lighter;
+		}
+		h3
+		{
+			font-size: 22px;
+			font-weight: lighter;
+		}
+		.page-title
+		{
+			font-weight: lighter;
+			font-size: 28px;
+			letter-spacing: -2px;
+			padding-top:0px;
+		}
+
+		.well
+		{
+			padding: 5px;
+			width:280px;
+			margin-left:0px;
+		}
+
+
+		.menuFrame
+		{
+			margin-top: 20px;
+			overflow:hidden;
+			overflow-y:auto;
+		}
+		.menuFrame::-webkit-scrollbar {
+		    -webkit-appearance: none;
+		}
+
+		.menuFrame::-webkit-scrollbar:vertical {
+		    width: 11px;
+		}
+
+		.menuFrame::-webkit-scrollbar:horizontal {
+		    height: 11px;
+		}
+
+		.menuFrame::-webkit-scrollbar-thumb {
+		    border-radius: 8px;
+		    border: 2px solid white; /* should match background, can't be transparent */
+		    background-color: rgba(0, 0, 0, .5);
+		}
+
+		.container-fluid
+		{
+			padding-left: 10px;
+		}
+
+		#side-menu
+		{
+			height: 415px;
+			box-shadow: inset 0 0 10px rgba(0,0,0,.5);
+			border: 1px solid #999;
+		}
+
+		#menuAside
+		{
+			margin-top:50px;
+			position:fixed;
+		}
+
+		.member {
+			font-size: 14px;
+			color:#000;
+			background-color:#FFF;
+			border:1px solid #2fa4e7;
+		}
+		.member:hover {
+
+			background-color:#F6F6F6;
+		}
+		.member-open .paramSignature{
+			font-size: 14px;
+			color: #2fa4e7;
+		}
+		.member-collapsed .paramSignature{
+			font-size: 14px;
+			color: #2fa4e7;
+		}
+		.routeTitle{
+		    cursor: pointer;
+		}
+
+		.genericAnnotation
+		{
+		    color:#2fa4e7;
+		}
+
+		.sourceBar
+		{
+			margin-top: -5px;
+		}
+
+
+
+.twitter-typeahead
+{
+	top: -5px;
+}
+.twitter-typeahead .tt-query,
+.twitter-typeahead .tt-hint {
+  margin-bottom: 0;
+  background-color: #F00;
+  border-radius: 20px;
+
+}
+
+.tt-hint
+{
+	top: 2px!important;
+
+    padding-left: 10px!important;
+    width: 188px;
+    text-indent: 4px;
+}
+.tt-dropdown-menu {
+  min-width: 160px;
+  margin-top: 2px;
+  padding: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.2);
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
+}
+
+.tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: #0081c2;
+  background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+  background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
+}
+
+.tt-suggestion.tt-is-under-cursor a {
+  color: #fff;
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+	</style>
+</head>
+
+<body>
+<div id="projectTitle">
+	<div id="btnCollapse" class="btn collapseSidebarButton btn-primary"><i class="icon-th-list icon-white"></i></div>
+	Graph.js
+</div>
+<div class="container-fluid">
+
+	<div id="menuAside">
+    <aside class="well span3 oc" id="side-menu" role="navigation">
+
+    	<div style="margin-left: 10px; margin-top: 10px;">
+			<input type="text" id="searchBox" class="search-query typeahead" placeholder="Search">
+		</div>
+		<div class="menuFrame" id="sideMenuFrame">
+		<ul id="menuContainer" class="nav nav-pills nav-stacked">
+			<li class="nav-header navTitle"><a href="index.html">INDEX</a></li>
+				<li class="divider"></li>
+
+
+					    <li id="navTitle_Namespaces" class="nav-header navTitle">
+                            <a class="handCursor" data-toggle="collapse" data-id="T_Namespaces" data-target="#collapse_Namespaces">Namespaces<span class="badge badge-info pull-right">2</span></a>
+                        </li>
+                        <li id="navContents_Namespaces">
+                            <div id="collapse_Namespaces" class="collapse">
+                                <ul class="nav nav-list" style="width:100%;margin-left:-8px;">
+
+                                        <?j
+                                    <li>
+
+
+                                        	<a href="GraphPaper.html">GraphPaper</a>
+
+                                    </li>
+
+                                    <li>
+
+
+                                        	<a href="GraphPaper.Shapes.html">GraphPaper.Shapes</a>
+
+                                    </li>
+
+                             <li class="divider"></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+
+					    <li id="navTitle_Classes" class="nav-header navTitle">
+                            <a class="handCursor" data-toggle="collapse" data-id="T_Classes" data-target="#collapse_Classes">Classes<span class="badge badge-info pull-right">4</span></a>
+                        </li>
+                        <li id="navContents_Classes">
+                            <div id="collapse_Classes" class="collapse">
+                                <ul class="nav nav-list" style="width:100%;margin-left:-8px;">
+                                    <li><div class="routeTitle">GraphPaper</div><ul class="children nav nav-list"><li><a href="GraphPaper.Graph.html">Graph</a></li><li><a href="GraphPaper.Scale.html">Scale</a></li><li><div class="routeTitle">Shapes</div><ul class="children nav nav-list"><li><a href="GraphPaper.Shapes.Point.html">Point</a></li></ul></li><li><a href="GraphPaper.Styles.html">Styles</a></li></ul></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+
+					    <li id="navTitle_Interfaces" class="nav-header navTitle">
+                            <a class="handCursor" data-toggle="collapse" data-id="T_Interfaces" data-target="#collapse_Interfaces">Interfaces<span class="badge badge-info pull-right">1</span></a>
+                        </li>
+                        <li id="navContents_Interfaces">
+                            <div id="collapse_Interfaces" class="collapse">
+                                <ul class="nav nav-list" style="width:100%;margin-left:-8px;">
+                                    <li><div class="routeTitle">GraphPaper</div><ul class="children nav nav-list"><li><a href="GraphPaper.Drawable.html">Drawable</a></li></ul></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+
+
+		</ul>
+		</div>
+
+		<script>
+			var searchMembers = [{"realName":"GraphPaper","link":"GraphPaper"},{"realName":"GraphPaper.Shapes","link":"GraphPaper.Shapes"},{"realName":"GraphPaper.Graph","link":"GraphPaper.Graph"},{"realName":"GraphPaper.Scale","link":"GraphPaper.Scale"},{"realName":"GraphPaper.Shapes.Point","link":"GraphPaper.Shapes.Point"},{"realName":"GraphPaper.Styles","link":"GraphPaper.Styles"},{"realName":"GraphPaper.Drawable","link":"GraphPaper.Drawable"}];
+		</script>
+    </aside>
+	</div>
+    <div id="docContents" class="sideMenu sideMargin">
+
+
+			<div style="width:100%">
+
+				<div id="main">
+
+
+
+	<h1 class="page-title">
+        Class:
+        <span class="ancestors"><a href="GraphPaper.html">GraphPaper</a>.</span>Graph
+
+    </h1>
+<section>
+
+<header>
+
+        <div class="class-description"><p>GraphPaper.Graph is the starting point of the library.</p></div>
+
+</header>
+
+<article>
+    <div class="container-overview">
+
+
+
+
+<dt>
+    <a name="Graph"></a>
+
+    <h4 class="name" id="Graph"><span class="btn btn-mini btn btn-danger">C</span> new Graph( canvas: <span class="paramSignature">HTMLCanvasElement</span>, xMin: <span class="paramSignature">number</span>, xMax: <span class="paramSignature">number</span>, yMin: <span class="paramSignature">number</span>, yMax: <span class="paramSignature">number</span>, axes: <span class="paramSignature">boolean</span>, gridlines: <span class="paramSignature">boolean</span>, tabs: <span class="paramSignature">boolean</span>, style: <span class="paramSignature">Styles</span> ) &rarr; {void}
+
+
+
+    <a href="Graph.ts.html"><div style="font-weight:lighter; float:right;" class="btn sourceBar"><i class="icon-eye-open"></i></div></a>
+
+
+
+    </h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>This is the main class GraphPaper.Graph. It is used to initialize a new graph. By default a graph initializes
+with a window of [-10, 10] by [-10, 10].</p>
+    </div>
+
+
+
+
+
+
+
+
+
+        <h5>Parameters:</h5>
+
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+
+		<th>Name</th>
+
+
+		<th>Type</th>
+
+
+		<th>Argument</th>
+
+
+
+		<th>Default</th>
+
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+
+
+        <tr>
+
+                <td class="name"><code>canvas</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">HTMLCanvasElement</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                </td>
+
+
+            <td class="description last"><p>The canvas to draw on</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>xMin</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">number</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    -10
+
+                </td>
+
+
+            <td class="description last"><p>The minimum of the x-axis</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>xMax</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">number</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    10
+
+                </td>
+
+
+            <td class="description last"><p>The maximum of the x-axis</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>yMin</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">number</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    10
+
+                </td>
+
+
+            <td class="description last"><p>The minimum of the y-axis</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>yMax</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">number</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    10
+
+                </td>
+
+
+            <td class="description last"><p>The maximum of the y-axis</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>axes</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">boolean</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    true
+
+                </td>
+
+
+            <td class="description last"><p>Whether or not to display axes on the graph</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>gridlines</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">boolean</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    true
+
+                </td>
+
+
+            <td class="description last"><p>Whether or not to display gridlines on the graph</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>tabs</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">boolean</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    true
+
+                </td>
+
+
+            <td class="description last"><p>Whether or not to display tabs on the graph</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>style</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Styles</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    The default styles
+
+                </td>
+
+
+            <td class="description last"><p>The styles of different objects on the graph</p></td>
+        </tr>
+
+
+	</tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <h3 class="subsection-title">Properties</h3>
+
+        <dl>
+
+<dt>
+    <a name="height"></a><h4 class="name" id="height"><span class="btn btn-mini btn-success" title="public">P</span> height<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is the height of the canvas</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="majorXScale"></a><h4 class="name" id="majorXScale"><span class="btn btn-mini btn-success" title="public">P</span> majorXScale<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is how far apart the major x gridlines are from each other. It is calculated in <a href="GraphPaper.Scale.html">GraphPaper.Scale</a></p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="majorYScale"></a><h4 class="name" id="majorYScale"><span class="btn btn-mini btn-success" title="public">P</span> majorYScale<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is how far apart the major y gridlines are form each other. It is calculated in <a href="GraphPaper.Scale.html">GraphPaper.Scale</a></p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="maxTicks"></a><h4 class="name" id="maxTicks"><span class="btn btn-mini btn-success" title="public">P</span> maxTicks<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is the maximum number of major gridlines in the graph. Changing this will change the tabs and gridlines</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="minorYScale"></a><h4 class="name" id="minorYScale"><span class="btn btn-mini btn-success" title="public">P</span> minorYScale<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is how far apart the minor y gridlines are from each other. It is calculated in <a href="GraphPaper.Scale.html">GraphPaper.Scale</a></p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="width"></a><h4 class="name" id="width"><span class="btn btn-mini btn-success" title="public">P</span> width<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is the width of the canvas</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="xLength"></a><h4 class="name" id="xLength"><span class="btn btn-mini btn-success" title="public">P</span> xLength<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is the length of the x-axis, or xMax - xMin</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="xMax"></a><h4 class="name" id="xMax"><span class="btn btn-mini btn-success" title="public">P</span> xMax<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is the maximum x coordinate of the graph</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="xMin"></a><h4 class="name" id="xMin"><span class="btn btn-mini btn-success" title="public">P</span> xMin<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is the minimum x coordinate of the graph</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="xResolution"></a><h4 class="name" id="xResolution"><span class="btn btn-mini btn-success" title="public">P</span> xResolution<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is used in converting to and from pixels and coordinate length on the x-axis</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="yLength"></a><h4 class="name" id="yLength"><span class="btn btn-mini btn-success" title="public">P</span> yLength<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is the length of the y-axis, or yMax - yMin</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="yMax"></a><h4 class="name" id="yMax"><span class="btn btn-mini btn-success" title="public">P</span> yMax<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is the maxmimum y coordinate of the graph</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="yMin"></a><h4 class="name" id="yMin"><span class="btn btn-mini btn-success" title="public">P</span> yMin<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is the minimum y coordinate of the graph</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<dt>
+    <a name="yResolution"></a><h4 class="name" id="yResolution"><span class="btn btn-mini btn-success" title="public">P</span> yResolution<span class="type-signature"> :number</span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>This is used in converting to and from pixels and coordinate lengths on the y-axis</p>
+    </div>
+
+
+
+        <h5>Type:</h5>
+        <ul>
+            <li>
+
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+        </dl>
+
+
+
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+
+<dt>
+    <a name="add"></a>
+
+    <h4 class="name" id="add"><span class="btn btn-mini btn-success" title="public">M</span> add( shape: <span class="paramSignature">GraphPaper&#46;Shape</span> )
+
+
+
+    </h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>This adds a shape to the graph that stays whenever the graph is redrawn</p>
+    </div>
+
+
+
+
+
+
+
+
+
+        <h5>Parameters:</h5>
+
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+
+		<th>Name</th>
+
+
+		<th>Type</th>
+
+
+
+
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+
+
+        <tr>
+
+                <td class="name"><code>shape</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">GraphPaper.Shape</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last"><p>The shape that needs to be permanently added</p></td>
+        </tr>
+
+
+	</tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt>
+    <a name="drag"></a>
+
+    <h4 class="name" id="drag"><span class="btn btn-mini btn-success" title="public">M</span> drag(  )
+
+
+
+    </h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>This method initializes the event listener for dragging</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt>
+    <a name="drawAxes"></a>
+
+    <h4 class="name" id="drawAxes"><span class="btn btn-mini btn-success" title="public">M</span> drawAxes(  )
+
+
+
+    </h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>This draws the axes according to the style given</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt>
+    <a name="drawGridLines"></a>
+
+    <h4 class="name" id="drawGridLines"><span class="btn btn-mini btn-success" title="public">M</span> drawGridLines(  )
+
+
+
+    </h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>This draws the gridlines according to the style given</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt>
+    <a name="drawLabels"></a>
+
+    <h4 class="name" id="drawLabels"><span class="btn btn-mini btn-success" title="public">M</span> drawLabels(  )
+
+
+
+    </h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>This draws the ticks on the axes</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt>
+    <a name="drawTabs"></a>
+
+    <h4 class="name" id="drawTabs"><span class="btn btn-mini btn-success" title="public">M</span> drawTabs(  )
+
+
+
+    </h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>This draws the ticks on the axes</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt>
+    <a name="remove"></a>
+
+    <h4 class="name" id="remove"><span class="btn btn-mini btn-success" title="public">M</span> remove( shape: <span class="paramSignature">GraphPaper&#46;Shape</span> )
+
+
+
+    </h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>This removes shapes from the graph</p>
+    </div>
+
+
+
+
+
+
+
+
+
+        <h5>Parameters:</h5>
+
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+
+		<th>Name</th>
+
+
+		<th>Type</th>
+
+
+
+
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+
+
+        <tr>
+
+                <td class="name"><code>shape</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">GraphPaper.Shape</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last"><p>The shape to be removed</p></td>
+        </tr>
+
+
+	</tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt>
+    <a name="update"></a>
+
+    <h4 class="name" id="update"><span class="btn btn-mini btn-success" title="public">M</span> update( recalculate: <span class="paramSignature">boolean</span> )
+
+
+
+    </h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>This redraws everything on the graph</p>
+    </div>
+
+
+
+
+
+
+
+
+
+        <h5>Parameters:</h5>
+
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+
+		<th>Name</th>
+
+
+		<th>Type</th>
+
+
+		<th>Argument</th>
+
+
+
+		<th>Default</th>
+
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+
+
+        <tr>
+
+                <td class="name"><code>recalculate</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">boolean</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+                <td class="default">
+
+                    true
+
+                </td>
+
+
+            <td class="description last"><p>If this is true, the graph will recalculate the resolution and scales</p></td>
+        </tr>
+
+
+	</tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt>
+    <a name="zoom"></a>
+
+    <h4 class="name" id="zoom"><span class="btn btn-mini btn-success" title="public">M</span> zoom(  )
+
+
+
+    </h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>This initializes the event listener for zooming</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+        </dl>
+
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- xperiments
+
+    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Graph.ts.html">Graph.ts</a></dt>
+    -->
+
+
+
+
+
+
+</dl>
+
+</article>
+
+</section>
+
+
+
+
+				</div>
+
+				<div class="clearfix"></div>
+				<footer>
+
+
+						<span class="copyright">
+						Graph.js Copyright © 2014 Amalan Iyengar.
+						</span>
+									<br />
+
+						<span class="jsdoc-message">
+						Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha9</a>
+						on Sat Jul 19 2014 11:53:54 GMT-0400 (EDT) using the <a href="https://github.com/xperiments/TSDoc">TSDoc template</a>.
+						</span>
+				</footer>
+			</div>
+			<!--
+
+			<div class="span3">
+				<div id="toc"></div>
+			</div>
+
+			-->
+			<br clear="both">
+		</div>
+
+	</div>
+
+	<script src="scripts/sunlight.js"></script>
+	<script src="scripts/sunlight.javascript.js"></script>
+	<script src="scripts/sunlight-plugin.doclinks.js"></script>
+	<script src="scripts/sunlight-plugin.linenumbers.js"></script>
+	<script src="scripts/sunlight-plugin.menu.js"></script>
+	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/jquery.scrollTo.js"></script>
+	<script src="scripts/jquery.localScroll.js"></script>
+	<script src="scripts/bootstrap.min.js"></script>
+
+
+
+	<script>  Sunlight.highlightAll({lineNumbers:false,  showMenu: true, enableDoclinks :true}); </script>
+
+	<script>
+		$( function () {
+
+			var searchItems = [];
+			var searchMap = {};
+			var mapName = "";
+			for( var i=0; i<searchMembers.length; i++ )
+			{
+				realName = searchMembers[i].realName;
+				searchItems.push( realName );
+				searchMap[ realName ] = searchMembers[ i ];
+			}
+
+
+			$('.typeahead').typeahead({
+			  source: searchItems,
+			  matcher: function(item) {
+			  	//console.log('aaa'+item, this.query, item.indexOf( this.query.toLowerCase() )==-1?false:true)
+                // evaluate item variable and return true if the item was matched.
+                return item.toLowerCase().indexOf( this.query.toLowerCase() )==-1?false:true;
+             },
+			  updater: function (item) {
+					window.location.href = searchMap[ item ].link+'.html';
+			  }
+
+			});
+
+
+            // Move Tutorials to bottom
+            //$('#menuContainer').append($('#navTitle_Tutorials'));
+            //$('#menuContainer').append($('#navContents_Tutorials'));
+			$(window).resize(function() {
+			  $('#side-menu').height( $(window).height()-70 );
+			  $('#sideMenuFrame').height( $(window).height()-140 );
+			  if( $(window).width() <480 )
+			  {
+			  	$('#side-menu').hide();
+				$('#docContents').removeClass('sideMenu');
+			  }
+			});
+
+			$(window).trigger('resize')
+			$('#btnCollapse').click(function()
+			{
+				$('#side-menu').toggle();
+				$('#docContents').toggleClass('sideMenu');
+
+			})
+			$('#btnHome').click(function()
+			{
+				document.location.href="index.html"
+
+			})
+
+			$('.sourceBar').click(function(){})
+			var lastMenuSelection = window.localStorage.getItem('lastMenuSelection') || null;
+			if( lastMenuSelection ) $('a[data-id='+lastMenuSelection+']').click();
+			$('a[data-toggle=collapse]').click(function(){
+				if( lastMenuSelection == $(this).attr('data-id') ) return;
+				if( lastMenuSelection ) $('a[data-id='+lastMenuSelection+']').click();
+				lastMenuSelection = $(this).attr('data-id');
+				window.localStorage.setItem('lastMenuSelection', lastMenuSelection )
+			});
+
+
+		} );
+	</script>
+
+
+	<script>
+		$( function () {
+			$('#main').localScroll({
+				offset: { top: 56 } //offset by the height of your header (give or take a few px, see what works for you)
+			});
+			$(".routeTitle").on('click', function(){
+			    $(this).next().slideToggle();
+			});
+			$( "dt h4.name" ).each( function () {
+				var $this = $( this );
+				//var icon = $( "<i/>" ).addClass( "icon-plus-sign" ).addClass( "pull-right" );
+				var dt = $this.parents( "dt" );
+				var children = dt.next( "dd" );
+
+				//$this.append( icon ).css( {cursor : "pointer"} );
+				$this.addClass( "member-collapsed" ).addClass( "member" );
+
+				children.hide();
+				$this.toggle( function () {
+					//icon.addClass( "icon-minus-sign" ).removeClass( "icon-plus-sign" );
+					$this.addClass( "member-open" ).removeClass( "member-collapsed" );
+					children.slideDown();
+				}, function () {
+					//icon.addClass( "icon-plus-sign" ).removeClass( "icon-minus-sign" );
+					$this.addClass( "member-collapsed" ).removeClass( "member-open" );
+					children.slideUp();
+				} );
+			} );
+			$('.sourceBar').click(function(event){event.stopPropagation();})
+		} );
+	</script>
+
+
+</body>
+</html>

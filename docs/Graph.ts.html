@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+	<title>Graph.js Source: Graph.ts</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
+
+	<style>
+		.sideMenu
+		{
+			margin-left: 320px!important;
+
+		}
+		#main
+		{
+			margin-top: 46px;
+		}
+		#mainMenu
+		{
+			position: fixed;
+			left: 0px;
+			top: 0px;
+
+		}
+
+		#searchBox
+		{
+			vertical-align: none !important;
+			padding-right: 0px;
+			width:238px;
+
+		}
+		.sideMargin
+		{
+			margin-left: 15px;
+		}
+		.sunlight-code-container
+		{
+			border:none!important;
+		}
+		.navTitle
+		{
+			font-size:15px;
+			padding:0px;
+
+		}
+		.nav-list
+		{
+			width: 100%;
+		}
+		.nav-list
+		{
+			padding-left:20px;
+		}
+		.nav-list li
+		{
+			line-height: 16px;
+		}
+		.handCursor
+		{
+			cursor: pointer;
+		}
+		.nav-pills > li > a {
+			padding-top: 0px;
+			padding-bottom: 0px;
+		}
+
+		#projectTitle
+		{
+			position: fixed;
+			padding-left: 10px;
+			padding-top: 5px;
+			font-size: 26px;
+			font-weight: lighter;
+			letter-spacing: -1px;
+			background-color: #FFF;
+			width: 100%;
+			height: 35px;
+			line-height: 18px;
+			color: #000;
+			border-bottom: 1px solid rgba(0,0,0,.2);
+			z-index: 10;
+		}
+		h1, h2, h3, h4, h5, h6 {
+			font-family: 'Helvetica Neue';
+			font-weight: lighter;
+		}
+		h3
+		{
+			font-size: 22px;
+			font-weight: lighter;
+		}
+		.page-title
+		{
+			font-weight: lighter;
+			font-size: 28px;
+			letter-spacing: -2px;
+			padding-top:0px;
+		}
+
+		.well
+		{
+			padding: 5px;
+			width:280px;
+			margin-left:0px;
+		}
+
+
+		.menuFrame
+		{
+			margin-top: 20px;
+			overflow:hidden;
+			overflow-y:auto;
+		}
+		.menuFrame::-webkit-scrollbar {
+		    -webkit-appearance: none;
+		}
+
+		.menuFrame::-webkit-scrollbar:vertical {
+		    width: 11px;
+		}
+
+		.menuFrame::-webkit-scrollbar:horizontal {
+		    height: 11px;
+		}
+
+		.menuFrame::-webkit-scrollbar-thumb {
+		    border-radius: 8px;
+		    border: 2px solid white; /* should match background, can't be transparent */
+		    background-color: rgba(0, 0, 0, .5);
+		}
+
+		.container-fluid
+		{
+			padding-left: 10px;
+		}
+
+		#side-menu
+		{
+			height: 415px;
+			box-shadow: inset 0 0 10px rgba(0,0,0,.5);
+			border: 1px solid #999;
+		}
+
+		#menuAside
+		{
+			margin-top:50px;
+			position:fixed;
+		}
+
+		.member {
+			font-size: 14px;
+			color:#000;
+			background-color:#FFF;
+			border:1px solid #2fa4e7;
+		}
+		.member:hover {
+
+			background-color:#F6F6F6;
+		}
+		.member-open .paramSignature{
+			font-size: 14px;
+			color: #2fa4e7;
+		}
+		.member-collapsed .paramSignature{
+			font-size: 14px;
+			color: #2fa4e7;
+		}
+		.routeTitle{
+		    cursor: pointer;
+		}
+
+		.genericAnnotation
+		{
+		    color:#2fa4e7;
+		}
+
+		.sourceBar
+		{
+			margin-top: -5px;
+		}
+
+
+
+.twitter-typeahead
+{
+	top: -5px;
+}
+.twitter-typeahead .tt-query,
+.twitter-typeahead .tt-hint {
+  margin-bottom: 0;
+  background-color: #F00;
+  border-radius: 20px;
+
+}
+
+.tt-hint
+{
+	top: 2px!important;
+
+    padding-left: 10px!important;
+    width: 188px;
+    text-indent: 4px;
+}
+.tt-dropdown-menu {
+  min-width: 160px;
+  margin-top: 2px;
+  padding: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.2);
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
+}
+
+.tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: #0081c2;
+  background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+  background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
+}
+
+.tt-suggestion.tt-is-under-cursor a {
+  color: #fff;
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+	</style>
+</head>
+
+<body>
+<div id="projectTitle">
+	<div id="btnCollapse" class="btn collapseSidebarButton btn-primary"><i class="icon-th-list icon-white"></i></div>
+	Graph.js
+</div>
+<div class="container-fluid">
+
+	<div id="menuAside">
+    <aside class="well span3 oc" id="side-menu" role="navigation">
+
+    	<div style="margin-left: 10px; margin-top: 10px;">
+			<input type="text" id="searchBox" class="search-query typeahead" placeholder="Search">
+		</div>
+		<div class="menuFrame" id="sideMenuFrame">
+		<ul id="menuContainer" class="nav nav-pills nav-stacked">
+			<li class="nav-header navTitle"><a href="index.html">INDEX</a></li>
+				<li class="divider"></li>
+
+
+					    <li id="navTitle_Namespaces" class="nav-header navTitle">
+                            <a class="handCursor" data-toggle="collapse" data-id="T_Namespaces" data-target="#collapse_Namespaces">Namespaces<span class="badge badge-info pull-right">2</span></a>
+                        </li>
+                        <li id="navContents_Namespaces">
+                            <div id="collapse_Namespaces" class="collapse">
+                                <ul class="nav nav-list" style="width:100%;margin-left:-8px;">
+
+                                        <?j
+                                    <li>
+
+
+                                        	<a href="GraphPaper.html">GraphPaper</a>
+
+                                    </li>
+
+                                    <li>
+
+
+                                        	<a href="GraphPaper.Shapes.html">GraphPaper.Shapes</a>
+
+                                    </li>
+
+                             <li class="divider"></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+
+					    <li id="navTitle_Classes" class="nav-header navTitle">
+                            <a class="handCursor" data-toggle="collapse" data-id="T_Classes" data-target="#collapse_Classes">Classes<span class="badge badge-info pull-right">4</span></a>
+                        </li>
+                        <li id="navContents_Classes">
+                            <div id="collapse_Classes" class="collapse">
+                                <ul class="nav nav-list" style="width:100%;margin-left:-8px;">
+                                    <li><div class="routeTitle">GraphPaper</div><ul class="children nav nav-list"><li><a href="GraphPaper.Graph.html">Graph</a></li><li><a href="GraphPaper.Scale.html">Scale</a></li><li><div class="routeTitle">Shapes</div><ul class="children nav nav-list"><li><a href="GraphPaper.Shapes.Point.html">Point</a></li></ul></li><li><a href="GraphPaper.Styles.html">Styles</a></li></ul></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+
+					    <li id="navTitle_Interfaces" class="nav-header navTitle">
+                            <a class="handCursor" data-toggle="collapse" data-id="T_Interfaces" data-target="#collapse_Interfaces">Interfaces<span class="badge badge-info pull-right">1</span></a>
+                        </li>
+                        <li id="navContents_Interfaces">
+                            <div id="collapse_Interfaces" class="collapse">
+                                <ul class="nav nav-list" style="width:100%;margin-left:-8px;">
+                                    <li><div class="routeTitle">GraphPaper</div><ul class="children nav nav-list"><li><a href="GraphPaper.Drawable.html">Drawable</a></li></ul></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+
+
+		</ul>
+		</div>
+
+		<script>
+			var searchMembers = [{"realName":"GraphPaper","link":"GraphPaper"},{"realName":"GraphPaper.Shapes","link":"GraphPaper.Shapes"},{"realName":"GraphPaper.Graph","link":"GraphPaper.Graph"},{"realName":"GraphPaper.Scale","link":"GraphPaper.Scale"},{"realName":"GraphPaper.Shapes.Point","link":"GraphPaper.Shapes.Point"},{"realName":"GraphPaper.Styles","link":"GraphPaper.Styles"},{"realName":"GraphPaper.Drawable","link":"GraphPaper.Drawable"}];
+		</script>
+    </aside>
+	</div>
+    <div id="docContents" class="sideMenu sideMargin">
+
+
+			<div style="width:100%">
+
+				<div id="main">
+
+
+
+		<h1 class="page-title">Source: Graph.ts</h1>
+
+    <section>
+        <article>
+            <pre class="sunlight-highlight-javascript ">/// &lt;reference path="Styles.ts" />
+/// &lt;reference path="Scale.ts" />
+/// &lt;reference path="Drawable.ts" />
+
+/**
+ * The namespace for the graph which encapsulates the graph object as well as all of the shapes
+ * @namespace GraphPaper
+ */
+module GraphPaper {
+
+
+    //Declare jQuery as a variable and import all of the submodules
+
+    declare var $;
+
+    import Scale = GraphPaper.Scale;
+    import Styles = GraphPaper.Styles;
+
+    import Drawable = GraphPaper.Drawable;
+    import Point = GraphPaper.Shapes.Point;
+    import Line = GraphPaper.Shapes.Line;
+    import Label = GraphPaper.Shapes.Label;
+    import Expression = GraphPaper.Shapes.Expression;
+
+
+    export class Graph {
+        style: Styles;
+        private _context: any;
+
+        private _xMin: number;
+        private _xMax: number;
+        private _yMin: number;
+        private _yMax: number;
+        private _xLength: number;
+        private _yLength: number;
+
+        private _width: number;
+        private _height: number;
+
+
+        private _axes: boolean;
+        private _gridLines: boolean;
+        private _tabs: boolean;
+
+        private _scale: Scale;
+        private _maxTicks: number = 10;
+
+        private mouseDown: boolean = false;
+
+        public xZoom: boolean = true;
+        public yZoom: boolean = true;
+
+        private _trace: Expression;
+        private _shapes: Array&lt;Drawable>;
+
+        /**
+         * This is the main class GraphPaper.Graph. It is used to initialize a new graph. By default a graph initializes
+         * with a window of [-10, 10] by [-10, 10].
+         *
+         * @class GraphPaper.Graph
+         * @classdesc GraphPaper.Graph is the starting point of the library.
+         *
+         * @param canvas {HTMLCanvasElement} The canvas to draw on
+         * @param {number} [xMin = -10] The minimum of the x-axis
+         * @param {number} [xMax = 10] The maximum of the x-axis
+         * @param {number} [yMin = 10] The minimum of the y-axis
+         * @param {number} [yMax = 10] The maximum of the y-axis
+         * @param {boolean} [axes = true] Whether or not to display axes on the graph
+         * @param {boolean} [gridlines = true] Whether or not to display gridlines on the graph
+         * @param {boolean} [tabs = true] Whether or not to display tabs on the graph
+         * @param {Styles} [style = The default styles] The styles of different objects on the graph
+         */
+        constructor(canvas: HTMLCanvasElement, xMin: number = -10, xMax: number = 10, yMin: number = -10, yMax: number = 10,
+            axes: boolean = true, gridlines: boolean = true, tabs: boolean = true, style: Styles = new Styles()) {
+
+            this._context = canvas.getContext("2d");
+            this.style = style;
+
+            this._height = canvas.height;
+            this._width = canvas.width;
+
+            this._xMin = xMin;
+            this._xMax = xMax;
+            this._yMin = yMin;
+            this._yMax = yMax;
+
+            this._axes = axes;
+            this._gridLines = gridlines;
+            this._tabs = tabs;
+
+            this._scale = new Scale(this);
+            this._shapes = [];
+
+            this.drag();
+            this.zoom();
+
+
+            this.interpolate();
+
+            this.update();
+
+
+
+        }
+
+        /**
+         * Sets up the event handler for tracing functions.
+         * @private
+         * @method GraphPaper.Graph#interpolate
+         *
+         */
+
+        private interpolate(): void {
+
+            var graph: Graph = this;
+
+            var canvas: HTMLCanvasElement = this.context.canvas;
+
+            $(canvas).mousemove(function(e) {
+                graph.update();
+                var x: number = e.pageX - $(this).parent().offset().left;
+                var origin: { x: number; y: number; } = new Point(0, 0).toCanvas(graph);
+
+                x = (x - origin.x) * graph.xResolution;
+
+                var fn: Expression = graph._trace;
+
+
+
+                if (typeof fn !== "undefined") {
+
+                    var y: number = fn.f(x);
+
+                    new Point(x, y, fn.color, 3).draw(graph);
+                    var label = new Label(new Point(graph._xMin, graph._yMin), "(" + x + ", " + y + ")");
+                    graph.context.textBaseline = "bottom";
+                    label.color = fn.color;
+                    label.draw(graph);
+                    graph.context.textBaseline = "alphabetic";
+
+                }
+
+
+            });
+
+        }
+
+        /**
+         * This adds a shape to the graph that stays whenever the graph is redrawn
+         * @method GraphPaper.Graph#add
+         * @param {GraphPaper.Shape} shape The shape that needs to be permanently added
+         */
+
+        public add(shape: Drawable) {
+            this._shapes.push(shape);
+            shape.add(this);
+            if (shape instanceof Expression) {
+                this.trace = &lt;Expression>shape;
+            }
+            this.update();
+        }
+
+        /**
+         * This removes shapes from the graph
+         * @method GraphPaper.Graph#remove
+         * @param {GraphPaper.Shape} shape The shape to be removed
+         */
+
+        public remove(shape: Drawable) {
+            for (var i: number = this._shapes.length - 1; i >= 0; i--) {
+                if (this._shapes[i].equals(shape)) {
+                    this._shapes.splice(i, 1);
+                }
+            }
+
+            shape.remove(this);
+
+            this.update();
+        }
+
+        /**
+         *
+         * This redraws everything on the graph
+         * @method GraphPaper.Graph#update
+         *
+         * @param {boolean} [recalculate = true] If this is true, the graph will recalculate the resolution and scales
+         */
+        public update(recalculate: boolean = true) {
+            this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
+
+            if (recalculate) {
+                this._xLength = this._xMax - this._xMin;
+                this._yLength = this._yMax - this._yMin;
+
+                if (this._xLength &lt;= 0) {
+                    throw "xMax must be greater than or equal to xMin";
+                }
+
+                if (this._yLength &lt;= 0) {
+                    throw "yMax must be greater than or equal to yMin";
+                }
+
+                this._scale.scale();
+            }
+
+            if (this._gridLines) {
+                this.drawGridlines();
+            }
+
+            if (this._axes) {
+                this.drawAxes();
+            }
+
+            if (this._tabs) {
+                this.drawTabs();
+            }
+
+            this.drawLabels();
+
+            var graph: Graph = this;
+
+            this._shapes.forEach(function(shape) {
+                shape.draw(graph);
+            });
+
+        }
+
+        /**
+         * This method initializes the event listener for dragging
+         * @method GraphPaper.Graph#drag
+         */
+
+        private drag(): void {
+            var context: CanvasRenderingContext2D = this._context;
+            var graph: Graph = this;
+            var canvas: HTMLCanvasElement = context.canvas;
+            var offset = $(canvas).offset();
+            var oldX: number;
+            var oldY: number;
+
+            $(canvas).mousedown(function(e) {
+                graph.mouseDown = true;
+
+                oldX = e.pageX - offset.left;
+                oldY = e.pageY - offset.top;
+
+            });
+
+            $(document).mouseup(function() {
+                graph.mouseDown = false;
+            });
+
+
+
+
+            $(canvas).mousemove(function(e) {
+
+                if (graph.mouseDown) {
+                    var newX: number = e.pageX - offset.left;
+                    var newY: number = e.pageY - offset.top;
+
+
+                    var xChange = Number(((newX - oldX) * graph.xResolution).toPrecision(1));
+                    var yChange = Number(((newY - oldY) * graph.yResolution).toPrecision(1));
+
+                    var xMin = graph.xMin - xChange;
+                    var xMax = graph.xMax - xChange;
+
+                    var yMin = graph.yMin + yChange;
+                    var yMax = graph.yMax + yChange;
+
+
+                    graph.setWindow(xMin, xMax, yMin, yMax);
+
+                    oldX = newX;
+                    oldY = newY;
+
+
+
+                }
+            });
+
+        }
+
+        /**
+         * This initializes the event listener for zooming
+         * @method GraphPaper.Graph#zoom
+         */
+
+        private zoom(): void {
+
+            var graph: Graph = this;
+            var canvas: HTMLCanvasElement = this.context.canvas;
+
+            $(canvas).mousewheel(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var parentOffset = $(this).parent().offset();
+
+                var x: number = e.pageX - parentOffset.left;
+                var y: number = e.pageY - parentOffset.top;
+
+                var delta: number = e.deltaY;
+                var factor: number = 1 + delta / 1000;
+
+                var origin = new Point(0, 0).toCanvas(graph);
+
+                var xOffset = (x - origin.x) * graph.xResolution;
+                var yOffset = (y - origin.y) * graph.yResolution;
+
+
+
+                var xMin: number = (graph.xZoom) ? Number(((graph.xMin - xOffset) * factor + xOffset).toPrecision(21)) : graph.xMin;
+                var xMax: number = (graph.xZoom) ? Number(((graph.xMax - xOffset) * factor + xOffset).toPrecision(21)) : graph.xMax;
+
+                var yMin: number = (graph.yZoom) ? Number(((graph.yMin + yOffset) * factor - yOffset).toPrecision(21)) : graph.yMin;
+                var yMax: number = (graph.yZoom) ? Number(((graph.yMax + yOffset) * factor - yOffset).toPrecision(21)) : graph.yMax;
+
+
+
+                graph.setWindow(xMin, xMax, yMin, yMax);
+
+
+            });
+
+
+        }
+
+        /**
+         * This draws the axes according to the style given
+         * @method GraphPaper.Graph#drawAxes
+         */
+
+        private drawAxes(): void {
+
+            var xAxis: Line = new Line(new Point(this._xMin, 0), new Point(this._xMax, 0), this.style.axes, this.style.axisWidth);
+            var yAxis: Line = new Line(new Point(0, this._yMin), new Point(0, this._yMax), this.style.axes, this.style.axisWidth);
+
+            xAxis.draw(this);
+            yAxis.draw(this);
+
+        }
+
+        /**
+         * This draws the gridlines according to the style given
+         * @method GraphPaper.Graph#drawGridLines
+         */
+
+        private drawGridlines(): void {
+
+
+            var xScale: number = this._scale.minorXScale;
+            var yScale: number = this._scale.minorYScale;
+
+            var x: number;
+            var y: number;
+
+            var color: string = this.style.minorGridLines;
+
+            var line: Line;
+
+            for (x = this._scale.minorXMin; x &lt; this._scale.minorXMax; x += xScale) {
+                line = new Line(new Point(x, this._yMin), new Point(x, this._yMax), color);
+                line.draw(this);
+            }
+
+
+            for (y = this._scale.minorYMin; y &lt; this._scale.minorYMax; y += yScale) {
+                line = new Line(new Point(this._xMin, y), new Point(this._xMax, y), color);
+                line.draw(this);
+            }
+
+            xScale = this._scale.majorXScale;
+            yScale = this._scale.majorYScale;
+
+            color = this.style.majorGridLines;
+
+            for (x = this._scale.majorXMin; x &lt; this._scale.majorXMax; x += xScale) {
+                line = new Line(new Point(x, this._yMin), new Point(x, this._yMax), color);
+                line.draw(this);
+            }
+
+
+            for (y = this._scale.majorYMin; y &lt; this._scale.majorYMax; y += yScale) {
+                line = new Line(new Point(this._xMin, y), new Point(this._xMax, y), color);
+                line.draw(this);
+            }
+
+
+
+        }
+
+        /**
+         * This draws the ticks on the axes
+         * @method GraphPaper.Graph#drawTabs
+         */
+
+        drawTabs() {
+            this._context.strokeStyle = this.style.axes;
+
+            var majorTabWidth: number = 8 * this.xResolution;
+            var majorTabHeight: number = 8 * this.yResolution;
+
+            var minorTabWidth: number = 4 * this.xResolution;
+            var minorTabHeight: number = 4 * this.yResolution;
+
+            this.style.lineWidth = 1;
+
+
+            var line: Line;
+
+            var x: number;
+            var y: number;
+
+            //Minor tabs
+
+            var xScale: number = this._scale.minorXScale;
+            var yScale: number = this._scale.minorYScale;
+
+            for (x = this._scale.minorXMin; x &lt; this._scale.minorXMax; x += xScale) {
+
+                line = new Line(new Point(x, -minorTabHeight), new Point(x, minorTabHeight), this.style.axes);
+                line.draw(this);
+            }
+
+
+            for (y = this._scale.minorYMin; y &lt; this._scale.minorYMax; y += yScale) {
+
+                line = new Line(new Point(-minorTabWidth, y), new Point(minorTabWidth, y), this.style.axes);
+                line.draw(this);
+            }
+
+
+
+            //Major tabs
+
+            var xScale: number = this._scale.majorXScale;
+            var yScale: number = this._scale.majorYScale;
+
+            for (x = this._scale.majorXMin; x &lt; this._scale.majorXMax; x += xScale) {
+
+                line = new Line(new Point(x, -majorTabHeight), new Point(x, majorTabHeight), this.style.axes);
+                line.draw(this);
+            }
+
+
+            for (y = this._scale.majorYMin; y &lt; this._scale.majorYMax; y += yScale) {
+
+                line = new Line(new Point(-majorTabWidth, y), new Point(majorTabWidth, y), this.style.axes);
+                line.draw(this);
+            }
+
+        }
+
+        /**
+         * This draws the ticks on the axes
+         * @method GraphPaper.Graph#drawLabels
+         */
+
+        drawLabels(): void {
+
+            var xScale = this._scale.majorXScale;
+
+            var point: Point;
+
+            var pixels: number = 20;
+
+
+            for (var i = this._scale.majorXMin; i &lt; this._scale.majorXMax; i += xScale) {
+
+                //prevent it from plotting zero
+                if (Math.abs(i) > xScale / 2) {
+
+                    if (this.yMin > 0) {
+                        point = new Point(i, this.yMin + pixels * this.yResolution);
+                    } else if (this.yMax &lt; 0) {
+                        point = new Point(i, this.yMax - pixels * this.yResolution);
+                    } else if (xScale &lt; -this.yMin) {
+                        point = new Point(i, -this.yResolution * pixels);
+                    } else {
+                        point = new Point(i, this.yResolution * pixels);
+
+                    }
+
+
+                    var message: string = parseFloat(i.toPrecision(8)).toString();
+                    if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
+                        message = i.toExponential();
+                    }
+
+                    new Label(point, message, "start", true).draw(this);
+
+
+                }
+            }
+
+            var yScale: number = this._scale.majorYScale;
+
+            this.context.textAlign = "end";
+
+            pixels = 15;
+
+            for (var i = this._scale.majorYMin; i &lt; this._scale.majorYMax; i += yScale) {
+                var align: string = "right";
+                if (Math.abs(i) > yScale / 2) {
+
+                    if (this.xMin > 0) {
+                        point = new Point(this.xMin + pixels * this.xResolution, i - 5 * this.yResolution);
+                        align = "left";
+                    } else if (this.xMax &lt; 0) {
+                        point = new Point(this.xMax - pixels * this.xResolution, i - 5 * this.yResolution);
+                    } else if (yScale &lt; -this.xMin) {
+                        point = new Point(-this.yResolution * pixels, i - 5 * this.yResolution);
+                    } else {
+                        point = new Point(this.yResolution * pixels, i - 5 * this.yResolution);
+                        align = "left";
+                    }
+
+
+                    var message: string = parseFloat(i.toPrecision(8)).toString();
+                    if (Math.log(Math.abs(i)) / Math.log(10) > 5) {
+                        message = i.toExponential();
+                    }
+
+                    new Label(point, message, align).draw(this);
+
+                }
+            }
+        }
+
+        /**
+         * This is the minimum x coordinate of the graph
+         * @member {number} GraphPaper.Graph#xMin
+         */
+
+        get xMin(): number {
+            return this._xMin;
+        }
+        set xMin(value: number) {
+            this._xMin = value;
+            this.update();
+        }
+
+        /**
+         * This is the maximum x coordinate of the graph
+         * @member {number} GraphPaper.Graph#xMax
+         */
+
+        get xMax(): number {
+            return this._xMax;
+        }
+        set xMax(value: number) {
+            this._xMax = value;
+            this.update();
+        }
+
+        /**
+         * This is the minimum y coordinate of the graph
+         * @member {number} GraphPaper.Graph#yMin
+         */
+
+        get yMin(): number {
+            return this._yMin;
+        }
+        set yMin(value: number) {
+            this._yMin = value;
+            this.update();
+        }
+
+        /**
+         * This is the maxmimum y coordinate of the graph
+         * @member {number} GraphPaper.Graph#yMax
+         */
+
+        get yMax(): number {
+            return this._yMax;
+        }
+        set yMax(value: number) {
+            this._yMax = value;
+            this.update();
+        }
+
+        /**
+         * This is the length of the x-axis, or xMax - xMin
+         * @member {number} GraphPaper.Graph#xLength
+         */
+
+        get xLength(): number {
+            return this._xLength;
+        }
+
+        /**
+         * This is the length of the y-axis, or yMax - yMin
+         * @member {number} GraphPaper.Graph#yLength
+         */
+
+        get yLength(): number {
+            return this._yLength;
+        }
+
+        /**
+         * This is how far apart the major x gridlines are from each other. It is calculated in {@link GraphPaper.Scale}
+         * @member {number} GraphPaper.Graph#majorXScale
+         */
+
+        get majorXScale(): number {
+            return this._scale.majorXScale;
+        }
+
+        set majorXScale(value: number) {
+            this._scale.majorXScale = value;
+            this.update(false);
+        }
+
+
+
+        get minorXScale(): number {
+            return this._scale.minorXScale;
+        }
+
+        set minorXScale(value: number) {
+            this._scale.minorXScale = value;
+            this.update(false);
+        }
+
+        /**
+         * This is how far apart the major y gridlines are form each other. It is calculated in {@link GraphPaper.Scale}
+         * @member {number} GraphPaper.Graph#majorYScale
+         */
+
+        get majorYScale(): number {
+            return this._scale.majorYScale;
+        }
+
+        set majorYScale(value: number) {
+            this._scale.majorYScale = value;
+            this.update(false);
+        }
+
+        /**
+         * This is how far apart the minor y gridlines are from each other. It is calculated in {@link GraphPaper.Scale}
+         * @member {number} GraphPaper.Graph#minorYScale
+         */
+
+        get minorYScale(): number {
+            return this._scale.minorYScale;
+        }
+
+        set minorYScale(value: number) {
+            this._scale.minorXScale = value;
+            this.update(false);
+        }
+
+        /**
+         * This is the maximum number of major gridlines in the graph. Changing this will change the tabs and gridlines
+         * @member {number} GraphPaper.Graph#maxTicks
+         */
+
+        get maxTicks(): number {
+            return this._maxTicks;
+        }
+
+        set maxTicks(v: number) {
+            this._maxTicks = v;
+            this.update();
+        }
+
+        /**
+         * This is the width of the canvas
+         * @member {number} GraphPaper.Graph#width
+         */
+
+        get width(): number {
+            return this._width;
+        }
+
+        /**
+         * This is the height of the canvas
+         * @member {number} GraphPaper.Graph#height
+         */
+
+        get height(): number {
+            return this._height;
+        }
+
+        /**
+         * This is used in converting to and from pixels and coordinate length on the x-axis
+         * @member {number} GraphPaper.Graph#xResolution
+         */
+
+        get xResolution(): number {
+            return this._xLength / this._width;
+        }
+
+        get yResolution(): number {
+            return this._yLength / this.height;
+        }
+
+        /**
+         * This is used in converting to and from pixels and coordinate lengths on the y-axis
+         * @member {number} GraphPaper.Graph#yResolution
+         */
+
+        get context(): CanvasRenderingContext2D {
+            return this._context;
+        }
+
+        public get trace(): Expression {
+            return &lt;Expression>this._trace;
+        }
+
+        public set trace(v: Expression) {
+            this._trace = v;
+        }
+
+
+        setWindow(xMin: number = -10, xMax: number = 10, yMin: number = -10, yMax: number = 10) {
+            this._xMin = xMin;
+            this._xMax = xMax;
+            this._yMin = yMin;
+            this._yMax = yMax;
+
+            this.update();
+        }
+
+    }
+}</pre>
+        </article>
+    </section>
+
+
+
+
+
+				</div>
+
+				<div class="clearfix"></div>
+				<footer>
+
+
+						<span class="copyright">
+						Graph.js Copyright © 2014 Amalan Iyengar.
+						</span>
+									<br />
+
+						<span class="jsdoc-message">
+						Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha9</a>
+						on Sat Jul 19 2014 11:53:54 GMT-0400 (EDT) using the <a href="https://github.com/xperiments/TSDoc">TSDoc template</a>.
+						</span>
+				</footer>
+			</div>
+			<!--
+
+			-->
+			<br clear="both">
+		</div>
+
+	</div>
+
+	<script src="scripts/sunlight.js"></script>
+	<script src="scripts/sunlight.javascript.js"></script>
+	<script src="scripts/sunlight-plugin.doclinks.js"></script>
+	<script src="scripts/sunlight-plugin.linenumbers.js"></script>
+	<script src="scripts/sunlight-plugin.menu.js"></script>
+	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/jquery.scrollTo.js"></script>
+	<script src="scripts/jquery.localScroll.js"></script>
+	<script src="scripts/bootstrap.min.js"></script>
+
+
+
+	<script>  Sunlight.highlightAll({lineNumbers:false,  showMenu: true, enableDoclinks :true}); </script>
+
+	<script>
+		$( function () {
+
+			var searchItems = [];
+			var searchMap = {};
+			var mapName = "";
+			for( var i=0; i<searchMembers.length; i++ )
+			{
+				realName = searchMembers[i].realName;
+				searchItems.push( realName );
+				searchMap[ realName ] = searchMembers[ i ];
+			}
+
+
+			$('.typeahead').typeahead({
+			  source: searchItems,
+			  matcher: function(item) {
+			  	//console.log('aaa'+item, this.query, item.indexOf( this.query.toLowerCase() )==-1?false:true)
+                // evaluate item variable and return true if the item was matched.
+                return item.toLowerCase().indexOf( this.query.toLowerCase() )==-1?false:true;
+             },
+			  updater: function (item) {
+					window.location.href = searchMap[ item ].link+'.html';
+			  }
+
+			});
+
+
+            // Move Tutorials to bottom
+            //$('#menuContainer').append($('#navTitle_Tutorials'));
+            //$('#menuContainer').append($('#navContents_Tutorials'));
+			$(window).resize(function() {
+			  $('#side-menu').height( $(window).height()-70 );
+			  $('#sideMenuFrame').height( $(window).height()-140 );
+			  if( $(window).width() <480 )
+			  {
+			  	$('#side-menu').hide();
+				$('#docContents').removeClass('sideMenu');
+			  }
+			});
+
+			$(window).trigger('resize')
+			$('#btnCollapse').click(function()
+			{
+				$('#side-menu').toggle();
+				$('#docContents').toggleClass('sideMenu');
+
+			})
+			$('#btnHome').click(function()
+			{
+				document.location.href="index.html"
+
+			})
+
+			$('.sourceBar').click(function(){})
+			var lastMenuSelection = window.localStorage.getItem('lastMenuSelection') || null;
+			if( lastMenuSelection ) $('a[data-id='+lastMenuSelection+']').click();
+			$('a[data-toggle=collapse]').click(function(){
+				if( lastMenuSelection == $(this).attr('data-id') ) return;
+				if( lastMenuSelection ) $('a[data-id='+lastMenuSelection+']').click();
+				lastMenuSelection = $(this).attr('data-id');
+				window.localStorage.setItem('lastMenuSelection', lastMenuSelection )
+			});
+
+
+		} );
+	</script>
+
+
+	<script>
+		$( function () {
+			$('#main').localScroll({
+				offset: { top: 56 } //offset by the height of your header (give or take a few px, see what works for you)
+			});
+			$(".routeTitle").on('click', function(){
+			    $(this).next().slideToggle();
+			});
+			$( "dt h4.name" ).each( function () {
+				var $this = $( this );
+				//var icon = $( "<i/>" ).addClass( "icon-plus-sign" ).addClass( "pull-right" );
+				var dt = $this.parents( "dt" );
+				var children = dt.next( "dd" );
+
+				//$this.append( icon ).css( {cursor : "pointer"} );
+				$this.addClass( "member-collapsed" ).addClass( "member" );
+
+				children.hide();
+				$this.toggle( function () {
+					//icon.addClass( "icon-minus-sign" ).removeClass( "icon-plus-sign" );
+					$this.addClass( "member-open" ).removeClass( "member-collapsed" );
+					children.slideDown();
+				}, function () {
+					//icon.addClass( "icon-plus-sign" ).removeClass( "icon-minus-sign" );
+					$this.addClass( "member-collapsed" ).removeClass( "member-open" );
+					children.slideUp();
+				} );
+			} );
+			$('.sourceBar').click(function(event){event.stopPropagation();})
+		} );
+	</script>
+
+
+</body>
+</html>
