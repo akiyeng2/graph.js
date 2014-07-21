@@ -61,7 +61,21 @@ module.exports = function(grunt) {
 
        jshint: {
            files: ['src/js/**/*.js']
+       },
+
+       jsdoc: {
+           dist: {
+               src: ['src/js/**/*.js', 'README.md'],
+               options: {
+                   destination: 'docs/',
+                   configure: 'node_modules/ink-docstrap/template/jsdoc.conf.json',
+                   template: 'node_modules/ink-docstrap/template'
+               }
+
+           }
        }
+
+
 
     });
 
@@ -69,7 +83,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-jsdoc');
 
-    grunt.registerTask('build', ['ts:build', 'uglify']);
+    grunt.registerTask('build', ['ts', 'uglify', 'jsdoc']);
     grunt.registerTask('lint', ['tslint', 'ts:dev', 'jshint']);
+
 }

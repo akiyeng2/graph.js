@@ -69,6 +69,12 @@ var GraphPaper;
             this.graph = graph;
             this.scale();
         }
+        /**
+        * This creates the nice intervals and mins and maxes for the graph.
+        * Adapted from <a href = "http://www.amazon.com/Graphics-Gems-Andrew-S-Glassner/dp/0122861663">Graphics Gems</a>
+        *
+        * @method GraphPaper.Scale#scale
+        */
         Scale.prototype.scale = function () {
             var graph = this.graph;
 
@@ -109,6 +115,17 @@ var GraphPaper;
             this._majorYMax = parseFloat((Math.ceil(graph.yMax / this._majorYScale) * this._majorYScale).toPrecision(21));
         };
 
+        /**
+        * This rounds numbers to the format 1*10^n, 2*10^n, or 5*10^n
+        * @method GraphPaper.Scale#makeNice
+        *
+        * @param {number} num The number to make nice
+        * @param {round} boolean Whether to round up or down
+        *
+        *
+        * @returns {Array<number>} The zeroth element is the base 10 mantissa and the second one is the exponent.
+        * For example [5, 2] would be 5*10^2
+        */
         Scale.prototype.makeNice = function (num, round) {
             var exponent = Math.floor(Math.log(num) / Math.log(10));
             var fraction = num / Math.pow(10, exponent);
@@ -258,13 +275,21 @@ var GraphPaper;
 var GraphPaper;
 (function (GraphPaper) {
     /**
-    * @namespace GraphPaper
-    */
-    /**
     * @namespace GraphPaper.Shapes
     */
     (function (Shapes) {
         var Line = (function () {
+            /**
+            * Constructor from two points to create a new line
+            *
+            * @class GraphPaper.Shapes.Line
+            * @classdesc This is a class that defines and draws a line on the graph
+            *
+            * @param {Point} point1 The first point of the line
+            * @param {Point} point2 The second point of the line
+            * @param {string} [color = "black"] The color of the loine
+            * @param {number} [width = 1] The width of the line
+            */
             function Line(point1, point2, color, width) {
                 if (typeof color === "undefined") { color = "black"; }
                 if (typeof width === "undefined") { width = 1; }
@@ -277,6 +302,10 @@ var GraphPaper;
 
                 this._graphs = [];
             }
+            /**
+            * @method GraphPaper.Shapes.Line#draw
+            * @see GraphPaper.Drawable#draw
+            */
             Line.prototype.draw = function (graph) {
                 graph.context.strokeStyle = this.color;
                 graph.context.lineWidth = this.width;
@@ -284,6 +313,7 @@ var GraphPaper;
                 var pt1 = this.point1.toCanvas(graph);
                 var pt2 = this.point2.toCanvas(graph);
 
+                //Make an exception for drawing vertical and horizontal lines due to pixel rounding
                 if (pt1.x === pt2.x) {
                     graph.context.fillStyle = this.color;
                     var x = pt1.x;
@@ -325,6 +355,10 @@ var GraphPaper;
             };
 
             Object.defineProperty(Line.prototype, "point1", {
+                /**
+                * The first point of the line
+                * @member GraphPaper.Shapes.Line#point1
+                */
                 get: function () {
                     return this._point1;
                 },
@@ -338,6 +372,10 @@ var GraphPaper;
 
 
             Object.defineProperty(Line.prototype, "point2", {
+                /**
+                * The second point of the line
+                * @member GraphPaper.Shapes.Line#point2
+                */
                 get: function () {
                     return this._point2;
                 },
@@ -351,6 +389,10 @@ var GraphPaper;
 
 
             Object.defineProperty(Line.prototype, "color", {
+                /**
+                * The color of the point
+                * @member GraphPaper.Shapes.Line#color
+                */
                 get: function () {
                     return this._color;
                 },
@@ -363,6 +405,10 @@ var GraphPaper;
 
 
             Object.defineProperty(Line.prototype, "width", {
+                /**
+                * The width of the line
+                * @member GraphPaper.Shapes.Line#width
+                */
                 get: function () {
                     return this._width;
                 },
@@ -381,15 +427,26 @@ var GraphPaper;
     var Shapes = GraphPaper.Shapes;
 })(GraphPaper || (GraphPaper = {}));
 /**
-* @namespace GraphPaper
+* @namespace GraphPaper.Shapes
 */
 var GraphPaper;
 (function (GraphPaper) {
-    /**
-    * @namespace GraphPaper.Shapes
-    */
     (function (Shapes) {
         var Label = (function () {
+            /**
+            * Constructor for a new text field on a graph
+            *
+            * @class GraphPaper.Shapes.Label
+            * @classdesc Creates a new text box on the graph
+            *
+            * @param {Point} point The point to put the text at
+            * @param {string} text The text to display
+            * @param {string} [align = "start"] <a href = "http://msdn.microsoft.com/en-us/library/ie/ff974919(v=vs.85).aspx">Text align</a>
+            * @param {boolean} [centered = false] If true, it will attempt to put the point at the center of the text.
+            * Otherwise, it will put it where it would be for the given alignment
+            * @param {string} [color = "black"] The color of the text
+            * @param {string} [font = "10px sans-serif"] The font of the text. Default is the canvas default
+            */
             function Label(point, text, align, centered, color, font) {
                 if (typeof align === "undefined") { align = "start"; }
                 if (typeof centered === "undefined") { centered = false; }
@@ -404,6 +461,10 @@ var GraphPaper;
 
                 this._graphs = [];
             }
+            /**
+            * @method GraphPaper.Shapes.Label#draw
+            * @see GraphPaper.Drawable#draw
+            */
             Label.prototype.draw = function (graph) {
                 var pt = this._point.toCanvas(graph);
 
@@ -446,6 +507,10 @@ var GraphPaper;
             };
 
             Object.defineProperty(Label.prototype, "point", {
+                /**
+                * The point where the text is drawn
+                * @member GraphPaper.Shapes.Label#point
+                */
                 get: function () {
                     return this._point;
                 },
@@ -459,6 +524,10 @@ var GraphPaper;
 
 
             Object.defineProperty(Label.prototype, "text", {
+                /**
+                * The text to draw
+                * @member GraphPaper.Shapes.Label#text
+                */
                 get: function () {
                     return this._text;
                 },
@@ -472,6 +541,10 @@ var GraphPaper;
 
 
             Object.defineProperty(Label.prototype, "align", {
+                /**
+                * The text alignment
+                * @member GraphPaper.Shapes.Label#align
+                */
                 get: function () {
                     return this._align;
                 },
@@ -484,6 +557,10 @@ var GraphPaper;
 
 
             Object.defineProperty(Label.prototype, "centered", {
+                /**
+                * Whether the text is centered around the point or not
+                * @member GraphPaper.Shapes.Label#centered
+                */
                 get: function () {
                     return this._centered;
                 },
@@ -497,6 +574,10 @@ var GraphPaper;
 
 
             Object.defineProperty(Label.prototype, "color", {
+                /**
+                * The color of the text
+                * @member GraphPaper.Shapes.Label#color
+                */
                 get: function () {
                     return this._color;
                 },
@@ -510,6 +591,10 @@ var GraphPaper;
 
 
             Object.defineProperty(Label.prototype, "font", {
+                /**
+                * The font the text is drawn with
+                * @member GraphPaper.Shapes.Label#font
+                */
                 get: function () {
                     return this._font;
                 },
@@ -531,27 +616,34 @@ var GraphPaper;
 var GraphPaper;
 (function (GraphPaper) {
     /**
-    * @namespace GraphPaper
-    */
-    /**
     * @namespace GraphPaper.Shapes
     */
     (function (Shapes) {
         var Line = GraphPaper.Shapes.Line;
 
         var Expression = (function () {
+            /**
+            * This constructs an equation to be graphed
+            *
+            * @class GraphPaper.Shapes.Expression
+            * @classdesc This provides an equation which is compiled from a string for drawing
+            *
+            * @param {string} eqn The equation in string format
+            * @param {string} [color = "red"] The color of the equation
+            */
             function Expression(eqn, color) {
                 if (typeof color === "undefined") { color = "red"; }
                 this._eqn = eqn;
                 this._equation = new Equation(eqn);
-                this.f = function (x) {
-                    return this._equation.evaluate("x", x);
-                };
-
+                this.f = this._equation.compile();
                 this._color = color;
 
                 this._graphs = [];
             }
+            /**
+            * @method GraphPaper.Shapes.Expression#draw
+            * @see GraphPaper.Drawable#draw
+            */
             Expression.prototype.draw = function (graph) {
                 for (var x = graph.xMin; x < graph.xMax; x += graph.xResolution) {
                     var lastX = x - (graph.xResolution);
@@ -589,6 +681,10 @@ var GraphPaper;
             };
 
             Object.defineProperty(Expression.prototype, "eqn", {
+                /**
+                * This is the equation represented as a math string.
+                * @member GraphPaper.Shapes.Expression#eqn
+                */
                 get: function () {
                     return this._eqn;
                 },
@@ -601,6 +697,10 @@ var GraphPaper;
             });
 
             Object.defineProperty(Expression.prototype, "color", {
+                /**
+                * The color of the equation
+                * @member GraphPaper.Shapes.Expression#color
+                */
                 get: function () {
                     return this._color;
                 },
@@ -623,9 +723,6 @@ var GraphPaper;
 /// <reference path="Expression.ts" />
 var GraphPaper;
 (function (GraphPaper) {
-    /**
-    * @namespace GraphPaper
-    */
     /**
     * This provides all of the implementations of {GraphPaper.Drawable}
     * @namespace GraphPaper.Shapes
@@ -655,9 +752,8 @@ var GraphPaper;
                 this._graphs = [];
             }
             /**
-            * Draws the point on the graph temporarily.
             * @method GraphPaper.Shapes.Point#draw
-            * @param {GraphPaper.graph} graph The graph to draw the point on
+            * @see GraphPaper.Drawable#draw
             */
             Point.prototype.draw = function (graph) {
                 var coordinates = this.toCanvas(graph);

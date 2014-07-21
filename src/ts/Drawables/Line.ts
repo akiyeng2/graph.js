@@ -1,8 +1,5 @@
 /// <reference path="Point.ts" />
 
-/**
- * @namespace GraphPaper
- */
 
 /**
  * @namespace GraphPaper.Shapes
@@ -26,6 +23,18 @@ module GraphPaper.Shapes {
 
 		private _graphs: Array<Graph> = [];
 
+        /**
+         * Constructor from two points to create a new line
+         *
+         * @class GraphPaper.Shapes.Line
+         * @classdesc This is a class that defines and draws a line on the graph
+         *
+         * @param {Point} point1 The first point of the line
+         * @param {Point} point2 The second point of the line
+         * @param {string} [color = "black"] The color of the loine
+         * @param {number} [width = 1] The width of the line
+         */
+
 		constructor(point1: Point, point2: Point, color: string = "black", width: number = 1) {
 			this._point1 = point1;
 			this._point2 = point2;
@@ -36,6 +45,11 @@ module GraphPaper.Shapes {
 			this._graphs = [];
 		}
 
+        /**
+         * @method GraphPaper.Shapes.Line#draw
+         * @see GraphPaper.Drawable#draw
+         */
+
 		draw(graph: Graph): void {
 
 			graph.context.strokeStyle = this.color;
@@ -43,6 +57,8 @@ module GraphPaper.Shapes {
 
 			var pt1: {x: number; y: number; } = this.point1.toCanvas(graph);
 			var pt2: {x: number; y: number; } = this.point2.toCanvas(graph);
+
+            //Make an exception for drawing vertical and horizontal lines due to pixel rounding
 
 			if (pt1.x === pt2.x) {
 				graph.context.fillStyle = this.color;
@@ -87,6 +103,11 @@ module GraphPaper.Shapes {
 			&& this.color.valueOf() === other.color.valueOf() && this.width === other.width;
 		}
 
+        /**
+         * The first point of the line
+         * @member GraphPaper.Shapes.Line#point1
+         */
+
 		public get point1() : Point {
 			return this._point1;
 		}
@@ -95,6 +116,11 @@ module GraphPaper.Shapes {
 			this._point1 = v;
 			this.updateGraphs();
 		}
+
+        /**
+         * The second point of the line
+         * @member GraphPaper.Shapes.Line#point2
+         */
 
 		public get point2() : Point {
 			return this._point2;
@@ -105,6 +131,11 @@ module GraphPaper.Shapes {
 			this.updateGraphs();
 		}
 
+        /**
+         * The color of the point
+         * @member GraphPaper.Shapes.Line#color
+         */
+
 		public get color() : string {
 			return this._color;
 		}
@@ -112,6 +143,11 @@ module GraphPaper.Shapes {
 		public set color(v : string) {
 			this._color = v;
 		}
+
+        /**
+         * The width of the line
+         * @member GraphPaper.Shapes.Line#width
+         */
 
 		public get width() : number {
 			return this._width;

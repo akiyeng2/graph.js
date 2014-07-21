@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Class: Point</title>
+	<title>DocStrap Class: Expression</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -90,17 +90,17 @@
 					
 
 
-	<h1 class="page-title">Class: Point</h1>
+	<h1 class="page-title">Class: Expression</h1>
 <section>
 
 <header>
     <h2>
         <span class="ancestors"><a href="GraphPaper.html">GraphPaper</a><a href="GraphPaper.Shapes.html">.Shapes</a>.</span>
     
-    Point
+    Expression
     </h2>
     
-        <div class="class-description"><p>Provides a point with a coordinate system centered at 0, 0</p></div>
+        <div class="class-description"><p>This provides an equation which is compiled from a string for drawing</p></div>
     
 </header>
 
@@ -111,7 +111,7 @@
     
         
 <dt>
-    <h4 class="name" id="Point"><span class="type-signature"></span>new Point<span class="signature">(x, y, <span class="optional">color</span>, <span class="optional">width</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Expression"><span class="type-signature"></span>new Expression<span class="signature">(eqn, <span class="optional">color</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -119,7 +119,7 @@
     
     
     <div class="description">
-        <p>Constructor for a new point on a graph</p>
+        <p>This constructs an equation to be graphed</p>
     </div>
     
 
@@ -157,13 +157,13 @@
 
         <tr>
             
-                <td class="name"><code>x</code></td>
+                <td class="name"><code>eqn</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -185,42 +185,7 @@
                 </td>
             
 
-            <td class="description last"><p>The x coordinate of the point in rectangular notation</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>y</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>The y coordinate of the point in rectangular notation</p></td>
+            <td class="description last"><p>The equation in string format</p></td>
         </tr>
 
 	
@@ -254,51 +219,12 @@
             
                 <td class="default">
                 
-                    "black"
+                    "red"
                 
                 </td>
             
 
-            <td class="description last"><p>The color of the point</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>width</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    3
-                
-                </td>
-            
-
-            <td class="description last"><p>The radius of the point</p></td>
+            <td class="description last"><p>The color of the equation</p></td>
         </tr>
 
 	
@@ -334,8 +260,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-12">line 12</a>
+				<a href="Expression.js.html">Drawables/Expression.js</a>,
+				 <a href="Expression.js.html#sunlight-1-line-11">line 11</a>
 			</li>
 		</ul>
 	</dd>
@@ -388,7 +314,7 @@
 <dd>
     
     <div class="description">
-        <p>The color of the point</p>
+        <p>The color of the equation</p>
     </div>
     
 
@@ -421,8 +347,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-137">line 137</a>
+				<a href="Expression.js.html">Drawables/Expression.js</a>,
+				 <a href="Expression.js.html#sunlight-1-line-86">line 86</a>
 			</li>
 		</ul>
 	</dd>
@@ -441,15 +367,15 @@
 
         
             
-<dt class="name" id="width">
-    <h4><span class="type-signature"></span>width<span class="type-signature"></span></h4>
+<dt class="name" id="eqn">
+    <h4><span class="type-signature"></span>eqn<span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>The radius of the point</p>
+        <p>This is the equation represented as a math string.</p>
     </div>
     
 
@@ -482,130 +408,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-153">line 153</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<dt class="name" id="x">
-    <h4><span class="type-signature"></span>x<span class="type-signature"></span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The x coordinate in rectangular notation</p>
-    </div>
-    
-
-    
-
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-103">line 103</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<dt class="name" id="y">
-    <h4><span class="type-signature"></span>y<span class="type-signature"></span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The y coordinate in rectangular notation</p>
-    </div>
-    
-
-    
-
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-120">line 120</a>
+				<a href="Expression.js.html">Drawables/Expression.js</a>,
+				 <a href="Expression.js.html#sunlight-1-line-70">line 70</a>
 			</li>
 		</ul>
 	</dd>
@@ -672,8 +476,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-34">line 34</a>
+				<a href="Expression.js.html">Drawables/Expression.js</a>,
+				 <a href="Expression.js.html#sunlight-1-line-29">line 29</a>
 			</li>
 		</ul>
 	</dd>
@@ -704,207 +508,6 @@
     
     
     
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="toCanvas"><span class="type-signature"></span>toCanvas<span class="signature">(graph)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>This method converts the traditional graphing coordinate system.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>graph</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">GraphPaper.graph</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The graph that the points need to be converted on</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-67">line 67</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    <ul>
-            <li>
-<div class="param-desc">
-    <p>The points on the graph translated to the normal canvas coordinates</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object</span>
-
-
-	</dd>
-</dl>
-
-</li>
-        
-            <li>
-<div class="param-desc">
-    <p>point.x: The x coordinate</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">number</span>
-
-
-	</dd>
-</dl>
-
-</li>
-        
-            <li>
-<div class="param-desc">
-    <p>point.y: The y coordinate</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">number</span>
-
-
-	</dd>
-</dl>
-
-</li>
-        </ul>
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="sunlight-highlight-javascript">&#x2F;&#x2F;returns {x: 250, y: 250}
-var canvas = document.getElementById(&quot;canvas&quot;);
-canvas.width = 500;
-canvas.height = 500;
-var graph = new GraphPaper.Graph(canvas)
-new Point(0, 0).toCanvas(graph);</pre>
-
-
     
 </dd>
 

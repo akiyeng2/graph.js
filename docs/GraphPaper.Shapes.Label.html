@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Class: Point</title>
+	<title>DocStrap Class: Label</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -90,17 +90,17 @@
 					
 
 
-	<h1 class="page-title">Class: Point</h1>
+	<h1 class="page-title">Class: Label</h1>
 <section>
 
 <header>
     <h2>
         <span class="ancestors"><a href="GraphPaper.html">GraphPaper</a><a href="GraphPaper.Shapes.html">.Shapes</a>.</span>
     
-    Point
+    Label
     </h2>
     
-        <div class="class-description"><p>Provides a point with a coordinate system centered at 0, 0</p></div>
+        <div class="class-description"><p>Creates a new text box on the graph</p></div>
     
 </header>
 
@@ -111,7 +111,7 @@
     
         
 <dt>
-    <h4 class="name" id="Point"><span class="type-signature"></span>new Point<span class="signature">(x, y, <span class="optional">color</span>, <span class="optional">width</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Label"><span class="type-signature"></span>new Label<span class="signature">(point, text, <span class="optional">align</span>, <span class="optional">centered</span>, <span class="optional">color</span>, <span class="optional">font</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -119,7 +119,7 @@
     
     
     <div class="description">
-        <p>Constructor for a new point on a graph</p>
+        <p>Constructor for a new text field on a graph</p>
     </div>
     
 
@@ -157,13 +157,13 @@
 
         <tr>
             
-                <td class="name"><code>x</code></td>
+                <td class="name"><code>point</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">Point</span>
 
 
             
@@ -185,20 +185,20 @@
                 </td>
             
 
-            <td class="description last"><p>The x coordinate of the point in rectangular notation</p></td>
+            <td class="description last"><p>The point to put the text at</p></td>
         </tr>
 
 	
 
         <tr>
             
-                <td class="name"><code>y</code></td>
+                <td class="name"><code>text</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -220,7 +220,86 @@
                 </td>
             
 
-            <td class="description last"><p>The y coordinate of the point in rectangular notation</p></td>
+            <td class="description last"><p>The text to display</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>align</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "start"
+                
+                </td>
+            
+
+            <td class="description last"><p><a href = "http://msdn.microsoft.com/en-us/library/ie/ff974919(v=vs.85).aspx">Text align</a></p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>centered</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>If true, it will attempt to put the point at the center of the text.
+Otherwise, it will put it where it would be for the given alignment</p></td>
         </tr>
 
 	
@@ -259,20 +338,20 @@
                 </td>
             
 
-            <td class="description last"><p>The color of the point</p></td>
+            <td class="description last"><p>The color of the text</p></td>
         </tr>
 
 	
 
         <tr>
             
-                <td class="name"><code>width</code></td>
+                <td class="name"><code>font</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -293,12 +372,12 @@
             
                 <td class="default">
                 
-                    3
+                    "10px sans-serif"
                 
                 </td>
             
 
-            <td class="description last"><p>The radius of the point</p></td>
+            <td class="description last"><p>The font of the text. Default is the canvas default</p></td>
         </tr>
 
 	
@@ -334,8 +413,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-12">line 12</a>
+				<a href="Label.js.html">Drawables/Label.js</a>,
+				 <a href="Label.js.html#sunlight-1-line-8">line 8</a>
 			</li>
 		</ul>
 	</dd>
@@ -380,6 +459,128 @@
 
         <dl>
             
+<dt class="name" id="align">
+    <h4><span class="type-signature"></span>align<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The text alignment</p>
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="Label.js.html">Drawables/Label.js</a>,
+				 <a href="Label.js.html#sunlight-1-line-116">line 116</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<dt class="name" id="centered">
+    <h4><span class="type-signature"></span>centered<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Whether the text is centered around the point or not</p>
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="Label.js.html">Drawables/Label.js</a>,
+				 <a href="Label.js.html#sunlight-1-line-132">line 132</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
 <dt class="name" id="color">
     <h4><span class="type-signature"></span>color<span class="type-signature"></span></h4>
 
@@ -388,7 +589,7 @@
 <dd>
     
     <div class="description">
-        <p>The color of the point</p>
+        <p>The color of the text</p>
     </div>
     
 
@@ -421,8 +622,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-137">line 137</a>
+				<a href="Label.js.html">Drawables/Label.js</a>,
+				 <a href="Label.js.html#sunlight-1-line-149">line 149</a>
 			</li>
 		</ul>
 	</dd>
@@ -441,15 +642,15 @@
 
         
             
-<dt class="name" id="width">
-    <h4><span class="type-signature"></span>width<span class="type-signature"></span></h4>
+<dt class="name" id="font">
+    <h4><span class="type-signature"></span>font<span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>The radius of the point</p>
+        <p>The font the text is drawn with</p>
     </div>
     
 
@@ -482,8 +683,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-153">line 153</a>
+				<a href="Label.js.html">Drawables/Label.js</a>,
+				 <a href="Label.js.html#sunlight-1-line-166">line 166</a>
 			</li>
 		</ul>
 	</dd>
@@ -502,15 +703,15 @@
 
         
             
-<dt class="name" id="x">
-    <h4><span class="type-signature"></span>x<span class="type-signature"></span></h4>
+<dt class="name" id="point">
+    <h4><span class="type-signature"></span>point<span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>The x coordinate in rectangular notation</p>
+        <p>The point where the text is drawn</p>
     </div>
     
 
@@ -543,8 +744,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-103">line 103</a>
+				<a href="Label.js.html">Drawables/Label.js</a>,
+				 <a href="Label.js.html#sunlight-1-line-82">line 82</a>
 			</li>
 		</ul>
 	</dd>
@@ -563,15 +764,15 @@
 
         
             
-<dt class="name" id="y">
-    <h4><span class="type-signature"></span>y<span class="type-signature"></span></h4>
+<dt class="name" id="text">
+    <h4><span class="type-signature"></span>text<span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>The y coordinate in rectangular notation</p>
+        <p>The text to draw</p>
     </div>
     
 
@@ -604,8 +805,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-120">line 120</a>
+				<a href="Label.js.html">Drawables/Label.js</a>,
+				 <a href="Label.js.html#sunlight-1-line-99">line 99</a>
 			</li>
 		</ul>
 	</dd>
@@ -672,8 +873,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-34">line 34</a>
+				<a href="Label.js.html">Drawables/Label.js</a>,
+				 <a href="Label.js.html#sunlight-1-line-36">line 36</a>
 			</li>
 		</ul>
 	</dd>
@@ -704,207 +905,6 @@
     
     
     
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="toCanvas"><span class="type-signature"></span>toCanvas<span class="signature">(graph)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>This method converts the traditional graphing coordinate system.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>graph</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">GraphPaper.graph</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The graph that the points need to be converted on</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="Point.js.html">Drawables/Point.js</a>,
-				 <a href="Point.js.html#sunlight-1-line-67">line 67</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    <ul>
-            <li>
-<div class="param-desc">
-    <p>The points on the graph translated to the normal canvas coordinates</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object</span>
-
-
-	</dd>
-</dl>
-
-</li>
-        
-            <li>
-<div class="param-desc">
-    <p>point.x: The x coordinate</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">number</span>
-
-
-	</dd>
-</dl>
-
-</li>
-        
-            <li>
-<div class="param-desc">
-    <p>point.y: The y coordinate</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">number</span>
-
-
-	</dd>
-</dl>
-
-</li>
-        </ul>
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="sunlight-highlight-javascript">&#x2F;&#x2F;returns {x: 250, y: 250}
-var canvas = document.getElementById(&quot;canvas&quot;);
-canvas.width = 500;
-canvas.height = 500;
-var graph = new GraphPaper.Graph(canvas)
-new Point(0, 0).toCanvas(graph);</pre>
-
-
     
 </dd>
 

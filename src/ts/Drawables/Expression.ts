@@ -1,8 +1,5 @@
 /// <reference path="Point.ts" />
 
-/**
- * @namespace GraphPaper
- */
 
 /**
  * @namespace GraphPaper.Shapes
@@ -30,22 +27,32 @@ module GraphPaper.Shapes {
 		private _color: string;
 
 
-
-
 		private _graphs: Array<Graph>;
+
+        /**
+         * This constructs an equation to be graphed
+         *
+         * @class GraphPaper.Shapes.Expression
+         * @classdesc This provides an equation which is compiled from a string for drawing
+         *
+         * @param {string} eqn The equation in string format
+         * @param {string} [color = "red"] The color of the equation
+         */
 
 		constructor(eqn: string, color: string = "red") {
 			this._eqn = eqn;
 			this._equation = new Equation(eqn);
-			this.f = function(x) {
-				return this._equation.evaluate("x", x);
-			};
-
+			this.f = this._equation.compile();
 			this._color = color;
 
 			this._graphs = [];
 
 		}
+
+        /**
+         * @method GraphPaper.Shapes.Expression#draw
+         * @see GraphPaper.Drawable#draw
+         */
 		draw(graph: Graph): void {
 			for (var x = graph.xMin; x < graph.xMax; x += graph.xResolution) {
 	            var lastX = x - (graph.xResolution);
@@ -84,6 +91,11 @@ module GraphPaper.Shapes {
 
 		}
 
+        /**
+         * This is the equation represented as a math string.
+         * @member GraphPaper.Shapes.Expression#eqn
+         */
+
 		public get eqn() : string {
 			return this._eqn;
 		}
@@ -91,6 +103,11 @@ module GraphPaper.Shapes {
 			this.f = new Equation(v).compile();
 			this.updateGraphs();
 		}
+
+        /**
+         * The color of the equation
+         * @member GraphPaper.Shapes.Expression#color
+         */
 
 		public get color() {
 			return this._color;

@@ -4,10 +4,6 @@
 
 
 /**
- * @namespace GraphPaper
- */
-
-/**
  * This provides all of the implementations of {GraphPaper.Drawable}
  * @namespace GraphPaper.Shapes
  */
@@ -61,9 +57,8 @@ module GraphPaper.Shapes {
 
 
         /**
-         * Draws the point on the graph temporarily.
          * @method GraphPaper.Shapes.Point#draw
-         * @param {GraphPaper.graph} graph The graph to draw the point on
+         * @see GraphPaper.Drawable#draw
          */
 
         draw(graph: Graph): void {

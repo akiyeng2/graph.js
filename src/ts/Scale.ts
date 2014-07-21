@@ -40,6 +40,13 @@ module GraphPaper {
     		this.scale();
     	}
 
+        /**
+         * This creates the nice intervals and mins and maxes for the graph.
+         * Adapted from <a href = "http://www.amazon.com/Graphics-Gems-Andrew-S-Glassner/dp/0122861663">Graphics Gems</a>
+         *
+         * @method GraphPaper.Scale#scale
+         */
+
     	public scale() {
 
             var graph: Graph = this.graph;
@@ -82,6 +89,18 @@ module GraphPaper {
             this._majorYMax = parseFloat((Math.ceil(graph.yMax / this._majorYScale) * this._majorYScale).toPrecision(21));
 
         }
+
+        /**
+         * This rounds numbers to the format 1*10^n, 2*10^n, or 5*10^n
+         * @method GraphPaper.Scale#makeNice
+         *
+         * @param {number} num The number to make nice
+         * @param {round} boolean Whether to round up or down
+         *
+         *
+         * @returns {Array<number>} The zeroth element is the base 10 mantissa and the second one is the exponent.
+         * For example [5, 2] would be 5*10^2
+         */
 
         public makeNice(num: number, round: boolean): Array<number> {
             var exponent: number = Math.floor(Math.log(num) / Math.log(10));

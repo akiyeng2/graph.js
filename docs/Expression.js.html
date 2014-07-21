@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Index</title>
+	<title>DocStrap Source: Drawables/Expression.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -84,72 +84,126 @@
 	<div class="row-fluid">
 
 		
-		<div class="span8">
-			
+			<div class="span12">
+				
 				<div id="main">
 					
 
 
-	
-	<span class="page-title">Index</span>
-	
-	
+		<h1 class="page-title">Source: Drawables/Expression.js</h1>
+    
+<section>
+	<article>
+		<pre
+			class="sunlight-highlight-javascript linenums">/// &lt;reference path="Point.ts" />
+var GraphPaper;
+(function (GraphPaper) {
+    /**
+    * @namespace GraphPaper.Shapes
+    */
+    (function (Shapes) {
+        var Line = GraphPaper.Shapes.Line;
 
+        var Expression = (function () {
+            /**
+            * This constructs an equation to be graphed
+            *
+            * @class GraphPaper.Shapes.Expression
+            * @classdesc This provides an equation which is compiled from a string for drawing
+            *
+            * @param {string} eqn The equation in string format
+            * @param {string} [color = "red"] The color of the equation
+            */
+            function Expression(eqn, color) {
+                if (typeof color === "undefined") { color = "red"; }
+                this._eqn = eqn;
+                this._equation = new Equation(eqn);
+                this.f = this._equation.compile();
+                this._color = color;
 
+                this._graphs = [];
+            }
+            /**
+            * @method GraphPaper.Shapes.Expression#draw
+            * @see GraphPaper.Drawable#draw
+            */
+            Expression.prototype.draw = function (graph) {
+                for (var x = graph.xMin; x &lt; graph.xMax; x += graph.xResolution) {
+                    var lastX = x - (graph.xResolution);
+                    var lastY = this.f(lastX);
 
+                    var line = new Line(new GraphPaper.Shapes.Point(lastX, lastY), new GraphPaper.Shapes.Point(x, this.f(x)), this.color);
+                    line.draw(graph);
+                }
+            };
 
+            Expression.prototype.updateGraphs = function () {
+                for (var i = 0; i &lt; this._graphs.length; i++) {
+                    this._graphs[i].update();
+                }
+            };
 
+            Expression.prototype.equals = function (other) {
+                return this.eqn === other.eqn && this.color === other.color;
+            };
 
+            Expression.prototype.toString = function () {
+                return this._eqn;
+            };
 
+            Expression.prototype.add = function (graph) {
+                this._graphs.push(graph);
+            };
 
+            Expression.prototype.remove = function (graph) {
+                for (var i = this._graphs.length - 1; i >= 0; i--) {
+                    if (this._graphs[i] === graph) {
+                        this._graphs.splice(i, 1);
+                    }
+                }
+            };
 
+            Object.defineProperty(Expression.prototype, "eqn", {
+                /**
+                * This is the equation represented as a math string.
+                * @member GraphPaper.Shapes.Expression#eqn
+                */
+                get: function () {
+                    return this._eqn;
+                },
+                set: function (v) {
+                    this.f = new Equation(v).compile();
+                    this.updateGraphs();
+                },
+                enumerable: true,
+                configurable: true
+            });
 
+            Object.defineProperty(Expression.prototype, "color", {
+                /**
+                * The color of the equation
+                * @member GraphPaper.Shapes.Expression#color
+                */
+                get: function () {
+                    return this._color;
+                },
+                set: function (v) {
+                    this._color = v;
+                    this.updateGraphs();
+                },
+                enumerable: true,
+                configurable: true
+            });
 
-
-	
-	
-
-
-
-
-
-    <section class="readme-section">
-        <article><h1>graph.js</h1>
-<p>Graph.js is a Javascript library for graphing functions, lines, points and more. It is written in Microsoft's Typescript but is compiled to ECMAScript 5 Javascript so it can be used in browsers or <a href="https://github.com/rogerwang/node-webkit">nodewebkit</a>.</p>
-<h1>Features</h1>
-<ul>
-<li>Includes a built-in equation parser for ease of entering equatiosn</li>
-<li>Adding elements to the graph is fast and simple</li>
-<li>Provides a graph with intervals at round numbers</li>
-<li>Graph interface is easy to manipulate to achieve different looks</li>
-<li>Allows for dragging and zooming with mouse movements</li>
-<li>Tracing enabled within the graph to find values at specific points</li>
-</ul>
-<h1>Getting started</h1>
-<p>Download the zip file or type <code>$ git clone https://github.com/scrblnrd3/graph.js.git</code> into the command line. Run <code>bower install</code> to install jQuery and jQuery mousewheel or include them from your favorite CDN in a webpage.</p>
-<h1>Dependencies</h1>
-<ul>
-<li><a href="https://github.com/jquery/jquery">jQuery</a></li>
-<li><a href="https://github.com/brandonaaron/jquery-mousewheel">jQuery-mousewheel</a></li>
-<li><a href="https://github.com/ekg/fraction.js">Fraction.js</a></li>
-</ul>
-<h1>Usage</h1>
-<p>To use this, create an HTML page with a <code>&lt;canvas&gt;</code> tag, and specify the dimensions and provide an id. In your Javascript, initialize a new Graph object by</p>
-<pre><code class="lang-javascript">var canvas = document.getElementById('canvas');
-var graph = new Graph(canvas); //Specify options here such as window and colors</code></pre>
-<p>Adding elements to the graph is easy. So far you can add points, lines, and mathematical functions</p>
-<pre><code class="lang-javascript">var point1 = new Point(1, 3);
-var point2 = new Point(5, 2);
-
-var line = new Line(point1, point2);
-graph.add(line);
-
-var fn = new Expression(&quot;sin(2x)cos(x)&quot;);
-graph.add(fn);</code></pre>
-<p>To remove elements from the graph, enter <code>graph.remove(element)</code></p></article>
-    </section>
-
-
+            return Expression;
+        })();
+        Shapes.Expression = Expression;
+    })(GraphPaper.Shapes || (GraphPaper.Shapes = {}));
+    var Shapes = GraphPaper.Shapes;
+})(GraphPaper || (GraphPaper = {}));
+</pre>
+	</article>
+</section>
 
 
 
@@ -174,10 +228,6 @@ graph.add(fn);</code></pre>
 				</footer>
 			</div>
 
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
 			
 			<br clear="both">
 		</div>

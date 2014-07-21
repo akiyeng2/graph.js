@@ -2,27 +2,34 @@
 var GraphPaper;
 (function (GraphPaper) {
     /**
-    * @namespace GraphPaper
-    */
-    /**
     * @namespace GraphPaper.Shapes
     */
     (function (Shapes) {
         var Line = GraphPaper.Shapes.Line;
 
         var Expression = (function () {
+            /**
+            * This constructs an equation to be graphed
+            *
+            * @class GraphPaper.Shapes.Expression
+            * @classdesc This provides an equation which is compiled from a string for drawing
+            *
+            * @param {string} eqn The equation in string format
+            * @param {string} [color = "red"] The color of the equation
+            */
             function Expression(eqn, color) {
                 if (typeof color === "undefined") { color = "red"; }
                 this._eqn = eqn;
                 this._equation = new Equation(eqn);
-                this.f = function (x) {
-                    return this._equation.evaluate("x", x);
-                };
-
+                this.f = this._equation.compile();
                 this._color = color;
 
                 this._graphs = [];
             }
+            /**
+            * @method GraphPaper.Shapes.Expression#draw
+            * @see GraphPaper.Drawable#draw
+            */
             Expression.prototype.draw = function (graph) {
                 for (var x = graph.xMin; x < graph.xMax; x += graph.xResolution) {
                     var lastX = x - (graph.xResolution);
@@ -60,6 +67,10 @@ var GraphPaper;
             };
 
             Object.defineProperty(Expression.prototype, "eqn", {
+                /**
+                * This is the equation represented as a math string.
+                * @member GraphPaper.Shapes.Expression#eqn
+                */
                 get: function () {
                     return this._eqn;
                 },
@@ -72,6 +83,10 @@ var GraphPaper;
             });
 
             Object.defineProperty(Expression.prototype, "color", {
+                /**
+                * The color of the equation
+                * @member GraphPaper.Shapes.Expression#color
+                */
                 get: function () {
                     return this._color;
                 },
