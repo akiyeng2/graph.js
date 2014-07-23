@@ -1,386 +1,49 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-
-	<title>graph Class: Scale</title>
-
-	<!--[if lt IE 9]>
-	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
-
-	
-	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
-	
-	<style>
-		.sideMenu
-		{
-			margin-left: 320px!important;
-
-		}
-		#main
-		{
-			margin-top: 46px;
-		}
-		#mainMenu
-		{
-			position: fixed;
-			left: 0px;
-			top: 0px;
-			
-		}
-
-		#searchBox
-		{
-			vertical-align: none !important;
-			padding-right: 0px;
-			width:238px;
-
-		}
-		.sideMargin
-		{
-			margin-left: 15px;
-		}
-		.sunlight-code-container
-		{
-			border:none!important;
-		}
-		.navTitle
-		{
-			font-size:15px;
-			padding:0px;
-
-		}
-		.nav-list
-		{
-			width: 100%;
-		}
-		.nav-list
-		{
-			padding-left:20px;
-		}		
-		.nav-list li
-		{
-			line-height: 16px;
-		}
-		.handCursor
-		{
-			cursor: pointer;
-		}
-		.nav-pills > li > a {
-			padding-top: 0px;
-			padding-bottom: 0px;
-		}
-
-		#projectTitle
-		{
-			position: fixed;
-			padding-left: 10px;
-			padding-top: 5px;
-			font-size: 26px;
-			font-weight: lighter;
-			letter-spacing: -1px;
-			background-color: #FFF;
-			width: 100%;
-			height: 35px;
-			line-height: 18px;
-			color: #000;
-			border-bottom: 1px solid rgba(0,0,0,.2);
-			z-index: 10;
-		}
-		h1, h2, h3, h4, h5, h6 {
-			font-family: 'Helvetica Neue';
-			font-weight: lighter;
-		}
-		h3
-		{
-			font-size: 22px;
-			font-weight: lighter;
-		}
-		.page-title
-		{
-			font-weight: lighter;
-			font-size: 28px;
-			letter-spacing: -2px;
-			padding-top:0px;
-		}
-
-		.well
-		{
-			padding: 5px;
-			width:280px;
-			margin-left:0px;
-		}
-
-
-		.menuFrame
-		{
-			margin-top: 20px;
-			overflow:hidden; 
-			overflow-y:auto;
-		}
-		.menuFrame::-webkit-scrollbar {
-		    -webkit-appearance: none;
-		}
-
-		.menuFrame::-webkit-scrollbar:vertical {
-		    width: 11px;
-		}
-
-		.menuFrame::-webkit-scrollbar:horizontal {
-		    height: 11px;
-		}
-
-		.menuFrame::-webkit-scrollbar-thumb {
-		    border-radius: 8px;
-		    border: 2px solid white; /* should match background, can't be transparent */
-		    background-color: rgba(0, 0, 0, .5);
-		}
-		
-		.container-fluid
-		{
-			padding-left: 10px;
-		}
-
-		#side-menu
-		{
-			height: 415px;
-			box-shadow: inset 0 0 10px rgba(0,0,0,.5);
-			border: 1px solid #999;
-		}
-
-		#menuAside
-		{
-			margin-top:50px;
-			position:fixed;
-		}
-
-		.member {
-			font-size: 14px;
-			color:#000;
-			background-color:#FFF;
-			border:1px solid #2fa4e7;
-		}
-		.member:hover {
-
-			background-color:#F6F6F6;
-		}		
-		.member-open .paramSignature{
-			font-size: 14px;
-			color: #2fa4e7;
-		}
-		.member-collapsed .paramSignature{
-			font-size: 14px;
-			color: #2fa4e7;
-		}
-		.routeTitle{
-		    cursor: pointer;
-		}
-
-		.genericAnnotation
-		{
-		    color:#2fa4e7;
-		}
-
-		.sourceBar
-		{
-			margin-top: -5px;
-		}
-
-
-
-.twitter-typeahead
-{
-	top: -5px;
-}
-.twitter-typeahead .tt-query,
-.twitter-typeahead .tt-hint {
-  margin-bottom: 0;
-  background-color: #F00;
-  border-radius: 20px;
-
-}
-
-.tt-hint
-{
-	top: 2px!important;
-
-    padding-left: 10px!important;  
-    width: 188px;
-    text-indent: 4px;
-}
-.tt-dropdown-menu {
-  min-width: 160px;
-  margin-top: 2px;
-  padding: 5px 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0,0,0,.2);
-  *border-right-width: 2px;
-  *border-bottom-width: 2px;
-  -webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
-  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-          box-shadow: 0 5px 10px rgba(0,0,0,.2);
-  -webkit-background-clip: padding-box;
-     -moz-background-clip: padding;
-          background-clip: padding-box;
-}
-
-.tt-suggestion {
-  display: block;
-  padding: 3px 20px;
-}
-
-.tt-suggestion.tt-is-under-cursor {
-  color: #fff;
-  background-color: #0081c2;
-  background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
-  background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
-  background-image: -o-linear-gradient(top, #0088cc, #0077b3);
-  background-image: linear-gradient(to bottom, #0088cc, #0077b3);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
-}
-
-.tt-suggestion.tt-is-under-cursor a {
-  color: #fff;
-}
-
-.tt-suggestion p {
-  margin: 0;
-}
-
-	</style>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Scale</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
 
 <body>
-<div id="projectTitle">
-	<div id="btnCollapse" class="btn collapseSidebarButton btn-primary"><i class="icon-th-list icon-white"></i></div>
-	graph
-</div>	
-<div class="container-fluid">
 
-	<div id="menuAside">
-    <aside class="well span3 oc" id="side-menu" role="navigation">
-
-    	<div style="margin-left: 10px; margin-top: 10px;">
-			<input type="text" id="searchBox" class="search-query typeahead" placeholder="Search">
-		</div>
-		<div class="menuFrame" id="sideMenuFrame">
-		<ul id="menuContainer" class="nav nav-pills nav-stacked">
-			<li class="nav-header navTitle"><a href="index.html">INDEX</a></li>
-				<li class="divider"></li>
-				
-				
-					    <li id="navTitle_Namespaces" class="nav-header navTitle">
-                            <a class="handCursor" data-toggle="collapse" data-id="T_Namespaces" data-target="#collapse_Namespaces">Namespaces<span class="badge badge-info pull-right">2</span></a>
-                        </li>
-                        <li id="navContents_Namespaces">
-                            <div id="collapse_Namespaces" class="collapse">
-                                <ul class="nav nav-list" style="width:100%;margin-left:-8px;">
-                                    
-                                        <?j
-                                    <li>
-                                        
-                                        
-                                        	<a href="GraphPaper.html">GraphPaper</a>
-                                        
-                                    </li>
-                                    
-                                    <li>
-                                        
-                                        
-                                        	<a href="GraphPaper.Shapes.html">GraphPaper.Shapes</a>
-                                        
-                                    </li>
-                                    
-                             <li class="divider"></li>
-                        
-                                    </ul>
-                                </div>
-                            </li>
-                        
-					    <li id="navTitle_Classes" class="nav-header navTitle">
-                            <a class="handCursor" data-toggle="collapse" data-id="T_Classes" data-target="#collapse_Classes">Classes<span class="badge badge-info pull-right">7</span></a>
-                        </li>
-                        <li id="navContents_Classes">
-                            <div id="collapse_Classes" class="collapse">
-                                <ul class="nav nav-list" style="width:100%;margin-left:-8px;">
-                                    <li><div class="routeTitle">GraphPaper</div><ul class="children nav nav-list"><li><a href="GraphPaper.Graph.html">Graph</a></li><li><a href="GraphPaper.Scale.html">Scale</a></li><li><div class="routeTitle">Shapes</div><ul class="children nav nav-list"><li><a href="GraphPaper.Shapes.Expression.html">Expression</a></li><li><a href="GraphPaper.Shapes.Label.html">Label</a></li><li><a href="GraphPaper.Shapes.Line.html">Line</a></li><li><a href="GraphPaper.Shapes.Point.html">Point</a></li></ul></li><li><a href="GraphPaper.Styles.html">Styles</a></li></ul></li>
-                            
-                                    </ul>
-                                </div>
-                            </li>
-                        
-					    <li id="navTitle_Interfaces" class="nav-header navTitle">
-                            <a class="handCursor" data-toggle="collapse" data-id="T_Interfaces" data-target="#collapse_Interfaces">Interfaces<span class="badge badge-info pull-right">1</span></a>
-                        </li>
-                        <li id="navContents_Interfaces">
-                            <div id="collapse_Interfaces" class="collapse">
-                                <ul class="nav nav-list" style="width:100%;margin-left:-8px;">
-                                    <li><div class="routeTitle">GraphPaper</div><ul class="children nav nav-list"><li><a href="GraphPaper.Drawable.html">Drawable</a></li></ul></li>
-                            
-                                    </ul>
-                                </div>
-                            </li>
-                        
-
-		</ul>
-		</div>
-
-		<script>
-			var searchMembers = [{"realName":"GraphPaper","link":"GraphPaper"},{"realName":"GraphPaper.Shapes","link":"GraphPaper.Shapes"},{"realName":"GraphPaper.Graph","link":"GraphPaper.Graph"},{"realName":"GraphPaper.Scale","link":"GraphPaper.Scale"},{"realName":"GraphPaper.Shapes.Expression","link":"GraphPaper.Shapes.Expression"},{"realName":"GraphPaper.Shapes.Label","link":"GraphPaper.Shapes.Label"},{"realName":"GraphPaper.Shapes.Line","link":"GraphPaper.Shapes.Line"},{"realName":"GraphPaper.Shapes.Point","link":"GraphPaper.Shapes.Point"},{"realName":"GraphPaper.Styles","link":"GraphPaper.Styles"},{"realName":"GraphPaper.Drawable","link":"GraphPaper.Drawable"}];
-		</script>
-    </aside>
-	</div>
-    <div id="docContents" class="sideMenu sideMargin">
-
-		
-			<div style="width:100%">
-		
-				<div id="main">
-					
+<div id="main">
+    
+    <h1 class="page-title">Class: Scale</h1>
+    
+    
 
 
-	<h1 class="page-title">
-        Class:
-        <span class="ancestors"><a href="GraphPaper.html">GraphPaper</a>.</span>Scale
-        
-    </h1>
+
 <section>
-
+    
 <header>
+    <h2>
+        <span class="ancestors"><a href="GraphPaper.html">GraphPaper</a>.</span>
     
-        <div class="class-description"><p>This is the class used to determine the spacing between graph ticks</p></div>
+    Scale
+    </h2>
     
-</header>
+        <div class="class-description">This is the class used to determine the spacing between graph ticks</div>
+    
+</header>  
 
 <article>
     <div class="container-overview">
     
-
+    
     
         
 <dt>
-    <a name="Scale"></a>
-
-    <h4 class="name" id="Scale"><span class="btn btn-mini btn btn-danger">C</span> new Scale( graph: <span class="paramSignature">GraphPaper&#46;Graph</span> ) &rarr; {void}
-
-    
-
-    <a href="Scale.ts.html"><div style="font-weight:lighter; float:right;" class="btn sourceBar"><i class="icon-eye-open"></i></div></a>
-
-    
-
-    </h4>
+    <h4 class="name" id="Scale"><span class="type-signature"></span>new Scale<span class="signature">(graph)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -388,11 +51,9 @@
     
     
     <div class="description">
-        <p>Sets up the tick scaling for the graph</p>
+        Sets up the tick scaling for the graph
     </div>
     
-
-
 
     
     
@@ -402,31 +63,31 @@
         <h5>Parameters:</h5>
         
 
-<table class="params table table-striped">
+<table class="params">
     <thead>
 	<tr>
 		
 		<th>Name</th>
 		
-
+		
 		<th>Type</th>
-
 		
-
 		
-
+		
+		
+		
 		<th class="last">Description</th>
 	</tr>
 	</thead>
-
+	
 	<tbody>
 	
-
+	
         <tr>
             
                 <td class="name"><code>graph</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -435,49 +96,50 @@
 
             
             </td>
-
             
-
             
-
-            <td class="description last"><p>The graph that you want to be scaled</p></td>
+            
+            
+            
+            <td class="description last">The graph that you want to be scaled</td>
         </tr>
-
+	
 	
 	</tbody>
 </table>
-
     
     
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
-    <!-- xperiments
     
-    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Scale.ts.html">Scale.ts</a></dt>
-    -->
-
     
-
     
-
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Scale.js.html">Scale.js</a>, <a href="Scale.js.html#line7">line 7</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
     
 </dl>
 
@@ -495,40 +157,28 @@
     
 </dd>
 
- 
     
     </div>
-
-   
-
     
-
     
-
     
-
     
-
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
+    
     
         <h3 class="subsection-title">Methods</h3>
-
+        
         <dl>
             
 <dt>
-    <a name="makeNice"></a>
-
-    <h4 class="name" id="makeNice"><span class="btn btn-mini btn-success" title="public">M</span> makeNice( num: <span class="paramSignature">number</span>, boolean: <span class="paramSignature">round</span> ) &rarr; { <span class='paramSignature'>Array.<number></span> }
-
-    
-
-    </h4>
+    <h4 class="name" id="makeNice"><span class="type-signature"></span>makeNice<span class="signature">(num, boolean)</span><span class="type-signature"> &rarr; {Array.&lt;number>}</span></h4>
     
     
 </dt>
@@ -536,11 +186,9 @@
     
     
     <div class="description">
-        <p>This rounds numbers to the format 1<em>10^n, 2</em>10^n, or 5*10^n</p>
+        This rounds numbers to the format 1*10^n, 2*10^n, or 5*10^n
     </div>
     
-
-
 
     
     
@@ -550,31 +198,31 @@
         <h5>Parameters:</h5>
         
 
-<table class="params table table-striped">
+<table class="params">
     <thead>
 	<tr>
 		
 		<th>Name</th>
 		
-
+		
 		<th>Type</th>
-
 		
-
 		
-
+		
+		
+		
 		<th class="last">Description</th>
 	</tr>
 	</thead>
-
+	
 	<tbody>
 	
-
+	
         <tr>
             
                 <td class="name"><code>num</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -583,21 +231,21 @@
 
             
             </td>
-
             
-
             
-
-            <td class="description last"><p>The number to make nice</p></td>
+            
+            
+            
+            <td class="description last">The number to make nice</td>
         </tr>
-
 	
-
+	
+	
         <tr>
             
                 <td class="name"><code>boolean</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -606,49 +254,50 @@
 
             
             </td>
-
             
-
             
-
-            <td class="description last"><p>Whether to round up or down</p></td>
+            
+            
+            
+            <td class="description last">Whether to round up or down</td>
         </tr>
-
+	
 	
 	</tbody>
 </table>
-
     
     
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
-    <!-- xperiments
     
-    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Scale.ts.html">Scale.ts</a></dt>
-    -->
-
     
-
     
-
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Scale.js.html">Scale.js</a>, <a href="Scale.js.html#line65">line 65</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
     
 </dl>
 
@@ -662,38 +311,37 @@
     
     
     
-    <span>Returns:</span>
+    <h5>Returns:</h5>
     
             
-
-→ { 
-<span class="param-type">Array.&lt;number></span>
-
- }
-
 <div class="param-desc">
-    <p>The zeroth element is the base 10 mantissa and the second one is the exponent.
-For example [5, 2] would be 5*10^2</p>
+    The zeroth element is the base 10 mantissa and the second one is the exponent.
+For example [5, 2] would be 5*10^2
 </div>
 
 
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Array.&lt;number></span>
+
+
+	</dd>
+</dl>
 
         
     
     
 </dd>
 
- 
         
             
 <dt>
-    <a name="scale"></a>
-
-    <h4 class="name" id="scale"><span class="btn btn-mini btn-success" title="public">M</span> scale(  )
-
-    
-
-    </h4>
+    <h4 class="name" id="scale"><span class="type-signature"></span>scale<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -701,12 +349,10 @@ For example [5, 2] would be 5*10^2</p>
     
     
     <div class="description">
-        <p>This creates the nice intervals and mins and maxes for the graph.
-Adapted from <a href = "http://www.amazon.com/Graphics-Gems-Andrew-S-Glassner/dp/0122861663">Graphics Gems</a></p>
+        This creates the nice intervals and mins and maxes for the graph.
+Adapted from <a href = "http://www.amazon.com/Graphics-Gems-Andrew-S-Glassner/dp/0122861663">Graphics Gems</a>
     </div>
     
-
-
 
     
     
@@ -717,32 +363,34 @@ Adapted from <a href = "http://www.amazon.com/Graphics-Gems-Andrew-S-Glassner/dp
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
-    <!-- xperiments
     
-    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Scale.ts.html">Scale.ts</a></dt>
-    -->
-
     
-
     
-
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Scale.js.html">Scale.js</a>, <a href="Scale.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
     
 </dl>
 
@@ -760,197 +408,32 @@ Adapted from <a href = "http://www.amazon.com/Graphics-Gems-Andrew-S-Glassner/dp
     
 </dd>
 
- 
         </dl>
     
-
     
-
     
-
     
-<dl class="details">
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <!-- xperiments
-    
-    <dt style="font-weight:lighter;" class="btn"><i class="icon-eye-open"></i> <a href="Scale.ts.html">Scale.ts</a></dt>
-    -->
-
-    
-
-    
-
-    
-</dl>
-
 </article>
 
-</section>
+</section>  
 
 
 
 
-				</div>
+</div>
 
-				<div class="clearfix"></div>
-				<footer>
-					
-					
-						<span class="copyright">
-						graph Copyright © 2014 Amalan.
-						</span>
-									<br />
-									
-						<span class="jsdoc-message">
-						Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha9</a>
-						on Wed Jul 23 2014 15:17:02 GMT-0400 (EDT) using the <a href="https://github.com/xperiments/TSDoc">TSDoc template</a>.
-						</span>
-				</footer>
-			</div>
-			<!--
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
-			
-			-->
-			<br clear="both">
-		</div>
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="GraphPaper.Graph.html">Graph</a></li><li><a href="GraphPaper.Scale.html">Scale</a></li><li><a href="GraphPaper.Shapes.Expression.html">Expression</a></li><li><a href="GraphPaper.Shapes.Label.html">Label</a></li><li><a href="GraphPaper.Shapes.Line.html">Line</a></li><li><a href="GraphPaper.Shapes.Point.html">Point</a></li><li><a href="GraphPaper.Styles.html">Styles</a></li></ul><h3>Namespaces</h3><ul><li><a href="GraphPaper.html">GraphPaper</a></li><li><a href="GraphPaper.Shapes.html">Shapes</a></li></ul>
+</nav>
 
-	</div>
+<br clear="both">
 
-	<script src="scripts/sunlight.js"></script>
-	<script src="scripts/sunlight.javascript.js"></script>
-	<script src="scripts/sunlight-plugin.doclinks.js"></script>
-	<script src="scripts/sunlight-plugin.linenumbers.js"></script>
-	<script src="scripts/sunlight-plugin.menu.js"></script>
-	<script src="scripts/jquery.min.js"></script>
-	<script src="scripts/jquery.scrollTo.js"></script>
-	<script src="scripts/jquery.localScroll.js"></script>
-	<script src="scripts/bootstrap.min.js"></script>
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Wed Jul 23 2014 15:39:17 GMT-0400 (EDT)
+</footer>
 
-
-
-	<script>  Sunlight.highlightAll({lineNumbers:false,  showMenu: true, enableDoclinks :true}); </script>
-
-	<script>
-		$( function () {
-
-			var searchItems = [];
-			var searchMap = {};
-			var mapName = "";
-			for( var i=0; i<searchMembers.length; i++ )
-			{
-				realName = searchMembers[i].realName;
-				searchItems.push( realName );
-				searchMap[ realName ] = searchMembers[ i ];
-			}
-
-
-			$('.typeahead').typeahead({
-			  source: searchItems,
-			  matcher: function(item) {
-			  	//console.log('aaa'+item, this.query, item.indexOf( this.query.toLowerCase() )==-1?false:true)
-                // evaluate item variable and return true if the item was matched.
-                return item.toLowerCase().indexOf( this.query.toLowerCase() )==-1?false:true;
-             },
-			  updater: function (item) {
-					window.location.href = searchMap[ item ].link+'.html';
-			  }
-
-			});
-
-
-            // Move Tutorials to bottom
-            //$('#menuContainer').append($('#navTitle_Tutorials'));
-            //$('#menuContainer').append($('#navContents_Tutorials'));
-			$(window).resize(function() {
-			  $('#side-menu').height( $(window).height()-70 );
-			  $('#sideMenuFrame').height( $(window).height()-140 );
-			  if( $(window).width() <480 )
-			  {
-			  	$('#side-menu').hide();
-				$('#docContents').removeClass('sideMenu');
-			  }
-			});
-
-			$(window).trigger('resize')
-			$('#btnCollapse').click(function()
-			{
-				$('#side-menu').toggle();
-				$('#docContents').toggleClass('sideMenu');
-
-			})
-			$('#btnHome').click(function()
-			{
-				document.location.href="index.html"
-
-			})		
-
-			$('.sourceBar').click(function(){})
-			var lastMenuSelection = window.localStorage.getItem('lastMenuSelection') || null;
-			if( lastMenuSelection ) $('a[data-id='+lastMenuSelection+']').click();
-			$('a[data-toggle=collapse]').click(function(){
-				if( lastMenuSelection == $(this).attr('data-id') ) return;
-				if( lastMenuSelection ) $('a[data-id='+lastMenuSelection+']').click();
-				lastMenuSelection = $(this).attr('data-id');
-				window.localStorage.setItem('lastMenuSelection', lastMenuSelection )
-			});	
-
-
-		} );
-	</script>
-
-	
-	<script>
-		$( function () {
-			$('#main').localScroll({
-				offset: { top: 56 } //offset by the height of your header (give or take a few px, see what works for you)
-			});
-			$(".routeTitle").on('click', function(){
-			    $(this).next().slideToggle();
-			});
-			$( "dt h4.name" ).each( function () {
-				var $this = $( this );
-				//var icon = $( "<i/>" ).addClass( "icon-plus-sign" ).addClass( "pull-right" );
-				var dt = $this.parents( "dt" );
-				var children = dt.next( "dd" );
-
-				//$this.append( icon ).css( {cursor : "pointer"} );
-				$this.addClass( "member-collapsed" ).addClass( "member" );
-
-				children.hide();
-				$this.toggle( function () {
-					//icon.addClass( "icon-minus-sign" ).removeClass( "icon-plus-sign" );
-					$this.addClass( "member-open" ).removeClass( "member-collapsed" );
-					children.slideDown();
-				}, function () {
-					//icon.addClass( "icon-plus-sign" ).removeClass( "icon-minus-sign" );
-					$this.addClass( "member-collapsed" ).removeClass( "member-open" );
-					children.slideUp();
-				} );
-			} );
-			$('.sourceBar').click(function(event){event.stopPropagation();})
-		} );
-	</script>
-	
-
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
 </body>
 </html>

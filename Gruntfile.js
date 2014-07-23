@@ -12,7 +12,7 @@ module.exports = function(grunt) {
                    sourceMap: false,
                    sourceRoot: '',
                    declaration: false,
-                   removeComments: true,
+                   removeComments: false,
                    htmlModuleTemplate: "<%= filename %>",
                    htmlVarTemplate: "<%= ext %>"
 
@@ -71,9 +71,7 @@ module.exports = function(grunt) {
            dist: {
                src: ['src/js/**/*.js', 'README.md'],
                options: {
-                   destination: 'docs/',
-                   configure: 'node_modules/ink-docstrap/template/jsdoc.conf.json',
-                   template: 'node_modules/ink-docstrap/template'
+                   destination: 'docs/'
                }
 
            }
@@ -93,9 +91,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-shell')
+    grunt.loadNpmTasks('grunt-jsdoc');
 
-    grunt.registerTask('build', ['ts', 'uglify', 'shell']);
+    grunt.registerTask('build', ['ts', 'uglify', 'jsdoc']);
     grunt.registerTask('lint', ['tslint', 'ts:dev', 'jshint']);
-    grunt.registerTask('default', ['tslint', 'ts:dev', 'jshint', 'ts:build', 'uglify', 'shell']);
+    grunt.registerTask('default', ['tslint', 'ts:dev', 'jshint', 'ts:build', 'uglify', 'jsdoc']);
 }
