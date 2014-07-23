@@ -12,7 +12,9 @@ module.exports = function(grunt) {
                    sourceMap: false,
                    sourceRoot: '',
                    declaration: false,
-                   removeComments: false
+                   removeComments: true,
+                   htmlModuleTemplate: "<%= filename %>",
+                   htmlVarTemplate: "<%= ext %>"
 
                },
 
@@ -26,7 +28,9 @@ module.exports = function(grunt) {
                    sourceMap: false,
                    sourceRoot: '',
                    declaration: false,
-                   removeComments: false
+                   removeComments: false,
+                   htmlModuleTemplate: "<%= filename %>",
+                   htmlVarTemplate: "<%= ext %>"
                },
                src: ['src/ts/Graph.ts'],
                outDir: 'src/js/'
@@ -73,6 +77,12 @@ module.exports = function(grunt) {
                }
 
            }
+       },
+
+       shell: {
+           tsdoc: {
+               command: 'tsdoc'
+           }
        }
 
 
@@ -83,9 +93,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-jsdoc');
+    grunt.loadNpmTasks('grunt-shell')
 
-    grunt.registerTask('build', ['ts', 'uglify', 'jsdoc']);
+    grunt.registerTask('build', ['ts', 'uglify', 'shell']);
     grunt.registerTask('lint', ['tslint', 'ts:dev', 'jshint']);
-
+    grunt.registerTask('default', ['tslint', 'ts:dev', 'jshint', 'ts:build', 'uglify', 'shell']);
 }
