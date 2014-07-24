@@ -19,8 +19,17 @@
 			var Line = GraphPaper.Shapes.Line;
 			var Expression = GraphPaper.Shapes.Expression;
 			var graph = new Graph(canvas);
-            var expr = new Expression("sin(x)");
-            graph.add(expr);
+
+            var points = [
+                    new Point(-10, 4),
+                    new Point(-9, 3),
+                    new Point(-8, -4),
+                    new Point(-7, 4)
+            ];
+
+            graph.add(new GraphPaper.Shapes.Plot(points));
+
+
 
 		</script>
 	</body>
