@@ -6,7 +6,7 @@
     "scrblnrd3 <amalan.iyengar@gmail.com>"
   ],
   "description": "A graphing library built in Typescript and Javascript",
-  "main": "js/graph.js",
+  "main": "dist/Graph.js",
   "moduleType": [
     "globals"
   ],
@@ -22,14 +22,24 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "docs",
+    "demos",
+    "tslint.json",
+    "tsdoc.json",
+    "package.json",
+    "Gruntfile.js",
+    "README.md"
+
   ],
   "dependencies": {
     "jquery": "~2.1.1",
     "jquery-mousewheel": "~3.1.12",
     "Javascript-CAS": "scrblnrd3/Javascript-CAS"
   }
+
+
+
+
 
 
 }

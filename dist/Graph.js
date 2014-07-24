@@ -734,7 +734,6 @@ var GraphPaper;
             *
             * @class GraphPaper.Shapes.Point
             * @classdesc Provides a point with a coordinate system centered at 0, 0
-            * @memberOf GraphPaper.Shapes
             *
             * @param {number} x The x coordinate of the point in rectangular notation
             * @param {number} y The y coordinate of the point in rectangular notation
@@ -1143,7 +1142,7 @@ var GraphPaper;
                 var x = e.pageX - parentOffset.left;
                 var y = e.pageY - parentOffset.top;
 
-                var delta = e.deltaY;
+                var delta = e.deltaY * e.deltaFactor;
                 var factor = 1 + delta / 1000;
 
                 var origin = new Point(0, 0).toCanvas(graph);

@@ -301,7 +301,7 @@ module GraphPaper {
                 var x: number = e.pageX - parentOffset.left;
                 var y: number = e.pageY - parentOffset.top;
 
-                var delta: number = e.deltaY;
+                var delta: number = e.deltaY * e.deltaFactor;
                 var factor: number = 1 + delta / 1000;
 
                 var origin = new Point(0, 0).toCanvas(graph);

@@ -245,7 +245,7 @@ var GraphPaper;
                 var x = e.pageX - parentOffset.left;
                 var y = e.pageY - parentOffset.top;
 
-                var delta = e.deltaY;
+                var delta = e.deltaY * e.deltaFactor;
                 var factor = 1 + delta / 1000;
 
                 var origin = new Point(0, 0).toCanvas(graph);

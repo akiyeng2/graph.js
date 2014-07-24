@@ -14,7 +14,6 @@ var GraphPaper;
             *
             * @class GraphPaper.Shapes.Point
             * @classdesc Provides a point with a coordinate system centered at 0, 0
-            * @memberOf GraphPaper.Shapes
             *
             * @param {number} x The x coordinate of the point in rectangular notation
             * @param {number} y The y coordinate of the point in rectangular notation
