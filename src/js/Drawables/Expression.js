@@ -25,6 +25,7 @@ var GraphPaper;
                 this._color = color;
 
                 this._graphs = [];
+                this._tex = toTex(this._equation.tree);
             }
             /**
             * @method GraphPaper.Shapes.Expression#draw
@@ -75,7 +76,9 @@ var GraphPaper;
                     return this._eqn;
                 },
                 set: function (v) {
-                    this.f = new Equation(v).compile();
+                    this._equation = new Equation(v);
+                    this.f = this._equation.compile();
+                    this._tex = toTex(this._equation.tree);
                     this.updateGraphs();
                 },
                 enumerable: true,

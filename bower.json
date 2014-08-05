@@ -33,8 +33,7 @@
   ],
   "dependencies": {
     "jquery": "~2.1.1",
-    "jquery-mousewheel": "~3.1.12",
-    "Javascript-CAS": "scrblnrd3/Javascript-CAS"
+    "jquery-mousewheel": "~3.1.12"
   }
 
 

@@ -6,9 +6,7 @@
 		<canvas id = "graph"></canvas>
 		<script src = "../bower_components/jquery/dist/jquery.min.js"></script>
 		<script src = "../bower_components/jquery-mousewheel/jquery.mousewheel.min.js"></script>
-		<script src = "../bower_components/fraction.js/fraction.js"></script>
-        <script src = "../bower_components/Javascript-CAS/src/CAS.min.js"></script>
-		<script src = "../dist/Graph.min.js"></script>
+		<script src = "../dist/main.min.js"></script>
 
 		<script>
 			var canvas = document.getElementById("graph");
@@ -20,18 +18,9 @@
 			var Expression = GraphPaper.Shapes.Expression;
 			var graph = new Graph(canvas);
 
-            var points = [
-                    new Point(-10, 4),
-                    new Point(-9, 3),
-                    new Point(-8, -4),
-                    new Point(-7, 4)
-            ];
-
-            graph.add(new GraphPaper.Shapes.Plot(points));
-
+            graph.add(new GraphPaper.Shapes.Expression("sin(x)"));
 
 
 		</script>
 	</body>
 </html>
-

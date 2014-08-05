@@ -17,7 +17,7 @@ module GraphPaper.Shapes {
     import Line = GraphPaper.Shapes.Line;
     import Label = GraphPaper.Shapes.Label;
 
-
+    declare var toTex;
 
 
 	export class Expression implements Drawable {
@@ -25,6 +25,7 @@ module GraphPaper.Shapes {
 		private _eqn : string;
 		private _equation: any;
 		private _color: string;
+        private _tex: string;
 
 
 		private _graphs: Array<Graph>;
@@ -46,6 +47,7 @@ module GraphPaper.Shapes {
 			this._color = color;
 
 			this._graphs = [];
+            this._tex = toTex(this._equation.tree);
 
 		}
 
@@ -100,7 +102,9 @@ module GraphPaper.Shapes {
 			return this._eqn;
 		}
 		public set eqn(v : string) {
-			this.f = new Equation(v).compile();
+            this._equation = new Equation(v);
+			this.f = this._equation.compile();
+            this._tex = toTex(this._equation.tree);
 			this.updateGraphs();
 		}
 

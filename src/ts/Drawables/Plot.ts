@@ -29,7 +29,7 @@ module GraphPaper.Shapes {
         }
 
         draw(graph: Graph) {
-            for(var i = 0; i < this._points.length - 1; i++) {
+            for (var i = 0; i < this._points.length - 1; i++) {
                 var point1 = this._points[i];
                 var point2 = this._points[i + 1];
                 var line = new Line(point1, point2, this._color, this._width);
@@ -40,11 +40,11 @@ module GraphPaper.Shapes {
         }
 
         add(graph: Graph) {
-
+            print("hi");
         }
 
         remove(graph: Graph) {
-
+            print("hi");
         }
 
         equals(other: Plot) {

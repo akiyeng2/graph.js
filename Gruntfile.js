@@ -77,9 +77,14 @@ module.exports = function(grunt) {
            }
        },
 
-       shell: {
-           tsdoc: {
-               command: 'tsdoc'
+       concat: {
+           options: {
+               separator: "\n"
+           },
+
+           dist: {
+               src: ["dist/CAS.min.js", "dist/Graph.min.js"],
+               dest: "dist/main.min.js"
            }
        }
 
@@ -92,8 +97,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-jsdoc');
+    grunt.loadNpmTasks('grunt-bower');
+    grunt.loadNpmTasks('grunt-contrib-concat');
 
-    grunt.registerTask('build', ['ts', 'uglify', 'jsdoc']);
+
+    grunt.registerTask('build', ['ts', 'uglify', 'jsdoc', 'concat']);
     grunt.registerTask('lint', ['tslint', 'ts:dev', 'jshint']);
-    grunt.registerTask('default', ['tslint', 'ts:dev', 'jshint', 'ts:build', 'uglify', 'jsdoc']);
+    grunt.registerTask('default', ['tslint', 'ts:dev', 'jshint', 'ts:build', 'uglify', 'jsdoc', 'concat']);
 }

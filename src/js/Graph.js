@@ -1,10 +1,6 @@
 /// <reference path="Styles.ts" />
 /// <reference path="Scale.ts" />
 /// <reference path="Drawable.ts" />
-/**
-* The namespace for the graph which encapsulates the graph object as well as all of the shapes
-* @namespace GraphPaper
-*/
 var GraphPaper;
 (function (GraphPaper) {
     
@@ -682,3 +678,5 @@ var GraphPaper;
     })();
     GraphPaper.Graph = Graph;
 })(GraphPaper || (GraphPaper = {}));
+
+module.exports = GraphPaper;

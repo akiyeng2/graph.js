@@ -6,6 +6,8 @@
  * The namespace for the graph which encapsulates the graph object as well as all of the shapes
  * @namespace GraphPaper
  */
+
+declare var module;
 module GraphPaper {
 
 
@@ -711,6 +713,7 @@ module GraphPaper {
 
         public set trace(v: Expression) {
             this._trace = v;
+
         }
 
 
@@ -725,3 +728,5 @@ module GraphPaper {
 
     }
 }
+
+module.exports = GraphPaper;
