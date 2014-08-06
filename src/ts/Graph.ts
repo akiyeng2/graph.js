@@ -728,5 +728,6 @@ module GraphPaper {
 
     }
 }
-
-module.exports = GraphPaper;
+if(typeof module === 'object') {
+    module.exports = GraphPaper;
+}

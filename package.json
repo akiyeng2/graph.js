@@ -18,7 +18,7 @@
     "Canvas"
   ],
   "license": "MIT",
-  "private": true,
+  "private": false,
   "ignore": [
     "**/.*",
     "node_modules",
@@ -39,5 +39,9 @@
     "tslint": "~0.4.11",
     "typescript": "~1.0.1",
     "uglify-js": "~2.4.15"
+  },
+  "dependencies": {
+    "jquery": "^2.1.1",
+    "jquery-mousewheel": "^3.1.12"
   }
 }
